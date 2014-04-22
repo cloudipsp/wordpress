@@ -4,7 +4,7 @@ Plugin Name: WooCommerce - Oplata Money
 Plugin URI: http://...
 Description: Oplata Money Payment Gateway for WooCommerce.
 Version: 1.0
-Author: oplata.com
+Author: olegliubiviy
 Author URI: http://oplata.com/
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
