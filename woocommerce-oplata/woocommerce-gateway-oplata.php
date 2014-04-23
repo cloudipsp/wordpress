@@ -316,10 +316,13 @@ function woocommerce_oplata_init()
             }
 
             if ($response['order_status'] == self::ORDER_DECLINED) {
-                $this->msg['class'] = 'woocommerce-error';
-                $this->msg['message'] = "Thank you for shopping with us. However, the transaction has been declined.";
+                $errorMessage = "Thank you for shopping with us. However, the transaction has been declined.";
                 $order->add_order_note('Transaction ERROR: order declined<br/>Oplata.com ID: '.$_REQUEST['payment_id']);
-                return $this->msg['message'];
+                $order->update_status('failed');
+
+                wp_mail($_REQUEST['email'], 'Order declined', $errorMessage);
+
+                return $errorMessage;
             }
 
             $responseSignature = $response['signature'];
@@ -336,11 +339,19 @@ function woocommerce_oplata_init()
             }
 
             if ($response['order_status'] != self::ORDER_APPROVED) {
+                $this->msg['class'] = 'woocommerce-error';
+                $this->msg['message'] = "Thank you for shopping with us. Your payment is processing. We will inform you about results.";
+                $order->update_status('processing');
                 $order->add_order_note("Order status: {$response['order_status']}");
             }
 
-            $order->payment_complete();
-            $order->add_order_note('Oplata.com payment successful.<br/>Oplata.com ID: ' . ' (' . $_REQUEST['payment_id'] . ')');
+
+            if ($response['order_status'] == self::ORDER_APPROVED) {
+                $order->update_status('complete');
+                $order->payment_complete();
+                $order->add_order_note('Oplata.com payment successful.<br/>Oplata.com ID: ' . ' (' . $_REQUEST['payment_id'] . ')');
+            }
+
             $woocommerce->cart->empty_cart();
 
             return true;
