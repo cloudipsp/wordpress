@@ -33,7 +33,7 @@ function woocommerce_oplata_init()
     class WC_oplata extends WC_Payment_Gateway
     {
         const ORDER_APPROVED = 'approved';
-        const ORDER_PROCESSING = 'approved';
+        const ORDER_DECLINED = 'declined';
 
         const SIGNATURE_SEPARATOR = '|';
 
@@ -315,10 +315,11 @@ function woocommerce_oplata_init()
                 return 'An error has occurred during payment. Merchant data is incorrect.';
             }
 
-            if ($response['order_status'] != self::ORDER_APPROVED && $response['order_status'] != self::ORDER_PROCESSING) {
+            if ($response['order_status'] == self::ORDER_DECLINED) {
                 $this->msg['class'] = 'woocommerce-error';
                 $this->msg['message'] = "Thank you for shopping with us. However, the transaction has been declined.";
-                $order->add_order_note('Transaction ERROR: '.$_REQUEST['error'].'<br/>Oplata.com ID: '.$_REQUEST['mihpayid'].' ('.$_REQUEST['txnid'].')');
+                $order->add_order_note('Transaction ERROR: order declined<br/>Oplata.com ID: '.$_REQUEST['payment_id']);
+                return $this->msg['message'];
             }
 
             $responseSignature = $response['signature'];
@@ -330,7 +331,12 @@ function woocommerce_oplata_init()
 
             if ($this->getSignature($response, $this->salt) != $responseSignature) {
                 $order->update_status('failed');
+                $order->add_order_note('Transaction ERROR: signature is not valid');
                 return 'An error has occurred during payment. Signature is not valid.';
+            }
+
+            if ($response['order_status'] != self::ORDER_APPROVED) {
+                $order->add_order_note("Order status: {$response['order_status']}");
             }
 
             $order->payment_complete();
