@@ -320,7 +320,7 @@ function woocommerce_oplata_init()
                 $order->add_order_note('Transaction ERROR: order declined<br/>Oplata.com ID: '.$_REQUEST['payment_id']);
                 $order->update_status('failed');
 
-                wp_mail($_REQUEST['email'], 'Order declined', $errorMessage);
+                wp_mail($_REQUEST['sender_email'], 'Order declined', $errorMessage);
 
                 return $errorMessage;
             }
