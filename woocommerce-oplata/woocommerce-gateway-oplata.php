@@ -184,7 +184,9 @@ function woocommerce_oplata_init()
 
         protected function getSignature($data, $password, $encoded = true)
         {
-            $data = array_filter($data);
+            $data = array_filter($data, function($var) {
+                return $var !== '' && $var !== null;
+            });
             ksort($data);
 
             $str = $password;
@@ -359,10 +361,6 @@ function woocommerce_oplata_init()
 
         function check_oplata_response()
         {
-//            if ($_REQUEST['response_status'] != 'success') {
-//                $this->msg['class'] = 'error';
-//                $this->msg['message'] = 'Payment is not valid.';
-//            } else {
             $paymentInfo = $this->isPaymentValid($_REQUEST);
             if ($paymentInfo === true) {
                 $this->msg['message'] = "Thank you for shopping with us. Your account has been charged and your transaction is successful.";
@@ -371,7 +369,6 @@ function woocommerce_oplata_init()
                 $this->msg['class'] = 'error';
                 $this->msg['message'] = $paymentInfo;
             }
-//            }
 
             $redirect_url = ($this->redirect_page_id == "" || $this->redirect_page_id == 0) ? get_site_url() . "/" : get_permalink($this->redirect_page_id);
             //For wooCoomerce 2.0
@@ -380,7 +377,6 @@ function woocommerce_oplata_init()
 
             wp_redirect($redirect_url);
             exit;
-
         }
 
         /*
