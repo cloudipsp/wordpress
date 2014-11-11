@@ -349,7 +349,7 @@ function woocommerce_oplata_init()
 
 
             if ($response['order_status'] == self::ORDER_APPROVED) {
-                $order->update_status('complete');
+                $order->update_status('completed');
                 $order->payment_complete();
                 $order->add_order_note('Oplata.com payment successful.<br/>Oplata.com ID: ' . ' (' . $_REQUEST['payment_id'] . ')');
             }
