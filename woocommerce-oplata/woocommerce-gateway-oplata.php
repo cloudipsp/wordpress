@@ -4,7 +4,7 @@ Plugin Name: WooCommerce - Oplata Money
 Plugin URI: http://...
 Description: Oplata Money Payment Gateway for WooCommerce.
 Version: 1.0
-Author: olegliubiviy
+Author: oplata.com
 Author URI: http://oplata.com/
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -221,7 +221,7 @@ function woocommerce_oplata_init()
                                  'server_callback_url' => $this->getCallbackUrl(),
                                  'response_url' => $this->getCallbackUrl(),
                                  'lang' => $this->getLanguage(),
-                                 'sender_email' => $this->getEmail());
+                                 'sender_email' => $this->getEmail($order));
 
             $oplata_args['signature'] = $this->getSignature($oplata_args, $this->salt);
 
@@ -252,7 +252,8 @@ function woocommerce_oplata_init()
 							lineHeight		: "32px"
 						}
 					});
-					jQuery("#submit_oplata_payment_form").click();});
+					jQuery("#submit_oplata_payment_form").click();
+					});
 					</script>
 				</form>';
         }
@@ -296,10 +297,16 @@ function woocommerce_oplata_init()
             return substr(get_bloginfo ( 'language' ), 0, 2);
         }
 
-        private function getEmail()
+        private function getEmail($order)
         {
             $current_user = wp_get_current_user();
-            return $current_user->user_email;
+            $email = $current_user->user_email;
+
+            if (empty($email)) {
+                $email = $order->billing_email;
+            }
+
+            return $email;
         }
 
         protected function isPaymentValid($response)
