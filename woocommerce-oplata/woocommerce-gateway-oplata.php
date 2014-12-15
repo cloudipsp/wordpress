@@ -91,24 +91,20 @@ function woocommerce_oplata_init()
             $this->msg['message'] = "";
             $this->msg['class'] = "";
 
-            add_action('init', array(&$this,
-                                     'check_oplata_response'));
-            //update for woocommerce >2.0
-            add_action('woocommerce_api_' . strtolower(get_class($this)), array($this,
-                                                                                'check_oplata_response'));
+//            add_action('init', array(&$this, 'check_oplata_response'));
+//            //update for woocommerce >2.0
+//            add_action('woocommerce_api_' . strtolower(get_class($this)), array($this, 'check_oplata_response'));
 
             if (version_compare(WOOCOMMERCE_VERSION, '2.0.0', '>=')) {
                 /* 2.0.0 */
-                add_action('woocommerce_update_options_payment_gateways_' . $this->id, array(&$this,
-                                                                                             'process_admin_options'));
+                add_action('woocommerce_api_' . strtolower(get_class($this)), array($this, 'check_oplata_response'));
+                add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
             } else {
                 /* 1.6.6 */
-                add_action('woocommerce_update_options_payment_gateways', array(&$this,
-                                                                                'process_admin_options'));
+                add_action('woocommerce_update_options_payment_gateways', array(&$this, 'process_admin_options'));
             }
 
-            add_action('woocommerce_receipt_oplata', array(&$this,
-                                                           'receipt_page'));
+            add_action('woocommerce_receipt_oplata', array(&$this, 'receipt_page'));
         }
 
         function init_form_fields()
