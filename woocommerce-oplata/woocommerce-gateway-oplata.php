@@ -101,6 +101,7 @@ function woocommerce_oplata_init()
                 add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
             } else {
                 /* 1.6.6 */
+                add_action('init', array(&$this, 'check_oplata_response'));
                 add_action('woocommerce_update_options_payment_gateways', array(&$this, 'process_admin_options'));
             }
 
