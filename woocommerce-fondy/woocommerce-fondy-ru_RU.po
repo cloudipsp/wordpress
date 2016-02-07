@@ -1,0 +1,160 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WooCommerce - Fondy Money\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: Wed Jan 13 2016 12:30:14 GMT+0200 (Финляндия (зима))\n"
+"PO-Revision-Date: Sun Feb 07 2016 11:11:35 GMT+0200 (Финляндия (зима))\n"
+"Last-Translator: wp <d@mail.ru>\n"
+"Language-Team: \n"
+"Language: Russian\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
+"n%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ../../plugins/woocommerce-oplata\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
+"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
+"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
+"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Loco-Target-Locale: ru_RU\n"
+"X-Generator: Loco - https://localise.biz/"
+
+#: /woocommerce-gateway-fondy.php:150
+msgid "Thank you for your order, please click the button below to pay with fondy."
+msgstr ""
+
+#: /woocommerce-gateway-fondy.php:241
+msgid "Reload payment window"
+msgstr "Открыть окно оплаты"
+
+#. Name of the plugin
+msgid "WooCommerce - Fondy Money"
+msgstr "WooCommerce - Fondy Money"
+
+#. URI of the plugin
+msgid "http://fondy.eu"
+msgstr "http://fondy.eu"
+
+#. Description of the plugin
+msgid "Fondy Payment Gateway for WooCommerce."
+msgstr "Fodny способ оплаты"
+
+#. Author of the plugin
+msgid "www.fondy.eu"
+msgstr "www.fondy.eu"
+
+#. Author URI of the plugin
+msgid "https://www.fondy.eu"
+msgstr "https://www.fondy.eu"
+
+#: /woocommerce-gateway-fondy.php:85
+msgid "Enable/Disable"
+msgstr "Включить/Выключить"
+
+#: /woocommerce-gateway-fondy.php:87
+msgid "Enable Fondy Payment Module."
+msgstr "Включить модуль оплаты Fondy"
+
+#: /woocommerce-gateway-fondy.php:90
+msgid "Title:"
+msgstr "Заголовок:"
+
+#: /woocommerce-gateway-fondy.php:92
+msgid "Online Payments"
+msgstr "Online Платежи"
+
+#: /woocommerce-gateway-fondy.php:93
+msgid "This controls the title which the user sees during checkout."
+msgstr "Заголовок который, видит пользователь в процессе оформления заказа."
+
+#: /woocommerce-gateway-fondy.php:95
+msgid "Description:"
+msgstr "Описание"
+
+#: /woocommerce-gateway-fondy.php:97
+msgid ""
+"Pay securely by Credit or Debit Card or Internet Banking through fondy "
+"service."
+msgstr ""
+"Оплатите безопасно с помощью кредитной или дебетовой карты или интернет-"
+"банкинга через  службы fondy."
+
+#: /woocommerce-gateway-fondy.php:98
+msgid "This controls the description which the user sees during checkout."
+msgstr "Описание которое видит пользователь в процессе оформления заказа."
+
+#: /woocommerce-gateway-fondy.php:100
+msgid "Merchant KEY"
+msgstr "Merchant Key"
+
+#: /woocommerce-gateway-fondy.php:102 /woocommerce-gateway-fondy.php:106
+msgid "Given to Merchant by fondy"
+msgstr "Выдается мерчанту fondy"
+
+#: /woocommerce-gateway-fondy.php:104
+msgid "Merchant secretkey"
+msgstr "Merchant secretkey"
+
+#: /woocommerce-gateway-fondy.php:108
+msgid "Show Logo"
+msgstr "Показать логотип"
+
+#: /woocommerce-gateway-fondy.php:110
+msgid "Show the \"fondy\" logo in the Payment Method section for the user"
+msgstr "Показать логотип \"fondy\" при оформлении заказа"
+
+#: /woocommerce-gateway-fondy.php:112
+msgid "Tick to show \"fondy\" logo"
+msgstr "Отметьте , чтобы показать логотип."
+
+#: /woocommerce-gateway-fondy.php:114
+msgid "Return Page"
+msgstr "Страница ответа"
+
+#: /woocommerce-gateway-fondy.php:117
+msgid "URL of success page"
+msgstr "Страница куда будет направлен пользователь после оплаты"
+
+#: /woocommerce-gateway-fondy.php:127
+msgid "Fondy.eu"
+msgstr "Fondy.eu"
+
+#: /woocommerce-gateway-fondy.php:128
+msgid "Payment gateway"
+msgstr "Payment gateway"
+
+#: /woocommerce-gateway-fondy.php:366
+msgid ""
+"An error has occurred during payment. Please contact us to ensure your order "
+"has submitted."
+msgstr "Ошибка при оплате. Пожалуйста свяжитесь с нами для уточнения деталей."
+
+#: /woocommerce-gateway-fondy.php:371
+msgid "An error has occurred during payment. Merchant data is incorrect."
+msgstr "An error has occurred during payment. Merchant data is incorrect."
+
+#: /woocommerce-gateway-fondy.php:375
+msgid "Thank you for shopping with us. However, the transaction has been declined."
+msgstr "Спасибо за покупку ! . Тем не менее, оплата была отклонена ."
+
+#: /woocommerce-gateway-fondy.php:391
+msgid "Transaction ERROR: signature is not valid"
+msgstr "Transaction ERROR: signature is not valid"
+
+#: /woocommerce-gateway-fondy.php:392
+msgid "An error has occurred during payment. Signature is not valid."
+msgstr "An error has occurred during payment. Signature is not valid."
+
+#: /woocommerce-gateway-fondy.php:397
+msgid "Thank you for shopping with us. But your payment declined."
+msgstr "Спасибо за покупки. Но по вашему платежу получили отказ."
+
+#: /woocommerce-gateway-fondy.php:429
+msgid ""
+"Thank you for shopping with us. Your account has been charged and your "
+"transaction is successful."
+msgstr "Спасибо за покупку. Оплата прошла успешно "
