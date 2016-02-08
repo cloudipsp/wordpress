@@ -22,4 +22,4 @@ wordpress
 ![Скриншот][1]
 ----
 
-[1]: https://raw.githubusercontent.com/oplatacom/wordpress/master/settings.png
+[1]: https://raw.githubusercontent.com/cloudipsp/wordpress/master/settings.png
