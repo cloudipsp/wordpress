@@ -239,22 +239,9 @@ function woocommerce_fondy_init()
 </style>
 <div id="checkout">
  <a class="btn-lime" onclick="callmag();">'. __('Reload payment window','woocommerce-fondy').'</a>
-<div id="checkout_wrapper"><a href="javascript:void(0)" onclick=resize(480);><i class="fa fa-mobile"></i></a>
-            <a href="javascript:void(0)" onclick=resize(768);><i class="fa fa-tablet"></i></a>
-            <a href="javascript:void(0)" onclick=resize(993);><i class="fa fa-desktop"></i></a></div>
+<div id="checkout_wrapper"></div>
 </div>
 <script>
-function resize(val) {
- if(val==480){
- checkoutInit(button.getUrl(),val);
- }
- if(val==768){
- checkoutInit(button.getUrl(),val);
- }
- if(val==993){
-checkoutInit(button.getUrl(),val);
-}
-}
 function callmag(){
 $.magnificPopup.open({
 showCloseBtn:false,
