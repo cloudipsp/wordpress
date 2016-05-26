@@ -367,14 +367,12 @@ function checkoutInit(url, val) {
 
                 return $errorMessage;
             }
-
-            $responseSignature = $response['signature'];
-
-            $strs = explode(self::SIGNATURE_SEPARATOR,$response['response_signature_string']);
-            $str = (str_replace($strs[0],$this->salt,$response['response_signature_string']));
-            //print_r (sha1($str)); echo "<br>"; print_r ($responseSignature);die;
-            if  (sha1($str) != $responseSignature) {
-                $order->update_status('failed');
+			$responseSignature = $_POST['signature'];
+			unset($_POST['response_signature_string']);
+			unset($_POST['signature']);
+			//print_r ($_POST); die;
+			if ($this->getSignature($_POST, $this->salt) != $responseSignature) {
+                 $order->update_status('failed');
                 $order->add_order_note(__('Transaction ERROR: signature is not valid','woocommerce-fondy'));
                 return __('An error has occurred during payment. Signature is not valid.','woocommerce-fondy');
             }
