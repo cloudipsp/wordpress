@@ -368,8 +368,11 @@ function checkoutInit(url, val) {
                 return $errorMessage;
             }
 			$responseSignature = $_POST['signature'];
-			unset($_POST['response_signature_string']);
-			unset($_POST['signature']);
+			if (isset($_POST['response_signature_string'])){
+				unset($_POST['response_signature_string']);
+			}
+			if (isset($_POST['signature'])){
+				unset($_POST['signature']);
 			//print_r ($_POST); die;
 			if ($this->getSignature($_POST, $this->salt) != $responseSignature) {
                  $order->update_status('failed');
