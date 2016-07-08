@@ -3,8 +3,9 @@ msgstr ""
 "Project-Id-Version: WooCommerce - Fondy Money\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Wed Jan 13 2016 12:30:14 GMT+0200 (Финляндия (зима))\n"
-"PO-Revision-Date: Sun Feb 07 2016 11:11:35 GMT+0200 (Финляндия (зима))\n"
-"Last-Translator: wp <d@mail.ru>\n"
+"PO-Revision-Date: Fri Jul 08 2016 14:51:25 GMT+0300 (Ð¤Ð¸Ð½Ð»ÑÐ½Ð´Ð¸Ñ "
+"(Ð»ÐµÑÐ¾))\n"
+"Last-Translator: admin <dina@mail.ru>\n"
 "Language-Team: \n"
 "Language: Russian\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
@@ -23,13 +24,33 @@ msgstr ""
 "X-Loco-Target-Locale: ru_RU\n"
 "X-Generator: Loco - https://localise.biz/"
 
-#: /woocommerce-gateway-fondy.php:150
-msgid "Thank you for your order, please click the button below to pay with fondy."
+#: /woocommerce-gateway-fondy.php:114
+msgid "Enable on page mode"
+msgstr "Включить режим показа на странице"
+
+#: /woocommerce-gateway-fondy.php:116
+msgid "Enable on page payment mode"
+msgstr "Включить модуль  на странице"
+
+#: /woocommerce-gateway-fondy.php:118
+msgid "Tick to show disable popup"
+msgstr "Выключить режим вслплывающего окна"
+
+#: /woocommerce-gateway-fondy.php:125
+msgid "Styles chekout page:"
+msgstr "Стилизировать страницу оплаты"
+
+#: /woocommerce-gateway-fondy.php:127
+msgid "Customize you payment window"
 msgstr ""
 
-#: /woocommerce-gateway-fondy.php:241
-msgid "Reload payment window"
-msgstr "Открыть окно оплаты"
+#: /woocommerce-gateway-fondy.php:128
+msgid "You can find example here http://jsfiddle.net/8h65h91t/"
+msgstr ""
+
+#: /woocommerce-gateway-fondy.php:161
+msgid "Thank you for your order, please click the button below to pay with fondy."
+msgstr ""
 
 #. Name of the plugin
 msgid "WooCommerce - Fondy Money"
@@ -111,49 +132,53 @@ msgstr "Показать логотип \"fondy\" при оформлении з
 msgid "Tick to show \"fondy\" logo"
 msgstr "Отметьте , чтобы показать логотип."
 
-#: /woocommerce-gateway-fondy.php:114
+#: /woocommerce-gateway-fondy.php:120
 msgid "Return Page"
 msgstr "Страница ответа"
 
-#: /woocommerce-gateway-fondy.php:117
+#: /woocommerce-gateway-fondy.php:123
 msgid "URL of success page"
 msgstr "Страница куда будет направлен пользователь после оплаты"
 
-#: /woocommerce-gateway-fondy.php:127
+#: /woocommerce-gateway-fondy.php:138
 msgid "Fondy.eu"
 msgstr "Fondy.eu"
 
-#: /woocommerce-gateway-fondy.php:128
+#: /woocommerce-gateway-fondy.php:139
 msgid "Payment gateway"
 msgstr "Payment gateway"
 
-#: /woocommerce-gateway-fondy.php:366
+#: /woocommerce-gateway-fondy.php:255
+msgid "Reload payment window"
+msgstr "Открыть окно оплаты"
+
+#: /woocommerce-gateway-fondy.php:368
 msgid ""
 "An error has occurred during payment. Please contact us to ensure your order "
 "has submitted."
 msgstr "Ошибка при оплате. Пожалуйста свяжитесь с нами для уточнения деталей."
 
-#: /woocommerce-gateway-fondy.php:371
+#: /woocommerce-gateway-fondy.php:373
 msgid "An error has occurred during payment. Merchant data is incorrect."
 msgstr "An error has occurred during payment. Merchant data is incorrect."
 
-#: /woocommerce-gateway-fondy.php:375
+#: /woocommerce-gateway-fondy.php:377
 msgid "Thank you for shopping with us. However, the transaction has been declined."
 msgstr "Спасибо за покупку ! . Тем не менее, оплата была отклонена ."
 
-#: /woocommerce-gateway-fondy.php:391
+#: /woocommerce-gateway-fondy.php:394
 msgid "Transaction ERROR: signature is not valid"
 msgstr "Transaction ERROR: signature is not valid"
 
-#: /woocommerce-gateway-fondy.php:392
+#: /woocommerce-gateway-fondy.php:395
 msgid "An error has occurred during payment. Signature is not valid."
 msgstr "An error has occurred during payment. Signature is not valid."
 
-#: /woocommerce-gateway-fondy.php:397
+#: /woocommerce-gateway-fondy.php:400
 msgid "Thank you for shopping with us. But your payment declined."
 msgstr "Спасибо за покупки. Но по вашему платежу получили отказ."
 
-#: /woocommerce-gateway-fondy.php:429
+#: /woocommerce-gateway-fondy.php:432
 msgid ""
 "Thank you for shopping with us. Your account has been charged and your "
 "transaction is successful."
