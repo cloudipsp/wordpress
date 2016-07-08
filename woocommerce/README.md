@@ -22,4 +22,4 @@ wordpress
 ![Скриншот][1]
 ----
 
-[1]: https://raw.githubusercontent.com/cloudipsp/wordpress/master/woocommerce/settings.png
+[1]: https://raw.githubusercontent.com/cloudipsp/wordpress/master/woocommerce/settings1.png
