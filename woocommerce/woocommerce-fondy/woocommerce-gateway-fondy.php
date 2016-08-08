@@ -266,7 +266,7 @@ showCloseBtn:false,
         }
     });
 }
-$(document).ready(function() {
+jQuery(document).ready(function() {
  $.magnificPopup.open({
  showCloseBtn:false,
         items: {
@@ -287,20 +287,20 @@ function checkoutInit(url, val) {
 		this.setCheckoutWrapper("#checkout_wrapper");
 		this.addCallback(__DEFAULTCALLBACK__);
 		this.action("show", function(data) {
-           $("#checkout_loader").remove();
-            $("#checkout").show();
+            jQuery("#checkout_loader").remove();
+            jQuery("#checkout").show();
         });
 		this.action("hide", function(data) {
-            $("#checkout").hide();
+            jQuery("#checkout").hide();
         });
         if(val){
         this.width(val);
         this.action("resize", function(data) {
-        $("#checkout_wrapper").width(val).height(data.height);
+        jQuery("#checkout_wrapper").width(val).height(data.height);
             });
         }else{
          this.action("resize", function(data) {
-        $("#checkout_wrapper").width("100%").height(data.height);
+        jQuery("#checkout_wrapper").width("100%").height(data.height);
             });
         }
 		this.loadUrl(url);
