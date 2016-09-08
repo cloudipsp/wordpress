@@ -208,7 +208,7 @@ function woocommerce_fondy_init()
 
             $fondy_args['signature'] = $this->getSignature($fondy_args, $this->salt);
 
-            $out =  '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+            $out =  '<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
                     <script src="https://api.fondy.eu/static_common/v1/checkout/ipsp.js"></script>
                     <script src="https://rawgit.com/dimsemenov/Magnific-Popup/master/dist/jquery.magnific-popup.js"></script>
                     <link href="https://rawgit.com/dimsemenov/Magnific-Popup/master/dist/magnific-popup.css" type="text/css" rel="stylesheet" media="screen">
@@ -286,6 +286,7 @@ function checkoutInit(url, val) {
 	$ipsp("checkout").scope(function() {
 		this.setCheckoutWrapper("#checkout_wrapper");
 		this.addCallback(__DEFAULTCALLBACK__);
+		this.setCssStyle(checkoutStyles);
 		this.action("show", function(data) {
             jQuery("#checkout_loader").remove();
             jQuery("#checkout").show();
