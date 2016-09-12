@@ -17,7 +17,8 @@ wordpress
 4. Fill out the fields `Merchant Key` and `Merchant Salt`.
 5. Select `Return Page` where users will be returned after payment.
 6. Save settings.
-___
+
+---------
 
 #RU
 
