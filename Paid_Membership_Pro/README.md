@@ -1,6 +1,25 @@
 wordpress
 =========
 
+#EN
+
+== Installation ==
+
+1. Ensure you have latest version of WooCommerce plugin installed (WooCommerce 2.0+)
+2. Upload the plugin files to the `/wp-content/plugins/`(or upload the plugin zip file using wp-admin.)
+3. Activate the plugin through the 'Plugins' menu.
+
+== Configuration ==
+
+1. Go to "Memberships > Payment Gateway & SSL Settings".
+2. Choose method "Fondy". If it doesn't exist - activate the plugin.
+4. Fill out the fields `Merchant ID:` and `Secret Key:`.
+6. Save settings.
+
+---------
+
+#RU
+
 == Установка ==
 
 1. Убедитесь что у вас установлена последняя версия плагина.
