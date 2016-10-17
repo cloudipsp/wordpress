@@ -1,13 +1,15 @@
 <?php
 /*
-Plugin Name: WooCommerce - Fondy Money
-Plugin URI: http://fondy.eu
+Plugin Name: WooCommerce - Fondy payment gateway
+Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
 Version: 1.0
-Author: www.fondy.eu
-Author URI: https://www.fondy.eu/
-License: GNU General Public License v3.0
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
+Author: DM
+Author URI: https://fondy.eu/
+Domain Path: /
+Text Domain: woocommerce-fondy
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 add_action("init", "fondy");
 function fondy(){
@@ -56,18 +58,14 @@ function woocommerce_fondy_init()
             }
             $this->title = $this->settings['title'];
             $this->redirect_page_id = $this->settings['redirect_page_id'];
-
-
             $this->merchant_id = $this->settings['merchant_id'];
             $this->salt = $this->settings['salt'];
 			$this->styles = $this->settings['styles'];
             $this->description = $this->settings['description'];
-			 $this->page_mode = $this->settings['page_mode'];
+			$this->page_mode = $this->settings['page_mode'];
             $this->msg['message'] = "";
             $this->msg['class'] = "";
 			
-
-
             if (version_compare(WOOCOMMERCE_VERSION, '2.0.0', '>=')) {
                 /* 2.0.0 */
                 add_action('woocommerce_api_' . strtolower(get_class($this)), array($this, 'check_fondy_response'));
@@ -90,7 +88,7 @@ function woocommerce_fondy_init()
                                                           'description' => 'Show in the Payment List as a payment option'),
                                        'title' => array('title' => __('Title:', 'woocommerce-fondy'),
                                                         'type' => 'text',
-                                                        'default' => __('Online Payments', 'woocommerce-fondy'),
+                                                        'default' => __('Fondy Online Payments', 'woocommerce-fondy'),
                                                         'description' => __('This controls the title which the user sees during checkout.', 'woocommerce-fondy'),
                                                         'desc_tip' => true),
                                        'description' => array('title' => __('Description:', 'woocommerce-fondy'),
@@ -110,26 +108,26 @@ function woocommerce_fondy_init()
                                                            'type' => 'checkbox',
                                                            'label' => __('Show the "fondy" logo in the Payment Method section for the user', 'woocommerce-fondy'),
                                                            'default' => 'yes',
-                                                           'description' => __('Tick to show "fondy" logo'),
+                                                           'description' => __('Tick to show "fondy" logo', 'woocommerce-fondy'),
                                                            'desc_tip' => true),
-			'page_mode' => array('title' => __('Enable on page mode', 'woocommerce-fondy'),
-			'type' => 'checkbox',
-			'label' => __('Enable on page payment mode', 'woocommerce-fondy'),
-			'default' => 'no',
-			'description' => __('Tick to show disable popup'),
-			'desc_tip' => true),
-                                       'redirect_page_id' => array('title' => __('Return Page', 'woocommerce-fondy'),
-                                                                   'type' => 'select',
-                                                                   'options' => $this->fondy_get_pages('Select Page'),
-                                                                   'description' => __('URL of success page', 'woocommerce-fondy'),
-                                                                   'desc_tip' => true),
-			'styles' => array('title' => __('Styles chekout page:', 'woocommerce-fondy'),
-			'type' => 'textarea',
-			'default' => __("   'html , body' : {
-			'overflow' : 'hidden'
-			},", 'woocommerce-fondy'),
-			'description' => __('You can find example here http://jsfiddle.net/8h65h91t/', 'woocommerce-fondy'),
-			'desc_tip' => true));
+										'page_mode' => array('title' => __('Enable on page mode', 'woocommerce-fondy'),
+															 'type' => 'checkbox',
+															 'label' => __('Enable on page payment mode', 'woocommerce-fondy'),
+															 'default' => 'no',
+															 'description' => __('Tick to show disable popup', 'woocommerce-fondy'),
+															 'desc_tip' => true),
+                                        'redirect_page_id' => array('title' => __('Return Page', 'woocommerce-fondy'),
+                                                                    'type' => 'select',
+                                                                    'options' => $this->fondy_get_pages('Select Page'),
+                                                                    'description' => __('URL of success page', 'woocommerce-fondy'),
+                                                                    'desc_tip' => true),
+										'styles' => array('title' => __('Styles chekout page:', 'woocommerce-fondy'),
+														  'type' => 'textarea',
+														  'default' => __("'html , body' : {
+														  'overflow' : 'hidden'
+														   },"),
+														  'description' => __('You can find example here http://jsfiddle.net/8h65h91t/', 'woocommerce-fondy'),
+														  'desc_tip' => true));
         }
 
         /**
@@ -214,112 +212,107 @@ function woocommerce_fondy_init()
                     <link href="https://rawgit.com/dimsemenov/Magnific-Popup/master/dist/magnific-popup.css" type="text/css" rel="stylesheet" media="screen">
                     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
-<style>
-#checkout_wrapper a{
-    font-size: 20px;
-    top: 30px;
-    padding: 20px;
-    position: relative;
-}
-#checkout_wrapper {
-    text-align: left;
-    position: relative;
-    background: #FFF;
-    /* padding: 30px; */
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-bottom: 30px;
-    width: auto;
-    max-width: 2000px;
-    margin: 9px auto;
-}
-.btn-lime {
-  height: 61px;
-  line-height: 61px;
-  background: #5ac341;
-  font-size: 16px!important;
-  font-weight: bold;
-  text-decoration: none!important;
-  color: #ffffff!important;
-  position: relative;
-  text-transform: uppercase;
-  padding: 0 30px 0 30px;
-  margin: 0 auto;
-  display: inline-block;
-  cursor: pointer;
-  margin-left: 25px;
-  border-radius: 6px;
-}
-</style>
-<div id="checkout">
-<div id="checkout_wrapper"></div>
-</div>';
-if ($this->page_mode === 'no') {
-$out .= '<a class="btn-lime" onclick="callmag();">'. __('Reload payment window','woocommerce-fondy').'</a>
-<script>
-function callmag(){
-$.magnificPopup.open({
-showCloseBtn:false,
-        items: {
-            src: $("#checkout_wrapper"),
-            type: "inline"
-        }
-    });
-}
-jQuery(document).ready(function() {
- $.magnificPopup.open({
- showCloseBtn:false,
-        items: {
-            src: $("#checkout_wrapper"),
-            type: "inline"
-        }
-    });
-    })
-</script>
-'; }
-$out.='
-<script>
-var checkoutStyles = {
-		' .$this->styles . '
-}
-function checkoutInit(url, val) {
-	$ipsp("checkout").scope(function() {
-		this.setCheckoutWrapper("#checkout_wrapper");
-		this.addCallback(__DEFAULTCALLBACK__);
-		this.setCssStyle(checkoutStyles);
-		this.action("show", function(data) {
-            jQuery("#checkout_loader").remove();
-            jQuery("#checkout").show();
-        });
-		this.action("hide", function(data) {
-            jQuery("#checkout").hide();
-        });
-        if(val){
-        this.width(val);
-        this.action("resize", function(data) {
-        jQuery("#checkout_wrapper").width(val).height(data.height);
-            });
-        }else{
-         this.action("resize", function(data) {
-        jQuery("#checkout_wrapper").width("100%").height(data.height);
-            });
-        }
-		this.loadUrl(url);
-	});
-    };
-    var button = $ipsp.get("button");
-    button.setMerchantId('.$fondy_args['merchant_id'].');
-    button.setAmount('.$fondy_args['amount'].', "'.$fondy_args['currency'].'", true);
-    button.setHost("api.fondy.eu");
-    button.addParam("order_desc","'.$fondy_args['order_desc'].'");
-    button.addParam("order_id","'.$fondy_args['order_id'].'");
-    button.addParam("lang","'.$fondy_args['lang'].'");//button.addParam("delayed","N");
-    button.addParam("server_callback_url","'.$fondy_args['server_callback_url'].'");
-    button.addParam("sender_email","'.$fondy_args['sender_email'].'");
-    button.setResponseUrl("'.$fondy_args['response_url'].'");
-    checkoutInit(button.getUrl());
-    </script>';
-	return $out;
+			<style>
+			#checkout_wrapper a{
+				font-size: 20px;
+				top: 30px;
+				padding: 20px;
+				position: relative;
+			}
+			#checkout_wrapper {
+				text-align: left;
+				background: #FFF;
+				padding-left: 15px;
+				padding-right: 15px;
+				padding-bottom: 30px;
+				margin: 9px auto;
+				width:100%
+			}
+			.btn-lime {
+			  height: 61px;
+			  line-height: 61px;
+			  background: #5ac341;
+			  font-size: 16px!important;
+			  font-weight: bold;
+			  text-decoration: none!important;
+			  color: #ffffff!important;
+			  position: relative;
+			  text-transform: uppercase;
+			  padding: 0 30px 0 30px;
+			  margin: 0 auto;
+			  display: inline-block;
+			  cursor: pointer;
+			  margin-left: 25px;
+			  border-radius: 6px;
+			}
+			</style>
+			<div id="checkout">
+			<div id="checkout_wrapper"></div>
+			</div>';
+			if ($this->page_mode == 'no') {
+				$out .= '<a class="btn-lime" onclick="callmag();">'. __('Reload payment window','woocommerce-fondy').'</a>
+				<style>
+				#checkout_wrapper {
+				width:480px;
+				}
+				</style>
+				<script>
+				function callmag(){
+				$.magnificPopup.open({
+				showCloseBtn:false,
+						items: {
+							src: $("#checkout_wrapper"),
+							type: "inline"
+						}
+					});
+				}
+				jQuery(document).ready(function() {
+				 $.magnificPopup.open({
+				 showCloseBtn:false,
+						items: {
+							src: $("#checkout_wrapper"),
+							type: "inline"
+						}
+					});
+					})
+				</script>'; 
+				}
+			$out.='
+			<script>
+			var checkoutStyles = {
+					' .$this->styles . '
+			}
+			function checkoutInit(url) {
+				$ipsp("checkout").scope(function() {
+					this.setCheckoutWrapper("#checkout_wrapper");
+					this.addCallback(__DEFAULTCALLBACK__);
+					this.setCssStyle(checkoutStyles);
+					this.action("show", function(data) {
+						jQuery("#checkout_loader").remove();
+						jQuery("#checkout").show();
+					});
+					this.action("hide", function(data) {
+						jQuery("#checkout").hide();
+					});
+					this.action("resize", function(data) {
+						jQuery("#checkout_wrapper").height(data.height);
+						});
+					this.loadUrl(url);
+				});
+				};
+				var button = $ipsp.get("button");
+				button.setMerchantId('.$fondy_args['merchant_id'].');
+				button.setAmount('.$fondy_args['amount'].', "'.$fondy_args['currency'].'", true);
+				button.setHost("api.fondy.eu");
+				button.addParam("order_desc","'.$fondy_args['order_desc'].'");
+				button.addParam("order_id","'.$fondy_args['order_id'].'");
+				button.addParam("lang","'.$fondy_args['lang'].'");//button.addParam("delayed","N");
+				button.addParam("server_callback_url","'.$fondy_args['server_callback_url'].'");
+				button.addParam("sender_email","'.$fondy_args['sender_email'].'");
+				button.setResponseUrl("'.$fondy_args['response_url'].'");
+				checkoutInit(button.getUrl());
+				</script>';
+			return $out;
         }
 
         /**
@@ -396,7 +389,7 @@ function checkoutInit(url, val) {
 				unset($_POST['signature']);
 			}
 			if ($this->getSignature($_POST, $this->salt) != $responseSignature) {
-                 $order->update_status('failed');
+                $order->update_status('failed');
                 $order->add_order_note(__('Transaction ERROR: signature is not valid','woocommerce-fondy'));
                 return __('An error has occurred during payment. Signature is not valid.','woocommerce-fondy');
             }
@@ -405,13 +398,13 @@ function checkoutInit(url, val) {
                 $this->msg['class'] = 'woocommerce-error';
                 $this->msg['message'] = __("Thank you for shopping with us. But your payment declined.",'woocommerce-fondy');
                 $order->update_status('processing');
-                $order->add_order_note("Order status: {$response['order_status']}");
+                $order->add_order_note("Order status:" . $response['order_status']);
             }
 
             if ($response['order_status'] == self::ORDER_APPROVED) {
                 $order->update_status('completed');
                 $order->payment_complete();
-                $order->add_order_note('fondy payment successful.<br/>fondy ID: ' . ' (' . $_REQUEST['payment_id'] . ')');
+                $order->add_order_note('Fondy payment successful.<br/>fondy ID: ' . ' (' . $_REQUEST['payment_id'] . ')');
             }
 
             $woocommerce->cart->empty_cart();
@@ -424,16 +417,15 @@ function checkoutInit(url, val) {
 
             if (empty($_REQUEST))
             {
-                $fap = json_decode(file_get_contents("php://input"));
-                $_REQUEST=array();
-                foreach($fap as $key=>$val)
+                $callback = json_decode(file_get_contents("php://input"));
+                $_REQUEST = array();
+                foreach($callback as $key=>$val)
                 {
                     $_REQUEST[$key] =  $val ;
                 }
             }
-            //print_r($_REQUEST); die;
             $paymentInfo = $this->isPaymentValid($_REQUEST);
-            if ($paymentInfo === true) {
+            if ($paymentInfo == true) {
                 if ($_REQUEST['order_status'] == self::ORDER_APPROVED) {
                 $this->msg['message'] = __("Thank you for shopping with us. Your account has been charged and your transaction is successful.",'woocommerce-fondy');}
                 $this->msg['class'] = 'woocommerce-message';
