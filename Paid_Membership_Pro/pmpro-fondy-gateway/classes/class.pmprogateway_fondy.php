@@ -290,7 +290,7 @@ require_once(dirname(__FILE__) . "/fondy.lib.php");
 				exit;
 			}
 			if (isset($fondy_url->checkout_url)){
-				wp_redirect($fondy_url);
+				wp_redirect($fondy_url->checkout_url);
 			}else{
 				echo $result;
 			}
