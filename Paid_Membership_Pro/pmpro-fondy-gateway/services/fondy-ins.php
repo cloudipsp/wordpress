@@ -48,6 +48,12 @@ if (empty($_POST))
 		
 		$morder = new MemberOrder( $order_id );
 		$morder->getMembershipLevel();
+		
+		if($morder->total != $amount/100){
+			fnlog( "Amount is incorrect" );
+			exit;
+		}
+		//print_r($amount);die;
 		$morder->getUser();
 		if (isset($_POST['rectoken'])){
 		$id = $morder->id;

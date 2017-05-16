@@ -24,7 +24,7 @@ require_once(dirname(__FILE__) . "/fondy.lib.php");
 		static function init()
 		{
 			global $wpdb;
-			$result = $wpdb->query("SELECT fondy_token from `$wpdb->pmpro_membership_orders` LIMIT 1' ");	
+			$result = $wpdb->query("SELECT fondy_token from `$wpdb->pmpro_membership_orders` LIMIT 1");	
 			if(!$result){
 			$wpdb->query("ALTER TABLE $wpdb->pmpro_membership_orders ADD fondy_token TEXT");	
 			}
@@ -232,7 +232,7 @@ require_once(dirname(__FILE__) . "/fondy.lib.php");
 			$initial_payment = round((float)$initial_payment + (float)$initial_payment_tax, 2);
 			
 			$fields = array(
-			'merchant_data' => 'name='. $order->billing->name . '=phone=' . $order->billing->phone,
+			'merchant_data' => json_encode(array ('name' => $order->billing->name , 'phone' => $order->billing->phone)),
 			'product_id' => $order->membership_id,
 			'subscription_callback_url' => admin_url("admin-ajax.php") . "?action=fondy-ins",
 			'order_id' => $order->code . FondyForm::ORDER_SEPARATOR . time(),
@@ -247,37 +247,54 @@ require_once(dirname(__FILE__) . "/fondy.lib.php");
 			'subscription' => 'Y'
 			);
 			$last_subscr_order = new MemberOrder();
-			
-			//print_r ($order);
+			$url = 'https://api.fondy.eu/api/checkout/url/';
 			$last = new MemberOrder($last_subscr_order->getLastMemberOrder($order->user_id, $status = 'success', $membership_id = NULL, $gateway = NULL, $gateway_environment = NULL));
 			if (isset($last->user_id) && isset($last->code)){
 				$result = $wpdb->get_row("SELECT fondy_token from `$wpdb->pmpro_membership_orders` WHERE user_id='". $last->user_id ."' AND code='". $last->code ."'");	
 				if (isset($result->fondy_token)){
 					$fields['rectoken'] = $result->fondy_token;
+					unset($fields['subscription_callback_url']);
+					unset($fields['required_rectoken']);
+					unset($fields['subscription']);
+				    unset($fields['response_url']);
+					$url = 'https://api.fondy.eu/api/recurring/';
+					
 				}
 			}	
 			$fields['signature'] = FondyForm::getSignature($fields, pmpro_getOption("fondy_securitykey"));
-			//print_r ($last->user_id);die;
-			unset ($fields['currency']);
-			
-			$data= 'currency='. $pmpro_currency .'&';
-			foreach ($fields as $key=>$val)
-			{
-				
-			$data .=  $key . "=" . $val . '&';	
-					}
 		
-			$url = 'https://api.fondy.eu/api/checkout/url/';
+			
 			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, 'https://api.fondy.eu/api/checkout/url/');
+			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
 			curl_setopt($ch, CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+			curl_setopt($ch, CURLOPT_POSTFIELDS,json_encode(array("request"=>$fields)));
 			$result = curl_exec($ch);
-			$str=urldecode($result);
-			parse_str($str,$mass);			
-			$fondy_url = $mass['checkout_url'];	
-			wp_redirect($fondy_url);
+			if (curl_errno($ch)) {
+				print curl_error($ch);
+			} else {
+				curl_close($ch);
+			}
+			$fondy_url = json_decode($result)->response;
+			if (isset($fondy_url->order_status) and $fondy_url->order_status == 'approved'){
+				$order_id = explode('#',$fondy_url->order_id)[0];
+				$morder = new MemberOrder( $order_id );
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, admin_url("admin-ajax.php") . "?action=fondy-ins");
+				curl_setopt($ch, CURLOPT_POST, true);
+				curl_setopt($ch, CURLOPT_POSTFIELDS,json_decode($result,true)['response']);
+				$result = curl_exec($ch);
+				curl_close($ch);
+				wp_redirect(pmpro_url("confirmation", "?level=" . $morder->membership_level->id));
+				exit;
+			}
+			if (isset($fondy_url->checkout_url)){
+				wp_redirect($fondy_url);
+			}else{
+				echo $result;
+			}
+			
 			exit;
 		}
 		
