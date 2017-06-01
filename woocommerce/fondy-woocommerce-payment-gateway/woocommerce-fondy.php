@@ -376,7 +376,7 @@ function woocommerce_fondy_init()
 
         function check_fondy_response()
         {
-
+			global $woocommerce;
             if (empty($_REQUEST)) {
                 $callback = json_decode(file_get_contents("php://input"));
                 $_REQUEST = array();
@@ -394,12 +394,17 @@ function woocommerce_fondy_init()
                 $this->msg['class'] = 'error';
                 $this->msg['message'] = $paymentInfo;
             }
+			
 
-            $redirect_url = ($this->redirect_page_id == "" || $this->redirect_page_id == 0) ? get_site_url() . "/" : get_permalink($this->redirect_page_id);
-            //For wooCoomerce 2.0
-            $redirect_url = add_query_arg(array('msg' => urlencode($this->msg['message']),
+            list($orderId,) = explode(self::ORDER_SEPARATOR, $_REQUEST['order_id']);
+            $order = new WC_Order($orderId);
+			if ($this->redirect_page_id == "" || $this->redirect_page_id == 0){
+				$redirect_url = $this->get_return_url( $order );			
+			}else{
+				$redirect_url = get_permalink($this->redirect_page_id);          
+				$redirect_url = add_query_arg(array('msg' => urlencode($this->msg['message']),
                 'type' => $this->msg['class']), $redirect_url);
-
+			}
             wp_redirect($redirect_url);
             exit;
         }
