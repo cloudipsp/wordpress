@@ -229,8 +229,10 @@ function woocommerce_fondy_init()
 			curl_setopt($ch, CURLOPT_POST, true);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array('request'=>$fondy_args)));
 			$result = json_decode(curl_exec($ch));
-			if ($result->response->response_status == 'failure') 
+			if ($result->response->response_status == 'failure'){
 				echo $result->response->error_message;
+				exit;
+			}
             $out = '
 			<div id="checkout">
 			<div id="checkout_wrapper"></div>
