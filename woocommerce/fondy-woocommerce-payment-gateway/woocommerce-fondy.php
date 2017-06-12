@@ -33,7 +33,7 @@ function woocommerce_fondy_init()
     }
     function showfondyMessage($content)
     {
-        return '<div class="' . htmlentities($_GET['type']) . '">' . htmlentities(urldecode($_GET['msg'])) . '</div>' . $content;
+        return '<div class="' . wp_kses_post($_GET['type']) . '">' . wp_kses_post($_GET['msg']) . '</div>' . $content;
     }
 
     /**
