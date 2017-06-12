@@ -211,15 +211,26 @@ function woocommerce_fondy_init()
         {
             $order = new WC_Order($order_id);
 
-            $fondy_args = array('order_id' => $order_id . self::ORDER_SEPARATOR . time(),
+            $fondy_args = array(
+				'order_id' => $order_id . self::ORDER_SEPARATOR . time(),
                 'merchant_id' => $this->merchant_id,
                 'order_desc' => $this->getProductInfo($order_id),
-                'amount' => $order->order_total,
+                'amount' => round($order->order_total*100),
                 'currency' => get_woocommerce_currency(),
                 'server_callback_url' => $this->getCallbackUrl(),
                 'response_url' => $this->getCallbackUrl(),
                 'lang' => $this->getLanguage(),
                 'sender_email' => $this->getEmail($order));
+			$fondy_args['signature'] =  $this->getSignature($fondy_args, $this->salt);
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, 'https://api.fondy.eu/api/checkout/url/');
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array('request'=>$fondy_args)));
+			$result = json_decode(curl_exec($ch));
+			if ($result->response->response_status == 'failure') 
+				echo $result->response->error_message;
             $out = '
 			<div id="checkout">
 			<div id="checkout_wrapper"></div>
@@ -261,17 +272,7 @@ function woocommerce_fondy_init()
 					this.loadUrl(url);
 				});
 				};
-				var button = $ipsp.get("button");
-				button.setMerchantId(' . $fondy_args['merchant_id'] . ');
-				button.setAmount(' . $fondy_args['amount'] . ', "' . $fondy_args['currency'] . '", true);
-				button.setHost("api.fondy.eu");
-				button.addParam("order_desc","' . $fondy_args['order_desc'] . '");
-				button.addParam("order_id","' . $fondy_args['order_id'] . '");
-				button.addParam("lang","' . $fondy_args['lang'] . '");//button.addParam("delayed","N");
-				button.addParam("server_callback_url","' . $fondy_args['server_callback_url'] . '");
-				button.addParam("sender_email","' . $fondy_args['sender_email'] . '");
-				button.setResponseUrl("' . $fondy_args['response_url'] . '");
-				checkoutInit(button.getUrl());
+				checkoutInit("' . $result->response->checkout_url . '");
 				</script>';
             }
             return $out;
