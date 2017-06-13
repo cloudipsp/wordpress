@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 1.0
+Version: 2.0
 Author: DM
 Author URI: https://fondy.eu/
 Domain Path: /
@@ -222,17 +222,7 @@ function woocommerce_fondy_init()
                 'lang' => $this->getLanguage(),
                 'sender_email' => $this->getEmail($order));
 			$fondy_args['signature'] =  $this->getSignature($fondy_args, $this->salt);
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, 'https://api.fondy.eu/api/checkout/url/');
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
-			curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
-			curl_setopt($ch, CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array('request'=>$fondy_args)));
-			$result = json_decode(curl_exec($ch));
-			if ($result->response->response_status == 'failure'){
-				echo $result->response->error_message;
-				exit;
-			}
+			$url = $this->get_checkout($fondy_args);
             $out = '
 			<div id="checkout">
 			<div id="checkout_wrapper"></div>
@@ -274,12 +264,39 @@ function woocommerce_fondy_init()
 					this.loadUrl(url);
 				});
 				};
-				checkoutInit("' . $result->response->checkout_url . '");
+				checkoutInit("' . $url . '");
 				</script>';
             }
             return $out;
         }
-
+		protected function get_checkout($args){
+			if(is_callable('curl_init')){
+			$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, 'https://api.fondy.eu/api/checkout/url/');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+				curl_setopt($ch, CURLOPT_POST, true);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array('request'=>$args)));
+				
+				$result = json_decode(curl_exec($ch));
+				$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+					
+				if ( $httpCode != 200 ){
+					echo "Return code is {$httpCode} \n"
+						.curl_error($ch);
+						exit;
+				} 
+				if ($result->response->response_status == 'failure'){
+					echo $result->response->error_message;
+					exit;
+				}
+				$url = $result->response->checkout_url;
+				return $url;
+			}else{
+				echo "Curl not found!";
+				die;
+			}			
+		}
         /**
          * Process the payment and return the result
          **/
