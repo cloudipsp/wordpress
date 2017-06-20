@@ -222,15 +222,12 @@ function woocommerce_fondy_init()
                 'lang' => $this->getLanguage(),
                 'sender_email' => $this->getEmail($order));
 			$fondy_args['signature'] =  $this->getSignature($fondy_args, $this->salt);
-			$url = $this->get_checkout($fondy_args);
+			
             $out = '
 			<div id="checkout">
 			<div id="checkout_wrapper"></div>
 			</div>';
             if ($this->page_mode == 'no') {
-
-                $fondy_args['amount'] = round($order->order_total * 100);
-                $fondy_args['signature'] = $this->getSignature($fondy_args, $this->salt);
                 foreach ($fondy_args as $key => $value) {
                     $fondy_args_array[] = "<input type='hidden' name='$key' value='$value'/>";
                 }
@@ -238,9 +235,7 @@ function woocommerce_fondy_init()
                     ' . implode('', $fondy_args_array) . '
                 <input type="submit" id="submit_fondy_payment_form" value="' . __('Pay via Fondy.eu', 'woocommerce-fondy') . '" />';
             } else {
-
-                $fondy_args['amount'] = $order->order_total;
-                $fondy_args['signature'] = $this->getSignature($fondy_args, $this->salt);
+				$url = $this->get_checkout($fondy_args);           
                 $out .= '
 			    <script>
 			    var checkoutStyles = {
