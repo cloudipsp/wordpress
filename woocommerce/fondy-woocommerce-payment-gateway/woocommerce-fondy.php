@@ -212,17 +212,17 @@ function woocommerce_fondy_init()
             $order = new WC_Order($order_id);
 
             $fondy_args = array(
-				'order_id' => $order_id . self::ORDER_SEPARATOR . time(),
+                'order_id' => $order_id . self::ORDER_SEPARATOR . time(),
                 'merchant_id' => $this->merchant_id,
                 'order_desc' => $this->getProductInfo($order_id),
-                'amount' => round($order->order_total*100),
+                'amount' => round($order->order_total * 100),
                 'currency' => get_woocommerce_currency(),
                 'server_callback_url' => $this->getCallbackUrl(),
                 'response_url' => $this->getCallbackUrl(),
                 'lang' => $this->getLanguage(),
                 'sender_email' => $this->getEmail($order));
-			$fondy_args['signature'] =  $this->getSignature($fondy_args, $this->salt);
-			
+            $fondy_args['signature'] = $this->getSignature($fondy_args, $this->salt);
+
             $out = '
 			<div id="checkout">
 			<div id="checkout_wrapper"></div>
@@ -235,7 +235,7 @@ function woocommerce_fondy_init()
                     ' . implode('', $fondy_args_array) . '
                 <input type="submit" id="submit_fondy_payment_form" value="' . __('Pay via Fondy.eu', 'woocommerce-fondy') . '" />';
             } else {
-				$url = $this->get_checkout($fondy_args);           
+                $url = $this->get_checkout($fondy_args);
                 $out .= '
 			    <script>
 			    var checkoutStyles = {
@@ -264,34 +264,37 @@ function woocommerce_fondy_init()
             }
             return $out;
         }
-		protected function get_checkout($args){
-			if(is_callable('curl_init')){
-			$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, 'https://api.fondy.eu/api/checkout/url/');
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
-				curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
-				curl_setopt($ch, CURLOPT_POST, true);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array('request'=>$args)));
-				
-				$result = json_decode(curl_exec($ch));
-				$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-					
-				if ( $httpCode != 200 ){
-					echo "Return code is {$httpCode} \n"
-						.curl_error($ch);
-						exit;
-				} 
-				if ($result->response->response_status == 'failure'){
-					echo $result->response->error_message;
-					exit;
-				}
-				$url = $result->response->checkout_url;
-				return $url;
-			}else{
-				echo "Curl not found!";
-				die;
-			}			
-		}
+
+        protected function get_checkout($args)
+        {
+            if (is_callable('curl_init')) {
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, 'https://api.fondy.eu/api/checkout/url/');
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array('request' => $args)));
+
+                $result = json_decode(curl_exec($ch));
+                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+                if ($httpCode != 200) {
+                    echo "Return code is {$httpCode} \n"
+                        . curl_error($ch);
+                    exit;
+                }
+                if ($result->response->response_status == 'failure') {
+                    echo $result->response->error_message;
+                    exit;
+                }
+                $url = $result->response->checkout_url;
+                return $url;
+            } else {
+                echo "Curl not found!";
+                die;
+            }
+        }
+
         /**
          * Process the payment and return the result
          **/
@@ -343,7 +346,9 @@ function woocommerce_fondy_init()
             if ($order === FALSE) {
                 return __('An error has occurred during payment. Please contact us to ensure your order has submitted.', 'woocommerce-fondy');
             }
-
+            if ($response['amount'] != round($order->order_total * 100)) {
+                return __('Amount incorrect.', 'woocommerce-fondy');
+            }
             if ($this->merchant_id != $response['merchant_id']) {
                 $order->update_status('failed');
                 return __('An error has occurred during payment. Merchant data is incorrect.', 'woocommerce-fondy');
@@ -391,16 +396,22 @@ function woocommerce_fondy_init()
 
         function check_fondy_response()
         {
-			global $woocommerce;
+            global $woocommerce;
+			
             if (empty($_REQUEST)) {
                 $callback = json_decode(file_get_contents("php://input"));
+                if (empty($callback)) {
+                    die('go away!');
+                }
                 $_REQUEST = array();
                 foreach ($callback as $key => $val) {
                     $_REQUEST[$key] = $val;
                 }
             }
+			list($orderId,) = explode(self::ORDER_SEPARATOR, $_REQUEST['order_id']);
+            $order = new WC_Order($orderId);
             $paymentInfo = $this->isPaymentValid($_REQUEST);
-            if ($paymentInfo == true) {
+            if ($paymentInfo === true) {
                 if ($_REQUEST['order_status'] == self::ORDER_APPROVED) {
                     $this->msg['message'] = __("Thank you for shopping with us. Your account has been charged and your transaction is successful.", 'woocommerce-fondy');
                 }
@@ -408,18 +419,15 @@ function woocommerce_fondy_init()
             } else {
                 $this->msg['class'] = 'error';
                 $this->msg['message'] = $paymentInfo;
+				$order->add_order_note("ERROR: " . $paymentInfo);
+            }         
+            if ($this->redirect_page_id == "" || $this->redirect_page_id == 0) {
+                $redirect_url = $this->get_return_url($order);
+            } else {
+                $redirect_url = get_permalink($this->redirect_page_id);
+                $redirect_url = add_query_arg(array('msg' => urlencode($this->msg['message']),
+                    'type' => $this->msg['class']), $redirect_url);
             }
-			
-
-            list($orderId,) = explode(self::ORDER_SEPARATOR, $_REQUEST['order_id']);
-            $order = new WC_Order($orderId);
-			if ($this->redirect_page_id == "" || $this->redirect_page_id == 0){
-				$redirect_url = $this->get_return_url( $order );			
-			}else{
-				$redirect_url = get_permalink($this->redirect_page_id);          
-				$redirect_url = add_query_arg(array('msg' => urlencode($this->msg['message']),
-                'type' => $this->msg['class']), $redirect_url);
-			}
             wp_redirect($redirect_url);
             exit;
         }
