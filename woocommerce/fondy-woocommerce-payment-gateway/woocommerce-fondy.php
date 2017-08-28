@@ -110,7 +110,7 @@ function woocommerce_fondy_init()
                     'default' => __('Pay securely by Credit or Debit Card or Internet Banking through fondy service.', 'woocommerce-fondy'),
                     'description' => __('This controls the description which the user sees during checkout.', 'woocommerce-fondy'),
                     'desc_tip' => true),
-                'merchant_id' => array('title' => __('Merchant KEY', 'woocommerce-fondy'),
+                'merchant_id' => array('title' => __('Merchant ID', 'woocommerce-fondy'),
                     'type' => 'text',
                     'description' => __('Given to Merchant by fondy'),
                     'desc_tip' => true),
