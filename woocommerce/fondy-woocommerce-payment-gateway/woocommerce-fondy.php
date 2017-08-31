@@ -363,6 +363,13 @@ function woocommerce_fondy_init()
 
                 return $errorMessage;
             }
+			if ($response['order_status'] == 'expired') {
+                $errorMessage = __("Thank you for shopping with us. However, the transaction has been expired.", 'woocommerce-fondy');
+                $order->add_order_note('Transaction ERROR: order expired<br/>Fondy ID: ' . $_REQUEST['payment_id']);
+                $order->update_status('cancelled');
+
+                return $errorMessage;
+            }
             $responseSignature = $_POST['signature'];
             if (isset($_POST['response_signature_string'])) {
                 unset($_POST['response_signature_string']);
