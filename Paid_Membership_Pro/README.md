@@ -5,7 +5,7 @@ wordpress
 
 == Installation ==
 
-1. Ensure you have latest version of WooCommerce plugin installed (WooCommerce 2.0+)
+1. Ensure you have latest version of plugin installed (Paid memberships Pro)
 2. Upload the plugin files to the `/wp-content/plugins/`(or upload the plugin zip file using wp-admin.)
 3. Activate the plugin through the 'Plugins' menu.
 
@@ -22,7 +22,7 @@ wordpress
 
 == Установка ==
 
-1. Убедитесь что у вас установлена последняя версия плагина.
+1. Убедитесь что у вас установлена последняя версия плагина. (Paid memberships Pro)
 2. Распакуйте этот плагин в директорию `/wp-content/plugins/`(либо установите вложенный архив через панель администратора)
 3. Активируйте плагин в меню "Плагины"
 

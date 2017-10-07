@@ -1,0 +1,100 @@
+# Translation of Plugins - Fondy WooCommerce Payment Gateway - Stable Readme (latest release) in Russian
+# This file is distributed under the same license as the Plugins - Fondy WooCommerce Payment Gateway - Stable Readme (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: +0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: GlotPress/2.4.0-alpha\n"
+"Language: ru\n"
+"Project-Id-Version: Plugins - Fondy WooCommerce Payment Gateway - Stable Readme (latest release)\n"
+
+#. Found in changelog paragraph.
+msgid "stability update"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "change to host-to-host"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "add default success page"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "First release"
+msgstr ""
+
+#. Found in faq paragraph.
+msgid "Some answers you can find here <a href=\"https://fondy.eu/faq/\">FAQ</a>"
+msgstr ""
+
+#. Found in faq header.
+msgid "Installation Instructions"
+msgstr ""
+
+#. Found in installation list item, faq list item.
+msgid "After activation, you can set options from `WooCommerce -&gt; Settings -&gt; Payment (tab \"Fondy\")"
+msgstr ""
+
+#. Found in installation list item, faq list item.
+msgid "Activate the plugin through the <code>Plugins</code> menu in WordPress"
+msgstr ""
+
+#. Found in installation list item, faq list item.
+msgid "Upload plugin directory to the <code>/wp-content/plugins/</code> directory"
+msgstr ""
+
+#. Found in description paragraph.
+msgid "With us your customers can make purchases in many currencies. Fondy support  EUR, USD, GBP, RUB and UAH."
+msgstr ""
+
+#. Found in description paragraph.
+msgid "<a href=\"https://portal.fondy.eu/mportal/#/account/registration\">Create Free Fondy Account</a>"
+msgstr ""
+
+#. Found in description paragraph.
+msgid "This plugin adds Fondy as payment method to your WooCommerce store. Fondy can accept VISA and MasterCard securely, quickly and easily on your store in minutes. Simple, straightforward pricing, top notch fraud intelligence, and 24/7 support."
+msgstr ""
+
+#. Found in description list item.
+msgid "Easy configuration in WooCommerce - only Merchant ID and Secret Key need to be copied from Fondy Merchant Portal"
+msgstr ""
+
+#. Found in description list item.
+msgid "Enable/Disable Pop-up mode"
+msgstr ""
+
+#. Found in description list item.
+msgid "Customize your checkout window (<a href=\"http://jsfiddle.net/8h65h91t/\">Some styles</a>)"
+msgstr ""
+
+#. Found in description header.
+msgid "Allowed currencies"
+msgstr ""
+
+#. Found in description header.
+msgid "Features"
+msgstr ""
+
+#. Found in description header.
+msgid "Start with Fondy"
+msgstr ""
+
+#. Screenshot description.
+msgid "WooCommerce Checkout page"
+msgstr ""
+
+#. Screenshot description.
+msgid "Fondy options"
+msgstr ""
+
+#. Short description.
+msgid "WooCommerce extension allow clients make payment with Fondy."
+msgstr ""
+
+#. Plugin name.
+msgid "Fondy WooCommerce Payment Gateway"
+msgstr ""

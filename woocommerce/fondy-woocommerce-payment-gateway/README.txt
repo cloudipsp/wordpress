@@ -2,8 +2,8 @@
 Contributors: DM
 Tags: fondy, woocommerce, payment, payment gateway, credit card, debit card
 Requires at least: 3.5
-Tested up to: 4.6
-Stable tag: 1.0.0
+Tested up to: 4.8
+Stable tag: 2.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,8 +38,24 @@ Some answers you can find here [FAQ](https://fondy.eu/faq/)
 == Changelog ==
 = 1.0.0 = 
 * First release
+= 1.0.1 =
+add default success page
+= 2.0 =
+change to host-to-host
+= 2.2 =
+stability update
 
 == Upgrade Notice ==
 
 = 1.0.0 =
 Add pop-up mode
+= 1.0.1 =
+add default success page
+= 2.0 =
+change to host-to-host
+= 2.2 =
+stability update
+= 2.2.2 =
+add expired callback
+= 2.2.3 =
+change payment complete status
