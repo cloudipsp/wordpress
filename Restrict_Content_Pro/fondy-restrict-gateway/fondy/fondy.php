@@ -24,25 +24,39 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway {
      */
     public function process_signup() {
         global $rcp_options;
+        global $rcp_fondy_options;
+        global $rcp_payments_db;
         if( $this->auto_renew ) {
             $amount = $this->initial_amount;
         } else {
             $amount = $this->initial_amount;
         }
         $member = new RCP_Member( $this->user_id );
-
+        if ( $this->is_trial() ) {
+            $rcp_payments_db->update( $this->payment->id, array(
+                'payment_type' => 'Fondy',
+                'status'       => 'complete'
+            ) );
+        }
+        /**
+         * Cancel existing subscription if the member just upgraded to another one.
+         */
+        if ( $member->just_upgraded() && $member->can_cancel() ) {
+            $cancelled = $member->cancel_payment_profile( false );
+        }
+        //print_r ($this->is_trial()); die;
         if($amount == 0) {
             if($this->payment->fees != 0) {
                 $amount = $this->payment->fees;
             }else {
-                $error = '<p>' . __('Ошибка для смены тарифа свяжитесь с администратором', 'rcp') . '</p>';
+                $error = '<p>' . __('Ошибка, для смены тарифа свяжитесь с администратором', 'rcp') . '</p>';
                 wp_die($error, __('Error', 'rcp'), array('response' => '401'));
             }
         }
 
         $fondy_args = array(
             'order_id' => $this->payment->id . '#' . $member->ID,
-            'merchant_id' => $rcp_options['fondy_merchant_id'],
+            'merchant_id' => $rcp_fondy_options['fondy_merchant_id'],
             'order_desc' => $this->subscription_name,
             'amount' => round($amount*100),
             'merchant_data' => json_encode(array(
@@ -57,14 +71,14 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway {
             'sender_email' => $member->user_email
         );
 
-        if ($rcp_options['fondy_reccuring'] == true and $this->auto_renew){
+        if ($rcp_fondy_options['fondy_reccuring'] == true and $this->auto_renew){
             $fondy_args['subscription'] = 'Y';
             $fondy_args['subscription_callback_url'] = add_query_arg( 'listener', 'fondy', home_url( 'index.php' ) );
         }else{
             $fondy_args['subscription'] = 'N';
         }
 
-        $fondy_args['signature'] = Fondy_API::getSignature($fondy_args, $rcp_options['fondy_secret']);
+        $fondy_args['signature'] = Fondy_API::getSignature($fondy_args, $rcp_fondy_options['fondy_secret']);
 
         $request = wp_remote_post( $this->api_endpoint, array( 'timeout' => 45, 'sslverify' => false, 'httpversion' => '1.1', 'body' => $fondy_args ) );
         $body    = wp_remote_retrieve_body( $request );
@@ -126,6 +140,7 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway {
         }
         global $rcp_options;
         global $rcp_payments_db;
+        global $rcp_fondy_options;
         rcp_log( 'Starting to process Fondy webhook.' );
 
         if (empty($_POST)) {
@@ -140,9 +155,10 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway {
         }
 
         $posted  = apply_filters('rcp_ipn_post', $_POST );
+
         $fondySettings = array(
-            'mid' => $rcp_options['fondy_merchant_id'],
-            'secret_key' => $rcp_options['fondy_secret']
+            'mid' => $rcp_fondy_options['fondy_merchant_id'],
+            'secret_key' => $rcp_fondy_options['fondy_secret']
         );
         $paymentInfo = Fondy_API::isPaymentValid($fondySettings,$posted);
         if($paymentInfo === true){
@@ -245,7 +261,6 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway {
                             $rcp_payments->update( $pending_payment_id, $payment_data );
 
                         } else {
-
                             $payment_id = $rcp_payments->insert( $payment_data );
 
                             $expiration = date( 'Y-m-d 23:59:59', strtotime( $posted['next_payment_date'] ) );
@@ -255,6 +270,7 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway {
                         do_action( 'rcp_webhook_recurring_payment_processed', $member, $payment_id, $this );
                         do_action( 'rcp_gateway_payment_processed', $member, $payment_id, $this );
                     }else{
+                        $member->set_payment_profile_id( $posted['payment_id'] );
                         $payment_id = $rcp_payments->insert( $payment_data );
                         do_action( 'rcp_webhook_recurring_payment_processed', $member, $payment_id, $this );
                         do_action( 'rcp_gateway_payment_processed', $member, $payment_id, $this );
@@ -262,9 +278,20 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway {
                     break;
 
                 case 'declined' :
+                    rcp_log( 'Processing Fondy declined webhook.' );
+                    $member->cancel();
+                    die( 'payment declined' );
                 case 'expired' :
-                    break;
+                    rcp_log( 'Processing Fondy expired webhook.' );
 
+                    $member->set_status( 'expired' );
+
+                    $member->set_expiration_date(date( 'Y-m-d H:i:s', strtotime( $posted['order_time'] ) ) );
+
+                    $member->add_note( __( 'Subscription expired in Fondy', 'rcp' ) );
+
+                    die( 'member expired' );
+                    break;
             endswitch;
         }else{
 
