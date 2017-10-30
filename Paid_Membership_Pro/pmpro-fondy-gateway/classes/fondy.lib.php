@@ -23,23 +23,21 @@ class FondyForm
             return $str;
         }
     }
-    public static function isPaymentValid($oplataSettings, $response)
+    public static function isPaymentValid($fondySettings, $response , $base64_data, $sign)
     {
-        if ($oplataSettings['merchant_id'] != $response['merchant_id']) {
+        if ($fondySettings['merchant_id'] != $response['merchant_id']) {
 		
             return 'An error has occurred during payment. Merchant data is incorrect.';
         }
-
-        $responseSignature = $response['signature'];
 		if (isset($response['response_signature_string'])){
 			unset($response['response_signature_string']);
 		}
 		if (isset($response['signature'])){
 			unset($response['signature']);
 		}
-		if (self::getSignature($response, $oplataSettings['secret_key']) != $responseSignature) {
-            return 'An error has occurred during payment. Signature is not valid.';
-        }
+	    if ($sign != sha1($fondySettings['secret_key'] . '|' . $base64_data)) {
+		    return 'An error has occurred during payment. Signature is not valid.';
+	    }
         return true;
     }
 }

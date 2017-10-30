@@ -1,7 +1,7 @@
 wordpress
 =========
 
-#EN
+# EN
 
 == Installation ==
 
@@ -18,7 +18,7 @@ wordpress
 
 ---------
 
-#RU
+# RU
 
 == Установка ==
 
