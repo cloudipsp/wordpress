@@ -21,7 +21,7 @@ function rcp_fondy_admin_page()
 {
     global $rcp_fondy_options;
     ?>
-    <?php if ($_REQUEST['settings-updated'] ) : ?>
+    <?php if (isset($_REQUEST['settings-updated']) ) : ?>
     <div class="updated fade"><p><strong><?php _e( 'Options saved', 'rcp' ); ?></strong></p></div>
     <?php endif; ?>
     <?php if (function_exists('pw_rcp_register_fondy_gateway')) : ?>
