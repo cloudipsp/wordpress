@@ -263,14 +263,7 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway {
 			);
 			$rcp_payments = new RCP_Payments();
 
-
-			$payment_f = $rcp_payments_db->get_payment( absint( $trans_id ) );
-
 			rcp_log( sprintf( 'Processing Fondy. Payment status: %s', $posted['order_status'] ) );
-			if ( $payment_f->amount != $amount ) {
-				rcp_log( 'Amoun is incorrect or order is updated' );
-				die;
-			}
 
 			switch ( strtolower( $posted['order_status'] ) ) :
 				case 'approved' :
