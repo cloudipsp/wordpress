@@ -302,6 +302,7 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway {
 					} else {
 						$member->set_payment_profile_id( $posted['payment_id'] );
 						$payment_id = $rcp_payments->insert( $payment_data );
+						$member->renew( true);
 						do_action( 'rcp_webhook_recurring_payment_processed', $member, $payment_id, $this );
 						do_action( 'rcp_gateway_payment_processed', $member, $payment_id, $this );
 					}
