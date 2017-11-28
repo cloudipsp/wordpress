@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.2.3
+Version: 2.3
 Author: DM
 Author URI: https://fondy.eu/
 Domain Path: /
@@ -55,7 +55,7 @@ if ( ! class_exists( 'WC_PaymentFondy' ) ) :
 		 */
 		static function check_environment() {
 			if ( version_compare( phpversion(), '5.4.0', '<' ) ) {
-				$message = __( ' The minimum PHP version required for Payment Highway is %1$s. You are running %2$s.', 'woocommerce-fondy' );
+				$message = __( ' The minimum PHP version required for Fondy is %1$s. You are running %2$s.', 'woocommerce-fondy' );
 
 				return sprintf( $message, '5.4.0', phpversion() );
 			}
@@ -65,7 +65,7 @@ if ( ! class_exists( 'WC_PaymentFondy' ) ) :
 			}
 
 			if ( version_compare( WC_VERSION, '3.0.0', '<' ) ) {
-				$message = __( 'The minimum WooCommerce version required for Payment Highway is %1$s. You are running %2$s.', 'woocommerce-fondy' );
+				$message = __( 'The minimum WooCommerce version required for Fondy is %1$s. You are running %2$s.', 'woocommerce-fondy' );
 
 				return sprintf( $message, '2.0.0', WC_VERSION );
 			}
