@@ -22,18 +22,8 @@ define('IMGDIR', WP_PLUGIN_URL . "/" . plugin_basename(dirname(__FILE__)) . '/as
 
 function woocommerce_fondy_init()
 {
-
-    //load_plugin_textdomain("woocommerce_fondy", false, basename(dirname(__FILE__)));
     if (!class_exists('WC_Payment_Gateway')) {
         return;
-    }
-
-    if (isset($_GET['msg']) && !empty($_GET['msg'])) {
-        add_action('the_content', 'showfondyMessage');
-    }
-    function showfondyMessage($content)
-    {
-        return '<div class="' . wp_kses_post($_GET['type']) . '">' . wp_kses_post($_GET['msg']) . '</div>' . $content;
     }
 
     /**
@@ -200,7 +190,7 @@ function woocommerce_fondy_init()
 
         private function getProductInfo($order_id)
         {
-            return "Order: $order_id";
+            return __('Order: ', 'woocommerce-fondy') . $order_id;
         }
 
         /**
@@ -210,11 +200,12 @@ function woocommerce_fondy_init()
         {
             $order = new WC_Order($order_id);
 
+
             $fondy_args = array(
                 'order_id' => $order_id . self::ORDER_SEPARATOR . time(),
                 'merchant_id' => $this->merchant_id,
                 'order_desc' => $this->getProductInfo($order_id),
-                'amount' => round($order->order_total * 100),
+                'amount' => round($order->get_total() * 100),
                 'currency' => get_woocommerce_currency(),
                 'server_callback_url' => $this->getCallbackUrl(),
                 'response_url' => $this->getCallbackUrl(),
@@ -234,7 +225,11 @@ function woocommerce_fondy_init()
                     ' . implode('', $fondy_args_array) . '
                 <input type="submit" id="submit_fondy_payment_form" value="' . __('Pay via Fondy.eu', 'woocommerce-fondy') . '" />';
             } else {
-                $url = $this->get_checkout($fondy_args);
+                $url = WC()->session->get('session_token_' . $order_id);
+                if (empty($url)) {
+                    $url = $this->get_checkout($fondy_args);
+                    WC()->session->set('session_token_' . $order_id, $url);
+                }
                 $out .= '
 			    <script>
 			    var checkoutStyles = {
@@ -278,19 +273,16 @@ function woocommerce_fondy_init()
                 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
                 if ($httpCode != 200) {
-                    echo "Return code is {$httpCode} \n"
-                        . curl_error($ch);
-                    exit;
+                    $error = "Return code is {$httpCode} \n" . curl_error($ch);
+                    wp_die($error);
                 }
                 if ($result->response->response_status == 'failure') {
-                    echo $result->response->error_message;
-                    exit;
+                    wp_die($result->response->error_message);
                 }
                 $url = $result->response->checkout_url;
                 return $url;
             } else {
-                echo "Curl not found!";
-                die;
+                wp_die("Curl not found!");
             }
         }
 
@@ -309,7 +301,7 @@ function woocommerce_fondy_init()
                 $checkout_payment_url = get_permalink(get_option('woocommerce_pay_page_id'));
             }
             return array('result' => 'success',
-                'redirect' => add_query_arg('order_pay', $order->id, $checkout_payment_url));
+                'redirect' => add_query_arg('order_pay', $order_id, $checkout_payment_url));
         }
 
         private function getCallbackUrl()
@@ -342,32 +334,32 @@ function woocommerce_fondy_init()
 
             list($orderId,) = explode(self::ORDER_SEPARATOR, $response['order_id']);
             $order = new WC_Order($orderId);
-			$total = round($order->order_total * 100);
+            $total = round($order->get_total() * 100);
             if ($order === FALSE) {
                 return __('An error has occurred during payment. Please contact us to ensure your order has submitted.', 'woocommerce-fondy');
             }
-            if ($response['amount'] != round($order->order_total * 100)) {
+            if ($response['amount'] != $total) {
                 return __('Amount incorrect.', 'woocommerce-fondy');
             }
             if ($this->merchant_id != $response['merchant_id']) {
                 $order->update_status('failed');
                 return __('An error has occurred during payment. Merchant data is incorrect.', 'woocommerce-fondy');
             }
-			
-			$responseSignature = $response['signature'];
+
+            $responseSignature = $response['signature'];
             if (isset($response['response_signature_string'])) {
                 unset($response['response_signature_string']);
             }
             if (isset($response['signature'])) {
                 unset($response['signature']);
             }
-			
+
             if ($this->getSignature($response, $this->salt) != $responseSignature) {
                 $order->update_status('failed');
                 $order->add_order_note(__('Transaction ERROR: signature is not valid', 'woocommerce-fondy'));
                 return __('An error has occurred during payment. Signature is not valid.', 'woocommerce-fondy');
             }
-			
+
             if ($response['order_status'] == self::ORDER_DECLINED) {
                 $errorMessage = __("Thank you for shopping with us. However, the transaction has been declined.", 'woocommerce-fondy');
                 $order->add_order_note('Transaction ERROR: order declined<br/>Fondy ID: ' . $response['payment_id']);
@@ -377,14 +369,14 @@ function woocommerce_fondy_init()
 
                 return $errorMessage;
             }
-			
-			if ($response['order_status'] == 'expired') {
+
+            if ($response['order_status'] == 'expired') {
                 $errorMessage = __("Thank you for shopping with us. However, the transaction has been expired.", 'woocommerce-fondy');
                 $order->add_order_note('Transaction ERROR: order expired<br/>Fondy ID: ' . $response['payment_id']);
                 $order->update_status('cancelled');
 
                 return $errorMessage;
-            }			
+            }
 
             if ($response['order_status'] != self::ORDER_APPROVED) {
                 $this->msg['class'] = 'woocommerce-error';
@@ -397,12 +389,12 @@ function woocommerce_fondy_init()
                 $order->update_status('processing');
                 $order->payment_complete();
                 $order->add_order_note('Fondy payment successful.<br/>fondy ID: ' . ' (' . $response['payment_id'] . ')');
-            }elseif($total != $response['amount']){
-				$errorMessage = __("Thank you for shopping with us. However, the transaction has been declined.", 'woocommerce-fondy');
+            } elseif ($total != $response['amount']) {
+                $errorMessage = __("Thank you for shopping with us. However, the transaction has been declined.", 'woocommerce-fondy');
                 $order->add_order_note('Transaction ERROR: amount incorrect<br/>Fondy ID: ' . $response['payment_id']);
                 $order->update_status('failed');
-			}
-
+            }
+            WC()->session->__unset('session_token_' . $orderId);
             $woocommerce->cart->empty_cart();
 
             return true;
@@ -411,7 +403,7 @@ function woocommerce_fondy_init()
         function check_fondy_response()
         {
             global $woocommerce;
-			
+
             if (empty($_POST)) {
                 $callback = json_decode(file_get_contents("php://input"));
                 if (empty($callback)) {
@@ -422,10 +414,10 @@ function woocommerce_fondy_init()
                     $_POST[$key] = $val;
                 }
             }
-			list($orderId,) = explode(self::ORDER_SEPARATOR, $_POST['order_id']);
+            list($orderId,) = explode(self::ORDER_SEPARATOR, $_POST['order_id']);
             $order = new WC_Order($orderId);
             $paymentInfo = $this->isPaymentValid($_POST);
-            if ($paymentInfo === true) {
+            if ($paymentInfo === true and !$order->has_status('processing')) {
                 if ($_POST['order_status'] == self::ORDER_APPROVED) {
                     $this->msg['message'] = __("Thank you for shopping with us. Your account has been charged and your transaction is successful.", 'woocommerce-fondy');
                 }
@@ -433,14 +425,17 @@ function woocommerce_fondy_init()
             } else {
                 $this->msg['class'] = 'error';
                 $this->msg['message'] = $paymentInfo;
-				$order->add_order_note("ERROR: " . $paymentInfo);
-            }         
+                $order->add_order_note("ERROR: " . $paymentInfo);
+            }
             if ($this->redirect_page_id == "" || $this->redirect_page_id == 0) {
                 $redirect_url = $this->get_return_url($order);
             } else {
                 $redirect_url = get_permalink($this->redirect_page_id);
-                $redirect_url = add_query_arg(array('msg' => urlencode($this->msg['message']),
-                    'type' => $this->msg['class']), $redirect_url);
+                if ($this->msg['class'] == 'woocommerce-error' or $this->msg['class'] == 'error') {
+                    wc_add_notice($this->msg['message'], 'error');
+                } else {
+                    wc_add_notice($this->msg['message']);
+                }
             }
             wp_redirect($redirect_url);
             exit;
