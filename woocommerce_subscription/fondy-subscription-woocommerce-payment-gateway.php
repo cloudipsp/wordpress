@@ -1,11 +1,11 @@
 <?php
 /*
-Plugin Name: WooCommerce - Fondy payment gateway
-Plugin URI: https://fondy.eu
-Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.3
+Plugin Name: WooCommerce - Fondy subscription payment gateway
+Plugin URI: https://fondy.eu/en/
+Description: Fondy subscription payment gateway for WooCommerce.
+Version: 1.0
 Author: DM
-Author URI: https://fondy.eu/
+Author URI: https://fondy.eu/en/
 Domain Path: /
 Text Domain: woocommerce-fondy
 License: GPLv2 or later

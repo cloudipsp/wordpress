@@ -38,6 +38,7 @@ class WC_Fondy extends WC_Payment_Gateway {
 			'products',
 			'subscriptions',
 			'subscription_reactivation',
+			'subscription_amount_changes',
 			'subscription_suspension'
 		);
 		if ( version_compare( WOOCOMMERCE_VERSION, '2.0.0', '>=' ) ) {

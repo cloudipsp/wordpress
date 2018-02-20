@@ -56,7 +56,7 @@ class WC_Fondy_Subscriptions extends WC_Fondy {
 		}
 
 		if ( $this->checkToken( $token[0] ) ) {
-
+			$order->add_order_note( 'Order amount is: ' . $amount/100 );
 			$fondy_args = array(
 				'order_id'    => $order->get_order_number() . self::ORDER_SEPARATOR . time(),
 				'merchant_id' => $this->merchant_id,
