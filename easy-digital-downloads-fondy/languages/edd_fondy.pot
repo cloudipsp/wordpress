@@ -1,0 +1,96 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: EDD Fondy Payment\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-03-12 12:46+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/"
+
+#: edd-fondy-payment.php:185
+msgid "Choose language, leave empty if you want for brower language."
+msgstr ""
+
+#: edd-fondy-payment.php:165
+msgid "Configure the gateway settings"
+msgstr ""
+
+#. Author of the plugin
+msgid "Dmitriy Miroshnikov"
+msgstr ""
+
+#. Name of the plugin
+msgid "EDD Fondy Payment"
+msgstr ""
+
+#: edd-fondy-payment.php:171
+msgid ""
+"Enter your Merchant ID, you can find it <a href=https://portal.fondy."
+"eu/mportal/#/settings/ target=_blank>here</a>."
+msgstr ""
+
+#: edd-fondy-payment.php:178
+msgid ""
+"Enter your Secret Key, you can find it <a href=https://portal.fondy."
+"eu/mportal/#/settings/ target=_blank>here</a>."
+msgstr ""
+
+#: edd-fondy-payment.php:147
+msgid "Fondy"
+msgstr ""
+
+#: edd-fondy-payment.php:164
+msgid "Fondy Payment Gateway Settings"
+msgstr ""
+
+#. Description of the plugin
+msgid "Fondy Payment integration for EDD plugin"
+msgstr ""
+
+#: edd-fondy-payment.php:147
+msgid "Fondy Payments"
+msgstr ""
+
+#: edd-fondy-payment.php:184
+msgid "Language"
+msgstr ""
+
+#: edd-fondy-payment.php:170
+msgid "Merchant ID"
+msgstr ""
+
+#: edd-fondy-payment.php:235
+#, php-format
+msgid "Order №: %s"
+msgstr ""
+
+#: edd-fondy-payment.php:227
+#, php-format
+msgid "Payment creation failed. Payment data: %s"
+msgstr ""
+
+#: edd-fondy-payment.php:227 edd-fondy-payment.php:261
+msgid "Payment Error"
+msgstr ""
+
+#: edd-fondy-payment.php:261
+#, php-format
+msgid "Payment failed. Payment data: %s"
+msgstr ""
+
+#: edd-fondy-payment.php:443
+msgid ""
+"Please upgrade WordPress to the latest version to allow WordPress and this "
+"plugin to work properly."
+msgstr ""
+
+#: edd-fondy-payment.php:177
+msgid "Secret Key"
+msgstr ""
