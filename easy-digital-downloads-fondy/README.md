@@ -11,4 +11,4 @@ Navigate to your WordPress "Plugins" page:
 ![Settings][1]
 ----
 
-[1]: https://raw.githubusercontent.com/cloudipsp/wordpress/master/easy-digital-downloads-fondy/settings.png
+[1]: https://raw.githubusercontent.com/cloudipsp/wordpress/master/easy-digital-downloads-fondy/settings1.png
