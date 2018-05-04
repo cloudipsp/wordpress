@@ -1,3 +1,20 @@
+function f_block($node) {
+    if (!f_is_blocked($node)) {
+        $node.addClass('processing').block({
+            message: null,
+            overlayCSS: {
+                background: '#fff',
+                opacity: 0.6
+            }
+        });
+    }
+}
+function f_is_blocked($node) {
+    return $node.is('.processing') || $node.parents('.processing').length;
+}
+function f_unblock($node) {
+    $node.removeClass('processing').unblock();
+}
 function nextInput(input, event) {
     clearTimeout(input.keydownIdle);
     input.keydownIdle = setTimeout(function (field, list, index, code, length) {
@@ -57,6 +74,7 @@ function fondy_submit_order(event) {
                 'action': 'generate_ajax_order_fondy_info',
                 'nonce_code': fondy_info.nonce
             });
+        f_block(jQuery('#checkout_fondy_form'));
         jQuery.post(fondy_info.url, f_o_data, function (response) {
             if (response.result === 'success') {
                 if (!jQuery("input[name='token']").length) {
@@ -75,11 +93,13 @@ function fondy_submit_order(event) {
                         console.log(model.attr('order'));
                         post_to_url(model.attr('order').response_url, model.attr('order').order_data, 'post');
                     }).fail(function (model) {
+                        f_unblock(jQuery('#checkout_fondy_form'));
                         var code = model.attr('error').code ? model.attr('error').code : '';
                         jQuery("#checkout_fondy_form").find(".error-wrapper").html(code + '. ' + model.attr('error').message).show();
                     });
                 });
             } else {
+                f_unblock(jQuery('#checkout_fondy_form'));
                 jQuery("#checkout_fondy_form").find(".error-wrapper").html(response.messages).show();
             }
         });
