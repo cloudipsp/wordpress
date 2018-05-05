@@ -1,10 +1,16 @@
 <?php
 /*
-Plugin Name: Fondy Gateway for Paid Memberships Pro
+Plugin Name: PmP Fondy Payment
+Plugin URI: https://fondy.eu
 Description: Fondy Gateway for Paid Memberships Pro
-Version: 0.1
+Version: 1.0
+Domain Path: /
+Text Domain: fondy
+Author: Dmitriy Miroshnikov
+Author URI: https://fondy.eu/
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
-
 define("PMPRO_FONDY_DIR", dirname(__FILE__));
 
 //load payment gateway class
