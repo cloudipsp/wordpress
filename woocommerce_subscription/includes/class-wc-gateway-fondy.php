@@ -477,7 +477,7 @@ class WC_Fondy extends WC_Payment_Gateway {
 			}
 			$_POST = array();
 			foreach ( $callback as $key => $val ) {
-				$_POST[ $key ] = $val;
+				$_POST[ esc_sql($key) ] = esc_sql($val);
 			}
 		}
 		list( $orderId, ) = explode( self::ORDER_SEPARATOR, $_POST['order_id'] );

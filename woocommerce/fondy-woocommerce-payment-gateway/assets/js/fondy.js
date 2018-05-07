@@ -9,12 +9,15 @@ function f_block($node) {
         });
     }
 }
+
 function f_is_blocked($node) {
     return $node.is('.processing') || $node.parents('.processing').length;
 }
+
 function f_unblock($node) {
     $node.removeClass('processing').unblock();
 }
+
 function nextInput(input, event) {
     clearTimeout(input.keydownIdle);
     input.keydownIdle = setTimeout(function (field, list, index, code, length) {
@@ -36,11 +39,13 @@ function nextInput(input, event) {
         }
     });
 }
+
 if (jQuery("#billing_email").length) {
     jQuery("#billing_email").on("input", function () {
         jQuery("input[name='sender_email']").val(this.value)
     });
 }
+
 function fondy_submit_order(event) {
     if (jQuery('#payment_method_fondy').is(':checked')) {
         var evt = event || window.event;
@@ -71,10 +76,11 @@ function fondy_submit_order(event) {
         }
         jQuery("#checkout_fondy_form").find(".error-wrapper").hide();
         var f_o_data = checkout.serialize() + '&' + jQuery.param({
-                'action': 'generate_ajax_order_fondy_info',
-                'nonce_code': fondy_info.nonce
-            });
+            'action': 'generate_ajax_order_fondy_info',
+            'nonce_code': fondy_info.nonce
+        });
         f_block(jQuery('#checkout_fondy_form'));
+        f_block(jQuery('#place_order'));
         jQuery.post(fondy_info.url, f_o_data, function (response) {
             if (response.result === 'success') {
                 if (!jQuery("input[name='token']").length) {
@@ -90,8 +96,7 @@ function fondy_submit_order(event) {
                 $checkout('Api').scope(function () {
                     this.request('api.checkout.form', 'request', Params).done(function (model) {
                         model.sendResponse();
-                        console.log(model.attr('order'));
-                        post_to_url(model.attr('order').response_url, model.attr('order').order_data, 'post');
+                        fondy_post_to_url(model.attr('order').response_url, model.attr('order').order_data, 'post');
                     }).fail(function (model) {
                         f_unblock(jQuery('#checkout_fondy_form'));
                         var code = model.attr('error').code ? model.attr('error').code : '';
@@ -105,6 +110,7 @@ function fondy_submit_order(event) {
         });
     }
 }
+
 function f_clean_error() {
     jQuery('#fondy_ccard').removeAttr("style");
     jQuery('#fondy_expiry_month').removeAttr("style");
@@ -116,6 +122,7 @@ function fondy_error(element) {
     element.css('color', 'red');
     element.css('border-color', 'red');
 }
+
 function f_valid_cvv2(value) {
     var maxLength = 3;
     if (typeof value !== 'string') {
@@ -136,6 +143,7 @@ function f_valid_cvv2(value) {
 
     return true;
 }
+
 function f_valid_year(value) {
     var currentFirstTwo, currentYear, firstTwo, len, twoDigitYear, valid, isCurrentYear;
     maxElapsedYear = 30;
@@ -176,6 +184,7 @@ function f_valid_year(value) {
 
     return valid;
 }
+
 function f_valid_month(value) {
     var month, result;
     if (typeof value !== 'string') {
@@ -196,6 +205,7 @@ function f_valid_month(value) {
     result = month > 0 && month < 13;
     return result;
 }
+
 function f_valid_credit_card(value) {
     if (/[^0-9-\s]+/.test(value)) return false;
     if (value === '') return false;
@@ -219,16 +229,8 @@ function f_valid_credit_card(value) {
 
     return sum % 10 === 0;
 }
-function fondy_ck_init(elem) {
-    $checkout('FormWidget', {
-        element: elem
-    }).on('success', function (model) {
-        console.log('success', JSON.stringify(model));
-    }).on('error', function (model) {
-        jQuery("#checkout_fondy_form").find(".error-wrapper").html(model.attr('error.message')).show();
-    });
-}
-function post_to_url(path, params, method) {
+
+function fondy_post_to_url(path, params, method) {
     method = method || "post";
 
     var form = document.createElement("form");
