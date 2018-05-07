@@ -26,6 +26,7 @@ function woocommerce_fondy_init() {
 		return;
 	}
 
+
 	/**
 	 * Gateway class
 	 */
@@ -54,6 +55,7 @@ function woocommerce_fondy_init() {
 			$this->styles           = $this->settings['styles'];
 			$this->description      = $this->settings['description'];
 			$this->page_mode        = $this->settings['page_mode'];
+			$this->on_checkout_page = $this->settings['on_checkout_page'] ? $this->settings['on_checkout_page'] : false;
 			$this->msg['message']   = "";
 			$this->msg['class']     = "";
 
@@ -72,9 +74,33 @@ function woocommerce_fondy_init() {
 				add_action( 'init', array( &$this, 'check_fondy_response' ) );
 				add_action( 'woocommerce_update_options_payment_gateways', array( &$this, 'process_admin_options' ) );
 			}
-
+			if ( isset( $this->on_checkout_page ) and $this->on_checkout_page == 'yes' ) {
+				add_filter( 'woocommerce_order_button_html', array( &$this, 'custom_order_button_html' ) );
+			}
 			add_action( 'woocommerce_receipt_fondy', array( &$this, 'receipt_page' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'fondy_checkout_scripts' ) );
+		}
+
+		/**
+		 *
+		 */
+		function generate_ajax_order_fondy_info() {
+			check_ajax_referer( 'fondy-submit-nonce', 'nonce_code' );
+			WC()->checkout()->process_checkout();
+			wp_die();
+		}
+
+		/**
+		 * @param $button
+		 *
+		 * @return string
+		 */
+		function custom_order_button_html( $button ) {
+			$order_button_text = __( 'Place order', 'woocommerce' );
+			$js_event          = "fondy_submit_order(event);";
+			$button            = '<button type="submit" onClick="' . esc_attr( $js_event ) . '" class="button alt" name="woocommerce_checkout_place_order" id="place_order" value="' . esc_attr( $order_button_text ) . '" data-value="' . esc_attr( $order_button_text ) . '" >' . esc_attr( $order_button_text ) . '</button>';
+
+			return $button;
 		}
 
 		/**
@@ -83,7 +109,18 @@ function woocommerce_fondy_init() {
 		function fondy_checkout_scripts() {
 			if ( is_checkout() ) {
 				wp_enqueue_style( 'fondy-checkout', plugin_dir_url( __FILE__ ) . 'assets/css/fondy_styles.css' );
-				wp_enqueue_script( 'fondy_pay', '//api.fondy.eu/static_common/v1/checkout/ipsp.js', array(), null, false );
+				if ( isset( $this->on_checkout_page ) and $this->on_checkout_page == 'yes' ) {
+					wp_enqueue_script( 'fondy_pay_v2', '//unpkg.com/ipsp-js-sdk@1.0.13/dist/checkout.min.js', array( 'jquery' ), null, true );
+					wp_enqueue_script( 'fondy_pay_v2_woocom', plugin_dir_url( __FILE__ ) . 'assets/js/fondy.js', array( 'fondy_pay_v2' ), null, true );
+					wp_localize_script( 'fondy_pay_v2_woocom', 'fondy_info',
+						array(
+							'url'   => admin_url( 'admin-ajax.php' ),
+							'nonce' => wp_create_nonce( 'fondy-submit-nonce' )
+						)
+					);
+				} else {
+					wp_enqueue_script( 'fondy_pay', '//api.fondy.eu/static_common/v1/checkout/ipsp.js', array(), null, false );
+				}
 			}
 		}
 
@@ -138,6 +175,14 @@ function woocommerce_fondy_init() {
 					'description' => __( 'Tick to show show recurring payment calendar on checkout', 'woocommerce-fondy' ),
 					'desc_tip'    => true
 				),
+				'on_checkout_page' => array(
+					'title'       => __( 'Enable on checkout page mode', 'woocommerce-fondy' ),
+					'type'        => 'checkbox',
+					'label'       => __( 'Show payment on checkout page', 'woocommerce-fondy' ),
+					'default'     => 'no',
+					'description' => __( 'Show payment on checkout page', 'woocommerce-fondy' ),
+					'desc_tip'    => true
+				),
 				'page_mode'        => array(
 					'title'       => __( 'Enable on page mode', 'woocommerce-fondy' ),
 					'type'        => 'checkbox',
@@ -182,6 +227,58 @@ function woocommerce_fondy_init() {
 		function payment_fields() {
 			if ( $this->description ) {
 				echo wpautop( wptexturize( $this->description ) );
+			}
+			if ( isset( $this->on_checkout_page ) and $this->on_checkout_page == 'yes' ) {
+				?>
+                <form id="checkout_fondy_form">
+                    <input type="hidden" name="payment_system" value="card">
+                    <div class="container">
+                        <div class="input-wrapper">
+                            <div class="input-label w-1">
+								<?= __( 'Card Number:', 'woocommerce-fondy' ) ?>
+                            </div>
+                            <div class="input-field w-1">
+                                <input required type="tel" name="card_number" class="input" id="fondy_ccard"
+                                       onkeydown="nextInput(this,event)"
+                                       maxlength="16"
+                                       placeholder="<?= __( 'XXXXXXXXXXXXXXXX', 'woocommerce-fondy' ) ?>"/>
+                                <div class="ccard"></div>
+                            </div>
+                        </div>
+                        <div class="input-wrapper">
+                            <div class="input-label w-3-2">
+								<?= __( 'Expiry Date:', 'woocommerce-fondy' ) ?>
+                            </div>
+                            <div class="input-label w-4 w-rigth">
+								<?= __( 'CVV2:', 'woocommerce-fondy' ) ?>
+                            </div>
+                            <div class="input-field w-4">
+                                <input required type="tel" name="expiry_month" id="fondy_expiry_month"
+                                       onkeydown="nextInput(this,event)" class="input"
+                                       maxlength="2" placeholder="MM"/>
+                            </div>
+                            <div class="input-field w-4">
+                                <input required type="tel" name="expiry_year" id="fondy_expiry_year"
+                                       onkeydown="nextInput(this,event)" class="input"
+                                       maxlength="2" placeholder="YY"/>
+                            </div>
+                            <div class="input-field w-4 w-rigth">
+                                <input required type="tel" name="cvv2" id="fondy_cvv2" onkeydown="nextInput(this,event)"
+                                       class="input"
+                                       maxlength="3"
+                                       placeholder="XXX"/>
+                            </div>
+                        </div>
+                        <div style="display: none" class="input-wrapper stack-1">
+                            <div class="input-field w-1">
+                                <input id="submit_fondy_checkout_form" type="submit" class="button">
+                                value="<?= __( 'Pay', 'woocommerce-fondy' ) ?>"/>
+                            </div>
+                        </div>
+                        <div class="error-wrapper"></div>
+                    </div>
+                </form>
+				<?
 			}
 		}
 
@@ -315,6 +412,38 @@ function woocommerce_fondy_init() {
 		}
 
 		/**
+		 * @param $args
+		 *
+		 * @return mixed
+		 */
+		protected function get_token( $args ) {
+			if ( is_callable( 'curl_init' ) ) {
+				$ch = curl_init();
+				curl_setopt( $ch, CURLOPT_URL, 'https://api.fondy.eu/api/checkout/token/' );
+				curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+				curl_setopt( $ch, CURLOPT_HTTPHEADER, array( 'Content-type: application/json' ) );
+				curl_setopt( $ch, CURLOPT_POST, true );
+				curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( array( 'request' => $args ) ) );
+
+				$result   = json_decode( curl_exec( $ch ) );
+				$httpCode = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+				if ( $httpCode != 200 ) {
+					$error = "Return code is {$httpCode} \n" . curl_error( $ch );
+
+					return array( 'result' => 'failture', 'messages' => $error );
+				}
+				if ( $result->response->response_status == 'failure' ) {
+					return array( 'result' => 'failture', 'messages' => $result->response->error_message );
+				}
+				$token = $result->response->token;
+
+				return array( 'result' => 'success', 'token' => esc_attr( $token ) );
+			} else {
+				wp_die( "Curl not found!" );
+			}
+		}
+
+		/**
 		 * Process the payment and return the result
 		 **/
 		function process_payment( $order_id ) {
@@ -327,11 +456,32 @@ function woocommerce_fondy_init() {
 				/* 2.0.0 */
 				$checkout_payment_url = get_permalink( get_option( 'woocommerce_pay_page_id' ) );
 			}
+			if ( $this->on_checkout_page == 'yes' ) {
 
-			return array(
-				'result'   => 'success',
-				'redirect' => add_query_arg( 'order_pay', $order_id, $checkout_payment_url )
-			);
+				$fondy_args              = array(
+					'order_id'            => $order_id . self::ORDER_SEPARATOR . time(),
+					'merchant_id'         => esc_attr( $this->merchant_id ),
+					'amount'              => round( $order->get_total() * 100 ),
+					'order_desc'          => $this->getProductInfo( $order_id ),
+					'currency'            => esc_attr( get_woocommerce_currency() ),
+					'server_callback_url' => esc_attr( $this->getCallbackUrl() ),
+					'response_url'        => esc_attr( $this->getCallbackUrl() ),
+					'lang'                => esc_attr( $this->getLanguage() ),
+					'sender_email'        => esc_attr( $this->getEmail( $order ) )
+				);
+				$fondy_args['signature'] = $this->getSignature( $fondy_args, $this->salt );
+				$token                   = $this->get_token( $fondy_args );
+				if ( $token['result'] === 'success' ) {
+					return $token;
+				} else {
+					wp_send_json( $token );
+				}
+			} else {
+				return array(
+					'result'   => 'success',
+					'redirect' => add_query_arg( 'order_pay', $order_id, $checkout_payment_url )
+				);
+			}
 		}
 
 		private function getCallbackUrl() {
@@ -439,7 +589,7 @@ function woocommerce_fondy_init() {
 				}
 				$_POST = array();
 				foreach ( $callback as $key => $val ) {
-					$_POST[ $key ] = $val;
+					$_POST[ esc_sql( $key ) ] = esc_sql( $val );
 				}
 			}
 			list( $orderId, ) = explode( self::ORDER_SEPARATOR, $_POST['order_id'] );
@@ -504,5 +654,10 @@ function woocommerce_fondy_init() {
 		return $methods;
 	}
 
+	add_action( 'wp_ajax_nopriv_generate_ajax_order_fondy_info', array(
+		'WC_fondy',
+		'generate_ajax_order_fondy_info'
+	) );
+	add_action( 'wp_ajax_generate_ajax_order_fondy_info', array( 'WC_fondy', 'generate_ajax_order_fondy_info' ) );
 	add_filter( 'woocommerce_payment_gateways', 'woocommerce_add_fondy_gateway' );
 }
