@@ -3,7 +3,7 @@ Contributors: DM
 Tags: fondy, woocommerce, payment, payment gateway, credit card, debit card
 Requires at least: 3.5
 Tested up to: 4.9
-Stable tag: 2.3.0
+Stable tag: 2.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,3 +61,5 @@ add expired callback
 change payment complete status
 = 2.3.0 =
 some fix, dublicate update
+= 2.4.0 =
+Added v2 js Api
