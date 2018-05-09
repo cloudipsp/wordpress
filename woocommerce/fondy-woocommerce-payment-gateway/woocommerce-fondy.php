@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.4.0
+Version: 2.4.2
 Author: DM
 Author URI: https://fondy.eu/
 Domain Path: /
@@ -27,7 +27,6 @@ function woocommerce_fondy_init()
     if (!class_exists('WC_Payment_Gateway')) {
         return;
     }
-
 
     /**
      * Gateway class
@@ -203,7 +202,7 @@ function woocommerce_fondy_init()
                 'redirect_page_id' => array(
                     'title' => __('Return Page', 'woocommerce-fondy'),
                     'type' => 'select',
-                    'options' => $this->fondy_get_pages('Select Page'),
+                    'options' => $this->fondy_get_pages(__('Default order page', 'woocommerce-fondy')),
                     'description' => __('URL of success page', 'woocommerce-fondy'),
                     'desc_tip' => true
                 ),
@@ -290,7 +289,7 @@ function woocommerce_fondy_init()
                         <div class="error-wrapper"></div>
                     </div>
                 </form>
-                <?
+                <?php
             }
         }
 
@@ -334,8 +333,6 @@ function woocommerce_fondy_init()
         function generate_fondy_form($order_id)
         {
             $order = new WC_Order($order_id);
-
-
             $fondy_args = array(
                 'order_id' => $order_id . self::ORDER_SEPARATOR . time(),
                 'merchant_id' => $this->merchant_id,
@@ -523,12 +520,19 @@ function woocommerce_fondy_init()
             $email = $current_user->user_email;
 
             if (empty($email)) {
-                $email = $order->billing_email;
+                $order_data = $order->get_data();
+                $email = $order_data['billing']['email'];
             }
 
             return $email;
         }
 
+        /**
+         * Validation responce
+         * @param $response
+         * @return bool
+         *
+         */
         protected function isPaymentValid($response)
         {
             global $woocommerce;
@@ -589,7 +593,6 @@ function woocommerce_fondy_init()
             }
 
             if ($response['order_status'] == self::ORDER_APPROVED and $total == $response['amount']) {
-                $order->update_status('processing');
                 $order->payment_complete();
                 $order->add_order_note('Fondy payment successful.<br/>fondy ID: ' . ' (' . $response['payment_id'] . ')');
             } elseif ($total != $response['amount']) {
@@ -677,7 +680,6 @@ function woocommerce_fondy_init()
     function woocommerce_add_fondy_gateway($methods)
     {
         $methods[] = 'WC_fondy';
-
         return $methods;
     }
 
@@ -685,6 +687,9 @@ function woocommerce_fondy_init()
         'WC_fondy',
         'generate_ajax_order_fondy_info'
     ));
-    add_action('wp_ajax_generate_ajax_order_fondy_info', array('WC_fondy', 'generate_ajax_order_fondy_info'));
+    add_action('wp_ajax_generate_ajax_order_fondy_info', array(
+        'WC_fondy',
+        'generate_ajax_order_fondy_info'
+    ));
     add_filter('woocommerce_payment_gateways', 'woocommerce_add_fondy_gateway');
 }
