@@ -724,7 +724,7 @@ function woocommerce_fondy_init()
                     $has_parent = $page->post_parent;
                     while ($has_parent) {
                         $prefix .= ' - ';
-                        $next_page = get_page($has_parent);
+                        $next_page = get_post($has_parent);
                         $has_parent = $next_page->post_parent;
                     }
                 }
