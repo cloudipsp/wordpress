@@ -685,7 +685,7 @@ function woocommerce_fondy_init()
                 $order->add_order_note(__('Refund Fondy status: ' . esc_sql($_POST['order_status']) . ', Refund payment id: ' . esc_sql($_POST['payment_id']), 'woocommerce-fondy'));
                 die('Order Reversed');
             }
-            if ($paymentInfo === true and !$order->has_status('processing')) {
+            if ($paymentInfo === true and !$order->is_paid()) {
                 if ($_POST['order_status'] == self::ORDER_APPROVED) {
                     $this->msg['message'] = __("Thank you for shopping with us. Your account has been charged and your transaction is successful.", 'woocommerce-fondy');
                 }

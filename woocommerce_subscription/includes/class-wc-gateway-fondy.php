@@ -449,12 +449,10 @@ class WC_Fondy extends WC_Payment_Gateway {
 		if ( $response['order_status'] != self::ORDER_APPROVED ) {
 			$this->msg['class']   = 'woocommerce-error';
 			$this->msg['message'] = __( "Thank you for shopping with us. But your payment declined.", 'woocommerce-fondy' );
-			$order->update_status( 'failed' );
 			$order->add_order_note( "Order status:" . $response['order_status'] );
 		}
 
-		if ( $response['order_status'] == self::ORDER_APPROVED and $total == $response['amount'] and ! $order->has_status( 'processing' ) ) {
-			$order->update_status( 'processing' );
+		if ( $response['order_status'] == self::ORDER_APPROVED and $total == $response['amount'] and !$order->is_paid() ) {
 			$order->payment_complete();
 			$order->add_order_note( 'Fondy payment successful.<br/>fondy ID: ' . ' (' . $response['payment_id'] . ')' );
 		} elseif ( $total != $response['amount'] ) {
