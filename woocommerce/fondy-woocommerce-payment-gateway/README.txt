@@ -65,3 +65,7 @@ some fix, dublicate update
 Added v2 js Api
 = 2.4.1 =
 Added js Mask CCard
+= 2.4.2 =	
+some fix php tags	
+= 2.4.3 =	
+Added Refund function
