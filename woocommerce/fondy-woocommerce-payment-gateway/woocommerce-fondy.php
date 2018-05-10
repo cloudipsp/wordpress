@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.4.2
+Version: 2.4.3
 Author: DM
 Author URI: https://fondy.eu/
 Domain Path: /
@@ -13,8 +13,8 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 2.0.0
 WC tested up to: 3.3.5
 */
-add_action("init", "fondy");
-function fondy()
+add_action("init", "woocoo_fondy");
+function woocoo_fondy()
 {
     load_plugin_textdomain("woocommerce-fondy", false, basename(dirname(__FILE__)));
 }
@@ -50,6 +50,7 @@ function woocommerce_fondy_init()
                 $this->icon = IMGDIR . 'logo.png';
             }
             $this->liveurl = 'https://api.fondy.eu/api/checkout/redirect/';
+            $this->refundurl = 'https://api.fondy.eu/api/reverse/order_id';
             $this->title = $this->settings['title'];
             $this->calendar = $this->settings['calendar'];
             $this->redirect_page_id = $this->settings['redirect_page_id'];
@@ -61,7 +62,11 @@ function woocommerce_fondy_init()
             $this->on_checkout_page = $this->settings['on_checkout_page'] ? $this->settings['on_checkout_page'] : false;
             $this->msg['message'] = "";
             $this->msg['class'] = "";
-
+            $this->supports = array(
+                'products',
+                'refunds'
+                //'pre-orders'
+            );
             if (version_compare(WOOCOMMERCE_VERSION, '2.0.0', '>=')) {
                 /* 2.0.0 */
                 add_action('woocommerce_api_' . strtolower(get_class($this)), array(
@@ -218,7 +223,6 @@ function woocommerce_fondy_init()
 
         /**
          * Admin Panel Options
-         * - Options for bits like 'title' and availability on a country-by-country basis
          **/
         public function admin_options()
         {
@@ -231,7 +235,7 @@ function woocommerce_fondy_init()
         }
 
         /**
-         *  There are no payment fields for techpro, but we want to show the description if set.
+         *  There are no payment fields for fondy, but we want to show the description and CCARD if set.
          **/
         function payment_fields()
         {
@@ -245,22 +249,22 @@ function woocommerce_fondy_init()
                     <div class="container">
                         <div class="input-wrapper">
                             <div class="input-label w-1">
-                                <?= __('Card Number:', 'woocommerce-fondy') ?>
+                                <?php esc_html_e('Card Number:', 'woocommerce-fondy') ?>
                             </div>
                             <div class="input-field w-1">
                                 <input required type="tel" name="card_number" class="input" id="fondy_ccard"
                                        onkeydown="nextInput(this,event)"
                                        maxlength="16"
-                                       placeholder="<?= __('XXXXXXXXXXXXXXXX', 'woocommerce-fondy') ?>"/>
+                                       placeholder="<?php esc_html_e('XXXXXXXXXXXXXXXX', 'woocommerce-fondy') ?>"/>
                                 <div class="ccard"></div>
                             </div>
                         </div>
                         <div class="input-wrapper">
                             <div class="input-label w-3-2">
-                                <?= __('Expiry Date:', 'woocommerce-fondy') ?>
+                                <?php esc_html_e('Expiry Date:', 'woocommerce-fondy') ?>
                             </div>
                             <div class="input-label w-4 w-rigth">
-                                <?= __('CVV2:', 'woocommerce-fondy') ?>
+                                <?php esc_html_e('CVV2:', 'woocommerce-fondy') ?>
                             </div>
                             <div class="input-field w-4">
                                 <input required type="tel" name="expiry_month" id="fondy_expiry_month"
@@ -283,7 +287,7 @@ function woocommerce_fondy_init()
                         <div style="display: none" class="input-wrapper stack-1">
                             <div class="input-field w-1">
                                 <input id="submit_fondy_checkout_form" type="submit" class="button">
-                                value="<?= __('Pay', 'woocommerce-fondy') ?>"/>
+                                value="<?php esc_html_e('Pay', 'woocommerce-fondy') ?>"/>
                             </div>
                         </div>
                         <div class="error-wrapper"></div>
@@ -306,6 +310,13 @@ function woocommerce_fondy_init()
             return $var !== '' && $var !== null;
         }
 
+        /**
+         * Fondy signature generation
+         * @param $data
+         * @param $password
+         * @param bool $encoded
+         * @return string
+         */
         protected function getSignature($data, $password, $encoded = true)
         {
             $data = array_filter($data, array($this, 'fondy_filter'));
@@ -501,6 +512,56 @@ function woocommerce_fondy_init()
             }
         }
 
+        public function process_refund($order_id, $amount = null, $reason = '')
+        {
+            $order = new WC_Order($order_id);
+
+            if (!$order or !$order->get_transaction_id()) {
+                return new WP_Error('error', __('Refund failed: No transaction ID', 'woocommerce'));
+            }
+            $payment_id = $order->get_transaction_id();
+            $data = array(
+                'request' => array(
+                    'amount' => round($amount * 100),
+                    'order_id' => $payment_id,
+                    'currency' => $order->get_currency(),
+                    'merchant_id' => esc_sql($this->merchant_id),
+                    'comment' => esc_attr($reason)
+                )
+            );
+            $data['request']['signature'] = $this->getSignature($data['request'], esc_sql($this->salt));
+            try {
+                $args = array(
+                    'redirection' => 2,
+                    'user-agent' => 'CMS Woocommerce',
+                    'headers' => array("Content-type" => "application/json;charset=UTF-8"),
+                    'body' => json_encode($data)
+                );
+                $response = wp_remote_post($this->refundurl, $args);
+                $fondy_response = json_decode($response['body'], TRUE)['response'];
+
+                if (isset($fondy_response['response_status']) and $fondy_response['response_status'] == 'success') {
+                    switch ($fondy_response['reverse_status']) {
+                        case 'approved':
+                            return true;
+                        case 'processing':
+                            $order->add_order_note(__('Refund Fondy status: processing', 'woocommerce-fondy'));
+                            return true;
+                        case 'declined':
+                            $order->add_order_note(__('Refund Fondy status: Declined', 'woocommerce-fondy'));
+                            return new WP_Error('error', __('Refund Fondy status: Declined', 'woocommerce-fondy'), 'woocommerce-fondy');
+                        default:
+                            $order->add_order_note(__('Refund Fondy status: Unknown', 'woocommerce-fondy'));
+                            return new WP_Error('error', __('Refund Fondy status: Unknown. Try to contact support', 'woocommerce-fondy'), 'woocommerce-fondy');
+                    }
+                } else {
+                    return new WP_Error('error', __($fondy_response['error_code'] . '. ' . $fondy_response['error_message'], 'woocommerce-fondy'));
+                }
+            } catch (Exception $e) {
+                return new WP_Error('error', __($e->getMessage(), 'woocommerce-fondy'));
+            }
+        }
+
         private function getCallbackUrl()
         {
             $redirect_url = ($this->redirect_page_id == "" || $this->redirect_page_id == 0) ? get_site_url() . "/" : get_permalink($this->redirect_page_id);
@@ -547,8 +608,6 @@ function woocommerce_fondy_init()
                 return __('Amount incorrect.', 'woocommerce-fondy');
             }
             if ($this->merchant_id != $response['merchant_id']) {
-                $order->update_status('failed');
-
                 return __('An error has occurred during payment. Merchant data is incorrect.', 'woocommerce-fondy');
             }
 
@@ -588,15 +647,13 @@ function woocommerce_fondy_init()
             if ($response['order_status'] != self::ORDER_APPROVED) {
                 $this->msg['class'] = 'woocommerce-error';
                 $this->msg['message'] = __("Thank you for shopping with us. But your payment declined.", 'woocommerce-fondy');
-                $order->update_status('failed');
-                $order->add_order_note("Order status:" . $response['order_status']);
+                $order->add_order_note("Fondy order status: " . $response['order_status']);
             }
 
             if ($response['order_status'] == self::ORDER_APPROVED and $total == $response['amount']) {
-                $order->payment_complete();
+                $order->payment_complete($response['order_id']);
                 $order->add_order_note('Fondy payment successful.<br/>fondy ID: ' . ' (' . $response['payment_id'] . ')');
             } elseif ($total != $response['amount']) {
-                $errorMessage = __("Thank you for shopping with us. However, the transaction has been declined.", 'woocommerce-fondy');
                 $order->add_order_note('Transaction ERROR: amount incorrect<br/>Fondy ID: ' . $response['payment_id']);
                 $order->update_status('failed');
             }
@@ -606,10 +663,11 @@ function woocommerce_fondy_init()
             return true;
         }
 
+        /**
+         * Response Handler
+         */
         function check_fondy_response()
         {
-            global $woocommerce;
-
             if (empty($_POST)) {
                 $callback = json_decode(file_get_contents("php://input"));
                 if (empty($callback)) {
@@ -623,6 +681,10 @@ function woocommerce_fondy_init()
             list($orderId,) = explode(self::ORDER_SEPARATOR, $_POST['order_id']);
             $order = new WC_Order($orderId);
             $paymentInfo = $this->isPaymentValid($_POST);
+            if ($paymentInfo === true and $_POST['order_status'] == 'reversed') {
+                $order->add_order_note(__('Refund Fondy status: ' . esc_sql($_POST['order_status']) . ', Refund payment id: ' . esc_sql($_POST['payment_id']), 'woocommerce-fondy'));
+                die('Order Reversed');
+            }
             if ($paymentInfo === true and !$order->has_status('processing')) {
                 if ($_POST['order_status'] == self::ORDER_APPROVED) {
                     $this->msg['message'] = __("Thank you for shopping with us. Your account has been charged and your transaction is successful.", 'woocommerce-fondy');
@@ -634,7 +696,7 @@ function woocommerce_fondy_init()
                 $order->add_order_note("ERROR: " . $paymentInfo);
             }
             if ($this->redirect_page_id == "" || $this->redirect_page_id == 0) {
-                $redirect_url = $this->get_return_url($order);
+                $redirect_url = $order->get_checkout_order_received_url();
             } else {
                 $redirect_url = get_permalink($this->redirect_page_id);
                 if ($this->msg['class'] == 'woocommerce-error' or $this->msg['class'] == 'error') {
