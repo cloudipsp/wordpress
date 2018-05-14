@@ -4,7 +4,7 @@ Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
 Version: 2.4.3
-Author: Fondy
+Author: DM
 Author URI: https://fondy.eu/
 Domain Path: /
 Text Domain: woocommerce-fondy
@@ -651,8 +651,13 @@ function woocommerce_fondy_init()
             }
 
             if ($response['order_status'] == self::ORDER_APPROVED and $total == $response['amount']) {
-                $order->payment_complete($response['order_id']);
-                $order->add_order_note('Fondy payment successful.<br/>fondy ID: ' . ' (' . $response['payment_id'] . ')');
+                if ($order->is_paid() and !$order->get_transaction_id()) {
+                    update_post_meta($order->get_id(), '_transaction_id', $response['order_id'], false);
+                    $order->add_order_note('Fondy transaction id is set:' . ' (' . $response['order_id'] . ')');
+                } else if (!$order->is_paid()) {
+                    $order->payment_complete($response['order_id']);
+                    $order->add_order_note('Fondy payment successful.<br/>fondy ID: ' . ' (' . $response['payment_id'] . ')');
+                }
             } elseif ($total != $response['amount']) {
                 $order->add_order_note('Transaction ERROR: amount incorrect<br/>Fondy ID: ' . $response['payment_id']);
                 $order->update_status('failed');
@@ -690,7 +695,7 @@ function woocommerce_fondy_init()
                     $this->msg['message'] = __("Thank you for shopping with us. Your account has been charged and your transaction is successful.", 'woocommerce-fondy');
                 }
                 $this->msg['class'] = 'woocommerce-message';
-            } else {
+            } else if (!$order->is_paid()) {
                 $this->msg['class'] = 'error';
                 $this->msg['message'] = $paymentInfo;
                 $order->add_order_note("ERROR: " . $paymentInfo);
