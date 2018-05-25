@@ -253,8 +253,7 @@ function woocommerce_fondy_init()
                             </div>
                             <div class="input-field w-1">
                                 <input required type="tel" name="card_number" class="input" id="fondy_ccard"
-                                       onkeydown="nextInput(this,event)"
-                                       maxlength="16"
+                                                                         
                                        placeholder="<?php esc_html_e('XXXXXXXXXXXXXXXX', 'woocommerce-fondy') ?>"/>
                                 <div class="ccard"></div>
                             </div>
