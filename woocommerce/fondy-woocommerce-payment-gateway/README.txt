@@ -4,10 +4,11 @@ Tags: fondy, woocommerce, payment, payment gateway, credit card, debit card, mer
 Requires at least: 3.5
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 2.4.3
+Stable tag: 2.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
+== Description ==
 WooCommerce extension allow clients make payment with Fondy.
 
 What is payment gateway and why does the customer need it?
@@ -16,14 +17,13 @@ In 2018 more and more customers made their purchases on the Internet. That is wh
 
 [International Internet-acquiring Fondy](https://fondy.eu/en-eu/) currently operates in 120 countries. The system enables simultaneous cooperation with international  acquires banks in Europe and provides its services for more than 1500 web businesses around the globe.
 
-== Description ==
 [This plugin adds Fondy gateway as a payment method to your WooCommerce store.](https://fondy.eu/en-eu/cms/wordpress/) Fondy can accept VISA and MasterCard securely, quickly and easily on your store in minutes. Simple, straightforward pricing, top-notch fraud intelligence, and 24/7 support. Fondy payment gateway for WooCommerce is easy to download without any programming skills. 
 
 
-= Start with Fondy =
+== Start with Fondy ==
 [Create Free Fondy Account](https://portal.fondy.eu/mportal/#/account/registration)
 
-= FONDY PAYMENT GATEWAY FEATURES =
+== FONDY PAYMENT GATEWAY FEATURES ==
 * [Total security and scalability](https://fondy.eu/en-eu/security/)
 * Stability and the consistent payments
 * Encryption and information transmission on a security protocol TLS with the Key Length 2048 bit
@@ -39,7 +39,7 @@ In 2018 more and more customers made their purchases on the Internet. That is wh
 * Enable/Disable Pop-up mode
 * Fondy payment gateway easy configuration in WooCommerce – only Merchant ID and Secret Key need to be copied from Fondy Merchant Portal
 
-= ALLOWED CURRENCIES =
+== ALLOWED CURRENCIES ==
 With us, your customers can make purchases in many currencies. Fondy payment gateway supports EUR, USD, PLN, GBP, UAH, RUB and +100 other currencies.
 
 == Frequently Asked Questions ==
@@ -88,3 +88,5 @@ Added js Mask CCard
 some fix php tags	
 = 2.4.3 =	
 Added Refund function
+= 2.4.4 =
+Fixed checkout card
