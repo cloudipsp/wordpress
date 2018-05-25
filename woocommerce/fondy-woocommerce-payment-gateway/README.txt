@@ -63,6 +63,20 @@ add default success page
 change to host-to-host
 = 2.2 =
 stability update
+= 2.2.3 =
+change payment complete status
+= 2.3.0 =
+some fix, dublicate update
+= 2.4.0 =
+Added v2 js Api
+= 2.4.1 =
+Added js Mask CCard
+= 2.4.2 =
+some fix php tags
+= 2.4.3 =
+Added Refund function
+= 2.4.4 =
+Fixed checkout card
 
 == Upgrade Notice ==
 
