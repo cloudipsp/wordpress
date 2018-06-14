@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.4.4
+Version: 2.4.5
 Author: Fondy
 Author URI: https://fondy.eu/
 Domain Path: /
@@ -11,7 +11,7 @@ Text Domain: woocommerce-fondy
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 2.0.0
-WC tested up to: 3.4.0
+WC tested up to: 3.4.2
 */
 add_action("init", "woocoo_fondy");
 function woocoo_fondy()
@@ -121,11 +121,11 @@ function woocommerce_fondy_init()
             if (is_checkout()) {
                 wp_enqueue_style('fondy-checkout', plugin_dir_url(__FILE__) . 'assets/css/fondy_styles.css');
                 if (isset($this->on_checkout_page) and $this->on_checkout_page == 'yes') {
-                    $plugin_data = get_plugin_data( __FILE__ );
-                    $plugin_version = $plugin_data['Version'];
+                    //$plugin_data = get_plugin_data( __FILE__ );
+                    //$plugin_version = $plugin_data['Version'];
                     wp_enqueue_script('fondy_pay_v2', '//unpkg.com/ipsp-js-sdk@1.0.13/dist/checkout.min.js', array('jquery'), null, true);
-                    wp_enqueue_script('fondy_pay_v2_woocom', plugin_dir_url(__FILE__) . 'assets/js/fondy.js', array('fondy_pay_v2'), $plugin_version, true);
-                    wp_enqueue_script('fondy_pay_v2_card', plugin_dir_url(__FILE__) . 'assets/js/payform.min.js', array('fondy_pay_v2_woocom'), $plugin_version, true);
+                    wp_enqueue_script('fondy_pay_v2_woocom', plugin_dir_url(__FILE__) . 'assets/js/fondy.js', array('fondy_pay_v2'), '2.4.5', true);
+                    wp_enqueue_script('fondy_pay_v2_card', plugin_dir_url(__FILE__) . 'assets/js/payform.min.js', array('fondy_pay_v2_woocom'), '2.4.5', true);
                     wp_localize_script('fondy_pay_v2_woocom', 'fondy_info',
                         array(
                             'url' => admin_url('admin-ajax.php'),
@@ -538,8 +538,8 @@ function woocommerce_fondy_init()
                     'body' => json_encode($data)
                 );
                 $response = wp_remote_post($this->refundurl, $args);
-                $fondy_response = json_decode($response['body'], TRUE)['response'];
-
+                $fondy_response = json_decode($response['body'], TRUE);
+                $fondy_response = $fondy_response['response'];
                 if (isset($fondy_response['response_status']) and $fondy_response['response_status'] == 'success') {
                     switch ($fondy_response['reverse_status']) {
                         case 'approved':
