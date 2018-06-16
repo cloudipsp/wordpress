@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.4.5
+Version: 2.4.6
 Author: Fondy
 Author URI: https://fondy.eu/
 Domain Path: /
@@ -90,7 +90,7 @@ function woocommerce_fondy_init()
         }
 
         /**
-         *
+         * Process checkout func
          */
         function generate_ajax_order_fondy_info()
         {
@@ -100,8 +100,8 @@ function woocommerce_fondy_init()
         }
 
         /**
+         * Custom button order
          * @param $button
-         *
          * @return string
          */
         function custom_order_button_html($button)
@@ -121,11 +121,9 @@ function woocommerce_fondy_init()
             if (is_checkout()) {
                 wp_enqueue_style('fondy-checkout', plugin_dir_url(__FILE__) . 'assets/css/fondy_styles.css');
                 if (isset($this->on_checkout_page) and $this->on_checkout_page == 'yes') {
-                    //$plugin_data = get_plugin_data( __FILE__ );
-                    //$plugin_version = $plugin_data['Version'];
                     wp_enqueue_script('fondy_pay_v2', '//unpkg.com/ipsp-js-sdk@1.0.13/dist/checkout.min.js', array('jquery'), null, true);
-                    wp_enqueue_script('fondy_pay_v2_woocom', plugin_dir_url(__FILE__) . 'assets/js/fondy.js', array('fondy_pay_v2'), '2.4.5', true);
-                    wp_enqueue_script('fondy_pay_v2_card', plugin_dir_url(__FILE__) . 'assets/js/payform.min.js', array('fondy_pay_v2_woocom'), '2.4.5', true);
+                    wp_enqueue_script('fondy_pay_v2_woocom', plugin_dir_url(__FILE__) . 'assets/js/fondy.js', array('fondy_pay_v2'), '2.4.6', true);
+                    wp_enqueue_script('fondy_pay_v2_card', plugin_dir_url(__FILE__) . 'assets/js/payform.min.js', array('fondy_pay_v2_woocom'), '2.4.6', true);
                     wp_localize_script('fondy_pay_v2_woocom', 'fondy_info',
                         array(
                             'url' => admin_url('admin-ajax.php'),
@@ -138,6 +136,9 @@ function woocommerce_fondy_init()
             }
         }
 
+        /**
+         * Admin fields
+         */
         function init_form_fields()
         {
             $this->form_fields = array(
@@ -237,8 +238,8 @@ function woocommerce_fondy_init()
         }
 
         /**
-         *  There are no payment fields for fondy, but we want to show the description and CCARD if set.
-         **/
+         * CCard fields on generating order
+         */
         function payment_fields()
         {
             if ($this->description) {
@@ -254,7 +255,8 @@ function woocommerce_fondy_init()
                                 <?php esc_html_e('Card Number:', 'woocommerce-fondy') ?>
                             </div>
                             <div class="input-field w-1">
-                                <input required type="tel" name="card_number" class="input fondy-credit-cart" id="fondy_ccard"
+                                <input required type="tel" name="card_number" class="input fondy-credit-cart"
+                                       id="fondy_ccard"
                                        autocomplete="cc-number"
                                        placeholder="<?php esc_html_e('XXXXXXXXXXXXXXXX', 'woocommerce-fondy') ?>"/>
                                 <div id="f_card_sep"></div>
@@ -298,13 +300,19 @@ function woocommerce_fondy_init()
         }
 
         /**
-         * Receipt Page
-         **/
+         * Order page
+         * @param $order
+         */
         function receipt_page($order)
         {
             echo $this->generate_fondy_form($order);
         }
 
+        /**
+         * filter empty var for signature
+         * @param $var
+         * @return bool
+         */
         protected function fondy_filter($var)
         {
             return $var !== '' && $var !== null;
@@ -339,8 +347,10 @@ function woocommerce_fondy_init()
         }
 
         /**
-         * Generate payu button link
-         **/
+         * Generate checkout
+         * @param $order_id
+         * @return string
+         */
         function generate_fondy_form($order_id)
         {
             $order = new WC_Order($order_id);
@@ -410,6 +420,11 @@ function woocommerce_fondy_init()
             return $out;
         }
 
+        /**
+         * Request to api
+         * @param $args
+         * @return mixed
+         */
         protected function get_checkout($args)
         {
             if (is_callable('curl_init')) {
@@ -437,10 +452,8 @@ function woocommerce_fondy_init()
             }
         }
 
-        /**
-         * @param $args
-         *
-         * @return mixed
+        /*
+         * Getting payment token for js ccrad
          */
         protected function get_token($args)
         {
@@ -472,7 +485,9 @@ function woocommerce_fondy_init()
 
         /**
          * Process the payment and return the result
-         **/
+         * @param int $order_id
+         * @return array|mixed
+         */
         function process_payment($order_id)
         {
             $order = new WC_Order($order_id);
@@ -512,6 +527,13 @@ function woocommerce_fondy_init()
             }
         }
 
+        /**
+         * Refunds function
+         * @param int $order_id
+         * @param null $amount
+         * @param string $reason
+         * @return WP_Error
+         */
         public function process_refund($order_id, $amount = null, $reason = '')
         {
             $order = new WC_Order($order_id);
@@ -562,6 +584,10 @@ function woocommerce_fondy_init()
             }
         }
 
+        /**
+         * Answer Url
+         * @return string
+         */
         private function getCallbackUrl()
         {
             $redirect_url = ($this->redirect_page_id == "" || $this->redirect_page_id == 0) ? get_site_url() . "/" : get_permalink($this->redirect_page_id);
@@ -570,11 +596,20 @@ function woocommerce_fondy_init()
             return add_query_arg('wc-api', get_class($this), $redirect_url);
         }
 
+        /**
+         * Site lang cropped
+         * @return string
+         */
         private function getLanguage()
         {
             return substr(get_bloginfo('language'), 0, 2);
         }
 
+        /**
+         * Order Email
+         * @param $order
+         * @return string
+         */
         private function getEmail($order)
         {
             $current_user = wp_get_current_user();
@@ -644,13 +679,13 @@ function woocommerce_fondy_init()
                 return $errorMessage;
             }
 
-            if ($response['order_status'] != self::ORDER_APPROVED) {
+            if ($response['tran_type'] == 'purchase' and $response['order_status'] != self::ORDER_APPROVED) {
                 $this->msg['class'] = 'woocommerce-error';
                 $this->msg['message'] = __("Thank you for shopping with us. But your payment declined.", 'woocommerce-fondy');
                 $order->add_order_note("Fondy order status: " . $response['order_status']);
             }
 
-            if ($response['order_status'] == self::ORDER_APPROVED and $total == $response['amount']) {
+            if ($response['tran_type'] == 'purchase' and $response['order_status'] == self::ORDER_APPROVED and $total == $response['amount']) {
                 $order->payment_complete($response['order_id']);
                 $order->add_order_note('Fondy payment successful.<br/>fondy ID: ' . ' (' . $response['payment_id'] . ')');
             } elseif ($total != $response['amount']) {

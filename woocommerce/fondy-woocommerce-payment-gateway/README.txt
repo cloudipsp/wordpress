@@ -3,8 +3,8 @@ Contributors: Fondy
 Tags: fondy, woocommerce, payment, payment gateway, credit card, debit card, merchant account, payments processing, merchant service, payment service provider
 Requires at least: 3.5
 Tested up to: 4.9
-Requires PHP: 5.3
-Stable tag: 2.4.4
+Requires PHP: 5.4
+Stable tag: 2.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,8 @@ some fix php tags
 Added Refund function
 = 2.4.4 =
 Fixed checkout card
+= 2.4.5 =
+Fix for php 5.3 <
 
 == Upgrade Notice ==
 
@@ -104,3 +106,5 @@ some fix php tags
 Added Refund function
 = 2.4.4 =
 Fixed checkout card
+= 2.4.6 =
+Order notify update
