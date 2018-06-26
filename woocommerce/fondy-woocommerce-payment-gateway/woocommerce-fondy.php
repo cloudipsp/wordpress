@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.4.6
+Version: 2.4.7
 Author: Fondy
 Author URI: https://fondy.eu/
 Domain Path: /
@@ -11,7 +11,7 @@ Text Domain: woocommerce-fondy
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 2.0.0
-WC tested up to: 3.4.2
+WC tested up to: 3.4.3
 */
 add_action("init", "woocoo_fondy");
 function woocoo_fondy()
@@ -122,8 +122,8 @@ function woocommerce_fondy_init()
                 wp_enqueue_style('fondy-checkout', plugin_dir_url(__FILE__) . 'assets/css/fondy_styles.css');
                 if (isset($this->on_checkout_page) and $this->on_checkout_page == 'yes') {
                     wp_enqueue_script('fondy_pay_v2', '//unpkg.com/ipsp-js-sdk@1.0.13/dist/checkout.min.js', array('jquery'), null, true);
-                    wp_enqueue_script('fondy_pay_v2_woocom', plugin_dir_url(__FILE__) . 'assets/js/fondy.js', array('fondy_pay_v2'), '2.4.6', true);
-                    wp_enqueue_script('fondy_pay_v2_card', plugin_dir_url(__FILE__) . 'assets/js/payform.min.js', array('fondy_pay_v2_woocom'), '2.4.6', true);
+                    wp_enqueue_script('fondy_pay_v2_woocom', plugin_dir_url(__FILE__) . 'assets/js/fondy.js', array('fondy_pay_v2'), '2.4.7', true);
+                    wp_enqueue_script('fondy_pay_v2_card', plugin_dir_url(__FILE__) . 'assets/js/payform.min.js', array('fondy_pay_v2_woocom'), '2.4.7', true);
                     wp_localize_script('fondy_pay_v2_woocom', 'fondy_info',
                         array(
                             'url' => admin_url('admin-ajax.php'),
@@ -249,7 +249,7 @@ function woocommerce_fondy_init()
                 ?>
                 <form autocomplete="on" class="fondy-ccard" id="checkout_fondy_form">
                     <input type="hidden" name="payment_system" value="card">
-                    <div class="container">
+                    <div class="f-container">
                         <div class="input-wrapper">
                             <div class="input-label w-1">
                                 <?php esc_html_e('Card Number:', 'woocommerce-fondy') ?>
@@ -372,10 +372,7 @@ function woocommerce_fondy_init()
             }
             $fondy_args['signature'] = $this->getSignature($fondy_args, $this->salt);
 
-            $out = '
-			<div id="checkout">
-			<div id="checkout_wrapper"></div>
-			</div>';
+            $out = '';
             if ($this->page_mode == 'no') {
                 $fondy_args_array = array();
                 foreach ($fondy_args as $key => $value) {
@@ -390,6 +387,10 @@ function woocommerce_fondy_init()
                     $url = $this->get_checkout($fondy_args);
                     WC()->session->set('session_token_' . $order_id, $url);
                 }
+                $out = '
+                    <div id="checkout">
+                    <div id="checkout_wrapper"></div>
+                    </div>';
                 $out .= '
 			    <script>
 			    var checkoutStyles = {
