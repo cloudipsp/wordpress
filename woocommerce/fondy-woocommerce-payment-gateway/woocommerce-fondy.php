@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.4.7
+Version: 2.4.8
 Author: Fondy
 Author URI: https://fondy.eu/
 Domain Path: /
@@ -428,29 +428,25 @@ function woocommerce_fondy_init()
          */
         protected function get_checkout($args)
         {
-            if (is_callable('curl_init')) {
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, 'https://api.fondy.eu/api/checkout/url/');
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array('request' => $args)));
+            $conf = array(
+                'redirection' => 2,
+                'user-agent' => 'CMS Woocommerce',
+                'headers' => array("Content-type" => "application/json;charset=UTF-8"),
+                'body' => json_encode(array('request' => $args))
+            );
+            $response = wp_remote_post('https://api.fondy.eu/api/checkout/url/', $conf);
 
-                $result = json_decode(curl_exec($ch));
-                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                if ($httpCode != 200) {
-                    $error = "Return code is {$httpCode} \n" . curl_error($ch);
-                    wp_die($error);
-                }
-                if ($result->response->response_status == 'failure') {
-                    wp_die($result->response->error_message);
-                }
-                $url = $result->response->checkout_url;
-
-                return $url;
-            } else {
-                wp_die("Curl not found!");
+            $result = json_decode($response['body']);
+            $response_code = wp_remote_retrieve_response_code($response);
+            if ($response_code != 200) {
+                $error = "Return code is {$response_code}";
+                wp_die($error);
             }
+            if ($result->response->response_status == 'failure') {
+                wp_die($result->response->error_message);
+            }
+            $url = $result->response->checkout_url;
+            return $url;
         }
 
         /*
@@ -458,30 +454,24 @@ function woocommerce_fondy_init()
          */
         protected function get_token($args)
         {
-            if (is_callable('curl_init')) {
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, 'https://api.fondy.eu/api/checkout/token/');
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array('request' => $args)));
-
-                $result = json_decode(curl_exec($ch));
-                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                if ($httpCode != 200) {
-                    $error = "Return code is {$httpCode} \n" . curl_error($ch);
-
-                    return array('result' => 'failture', 'messages' => $error);
-                }
-                if ($result->response->response_status == 'failure') {
-                    return array('result' => 'failture', 'messages' => $result->response->error_message);
-                }
-                $token = $result->response->token;
-
-                return array('result' => 'success', 'token' => esc_attr($token));
-            } else {
-                wp_die("Curl not found!");
+            $conf = array(
+                'redirection' => 2,
+                'user-agent' => 'CMS Woocommerce',
+                'headers' => array("Content-type" => "application/json;charset=UTF-8"),
+                'body' => json_encode(array('request' => $args))
+            );
+            $response = wp_remote_post('https://api.fondy.eu/api/checkout/token/', $conf);
+            $response_code = wp_remote_retrieve_response_code($response);
+            if ($response_code != 200) {
+                $error = "Return code is {$response_code}";
+                return array('result' => 'failture', 'messages' => $error);
             }
+            $result = json_decode($response['body']);
+            if ($result->response->response_status == 'failure') {
+                return array('result' => 'failture', 'messages' => $result->response->error_message);
+            }
+            $token = $result->response->token;
+            return array('result' => 'success', 'token' => esc_attr($token));
         }
 
         /**
