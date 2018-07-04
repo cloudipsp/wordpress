@@ -340,8 +340,8 @@ class WC_Fondy extends WC_Payment_Gateway {
 		);
 	}
 
-	private function save_card( $data ) {
-		$userid = wp_get_current_user()->ID;
+	private function save_card( $data, $order ) {
+		$userid = $order->get_user_id();
 		$token  = false;
 		if ( $this->isTokenAlreadySaved( $data['rectoken'], $userid ) ) {
 			update_user_meta( $userid, 'fondy_token', array(
@@ -503,7 +503,7 @@ class WC_Fondy extends WC_Payment_Gateway {
 		}
 		if ( $this->is_subscription( $orderId ) ) {
 			if ( ! empty( $_POST['rectoken'] ) ) {
-				$this->save_card( $_POST );
+				$this->save_card( $_POST, $order );
 			}
 		} else {
 			$order->add_order_note( 'Transaction Subscription ERROR: no card token' );
