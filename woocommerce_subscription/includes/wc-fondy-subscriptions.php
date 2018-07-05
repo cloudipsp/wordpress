@@ -69,7 +69,11 @@ class WC_Fondy_Subscriptions extends WC_Fondy {
 			$fondy_args['signature'] = $this->getSignature( $fondy_args, $this->salt );
 			$result                  = $this->do_subscription_payment( $fondy_args, $order );
 			if ( $result['response']['response_status'] == 'failure' ) {
-				$order->add_order_note( $result['response']['response_status'] );
+				$order->add_order_note( json_encode($result['response']));
+                if(isset($result['response']['error_message']))
+                    $order->add_order_note( $result['response']['error_message'] );
+                if(isset($result['response']['error_code']))
+                    $order->add_order_note( sprintf("Error code: %s",  $result['response']['error_code']) );
 				$order->update_status( 'failed', sprintf( __( 'Payment failed (%s)', 'woocommerce-fondy' ), $result['response']['response_status'] ) );
 			} else if ( $result['response']['response_status'] == 'success' ) {
 				if ( $this->is_subscription_payment_valid( $result['response'], $amount ) !== true ) {
