@@ -28,4 +28,4 @@ wordpress
 ![Скриншот][2]
 ----
 
-[1]: https://raw.githubusercontent.com/cloudipsp/wordpress/bank_wire/woocommerce/s2.png
+[2]: https://raw.githubusercontent.com/cloudipsp/wordpress/bank_wire/woocommerce/s2.png
