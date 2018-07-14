@@ -24,6 +24,7 @@ wordpress
 
 [1]: https://raw.githubusercontent.com/cloudipsp/wordpress/bank_wire/woocommerce/settings1.png
 
+
 ![Скриншот][2]
 ----
 
