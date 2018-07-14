@@ -18,28 +18,13 @@ wordpress
 5. Select `Return Page` where users will be returned after payment.
 6. Save settings.
 
----------
-
-#RU
-
-== Установка ==
-
-1. Убедитесь что у вас установлена последняя версия плагина WooCommerce (WooCommerce 2.0+)
-2. Распакуйте этот плагин в директорию `/wp-content/plugins/`(либо установите вложенный архив через панель администратора)
-3. Активируйте плагин в меню "Плагины"
-
-
-== Конфигурация ==
-
-1. Зайдите в "WooCommerce > Настройки > Оплата"
-2. Зайдите на таб "Fondy". Если его нет - активируйте плагин.
-3. Разрешите этот способ оплаты (Enable). Назовите его "Online Payments".
-4. Заполните поля `Merchant Key` и `Merchant Salt` данными полученными от fondy.eu.
-5. Выберите `Return Page` куда будет напрявлять пользователей платежная система после оплаты.
-6. Сохраните настройки.
-
 
 ![Скриншот][1]
 ----
 
-[1]: https://raw.githubusercontent.com/cloudipsp/wordpress/master/woocommerce/settings1.png
+[1]: https://raw.githubusercontent.com/cloudipsp/wordpress/bank_wire/woocommerce/settings1.png
+
+![Скриншот][2]
+----
+
+[1]: https://raw.githubusercontent.com/cloudipsp/wordpress/bank_wire/woocommerce/s2.png
