@@ -1,0 +1,327 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Fondy Payment Gravity Forms Add-on\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-07-18 08:22+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/"
+
+#: class-gf-fondy.php:1319
+msgid ""
+"A reversal has occurred on this transaction because you have given the "
+"customer a refund."
+msgstr ""
+
+#: class-gf-fondy.php:1317
+msgid ""
+"A reversal has occurred on this transaction due to your customer triggering "
+"a money-back guarantee."
+msgstr ""
+
+#: class-gf-fondy.php:197
+msgid "Change post status when subscription is canceled."
+msgstr ""
+
+#: class-gf-fondy.php:79
+msgid "Confirm that you have configured your Fondy account in Merchant portal."
+msgstr ""
+
+#: class-gf-fondy.php:191
+msgid "Create post only when payment is received."
+msgstr ""
+
+#: class-gf-fondy.php:65
+#, php-format
+msgid "Create you free %sFondy account.%s"
+msgstr ""
+
+#: class-gf-fondy.php:259
+msgid "day(s)"
+msgstr ""
+
+#: class-gf-fondy.php:415
+msgid "Delete Post"
+msgstr ""
+
+#. Author of the plugin
+msgid "DM"
+msgstr ""
+
+#: class-gf-fondy.php:155
+msgid "Donations"
+msgstr ""
+
+#: class-gf-fondy.php:189
+msgid ""
+"Enable this option if you would like to only create the post after payment "
+"has been received."
+msgstr ""
+
+#: class-gf-fondy.php:178
+msgid ""
+"Enable this option if you would like to only send out this form's "
+"notifications for the 'Form is submitted' event after payment has been "
+"received. Leaving this option disabled will send these notifications "
+"immediately after the form is submitted. Notifications which are configured "
+"for other events will not be affected by this option."
+msgstr ""
+
+#: class-gf-fondy.php:169
+msgid "Enter the URL the user should be retuned if not set use defaults."
+msgstr ""
+
+#: class-gf-fondy.php:237
+msgid "First Name"
+msgstr ""
+
+#: class-gf-fondy.php:1426
+msgid "Fondy Add-On v1.0"
+msgstr ""
+
+#: class-gf-fondy.php:1433
+msgid ""
+"Fondy Feeds are now accessed via the Fondy sub-menu within the Form Settings "
+"for the Form you would like to integrate Fondy with."
+msgstr ""
+
+#: class-gf-fondy.php:270
+msgid "Fondy Field"
+msgstr ""
+
+#: class-gf-fondy.php:110
+msgid "Fondy Merchant ID"
+msgstr ""
+
+#. Name of the plugin
+msgid "Fondy Payment Gravity Forms Add-on"
+msgstr ""
+
+#: class-gf-fondy.php:118
+msgid "Fondy secret key "
+msgstr ""
+
+#: class-gf-fondy.php:122
+msgid "Fondy secret key from portal"
+msgstr ""
+
+#: class-gf-fondy.php:77
+msgid "Fondy setting"
+msgstr ""
+
+#: class-gf-fondy.php:66
+#, php-format
+msgid "Go to settings end enter Callback URL: %s"
+msgstr ""
+
+#: class-gf-fondy.php:62
+msgid ""
+"Gravity Forms requires to be create and enabled your Fondy account. Follow "
+"the following steps to confirm it is enabled."
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://fondy.eu"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://www.gravityforms.com"
+msgstr ""
+
+#: class-gf-fondy.php:1444
+msgid "I understand, dismiss this message!"
+msgstr ""
+
+#. Description of the plugin
+msgid "Integrates Gravity Forms with Fondy."
+msgstr ""
+
+#: class-gf-fondy.php:234
+msgid "Last Name"
+msgstr ""
+
+#: class-gf-fondy.php:414
+msgid "Mark Post as Draft"
+msgstr ""
+
+#: class-gf-fondy.php:114
+msgid "Merchant ID from portal"
+msgstr ""
+
+#: class-gf-fondy.php:126 class-gf-fondy.php:136
+msgid "Mode"
+msgstr ""
+
+#: class-gf-fondy.php:261
+msgid "month(s)"
+msgstr ""
+
+#: class-gf-fondy.php:176 class-gf-fondy.php:178
+msgid "Notifications"
+msgstr ""
+
+#: class-gf-fondy.php:1315
+msgid ""
+"Order completed successfully, funds are hold on the payer’s account and soon "
+"will be credited of the merchant; merchant can provide the service or ship "
+"goods."
+msgstr ""
+
+#: class-gf-fondy.php:1309
+msgid ""
+"Order has been created, but the customer has not entered payment details yet;"
+" merchant must continue to request the status of the order"
+msgstr ""
+
+#: class-gf-fondy.php:1313
+msgid ""
+"Order is declined by FONDY payment gateway or by bank or by external payment "
+"system"
+msgstr ""
+
+#: class-gf-fondy.php:1311
+msgid ""
+"Order is still in processing by payment gateway; merchant must continue to "
+"request the status of the order"
+msgstr ""
+
+#: class-gf-fondy.php:1193
+#, php-format
+msgid ""
+"Payment amount (%s) does not match product price. Entry will not be marked "
+"as Approved. Transaction ID: %s"
+msgstr ""
+
+#: class-gf-fondy.php:1376
+msgid "Payment Completed"
+msgstr ""
+
+#: class-gf-fondy.php:1150
+#, php-format
+msgid "Payment created. Amount: %s. Transaction ID: %s. Reason: %s"
+msgstr ""
+
+#: class-gf-fondy.php:1378
+msgid "Payment Failed"
+msgstr ""
+
+#: class-gf-fondy.php:1177
+#, php-format
+msgid "Payment has been declined. Transaction ID: %s. Reason: %s"
+msgstr ""
+
+#: class-gf-fondy.php:1232
+#, php-format
+msgid "Payment has been expired. Transaction ID: %s. Reason: %s"
+msgstr ""
+
+#: class-gf-fondy.php:1216
+#, php-format
+msgid "Payment has been reversed. Transaction ID: %s. Reason: %s"
+msgstr ""
+
+#: class-gf-fondy.php:1576
+#, php-format
+msgid ""
+"Payment information was manually updated. Status: %s. Amount: %s. "
+"Transaction ID: %s. Date: %s"
+msgstr ""
+
+#: class-gf-fondy.php:1161
+#, php-format
+msgid "Payment is pending. Amount: %s. Transaction ID: %s. Reason: %s"
+msgstr ""
+
+#: class-gf-fondy.php:1379
+msgid "Payment Pending"
+msgstr ""
+
+#: class-gf-fondy.php:1377
+msgid "Payment Refunded"
+msgstr ""
+
+#: class-gf-fondy.php:1446
+msgid "Please wait..."
+msgstr ""
+
+#: class-gf-fondy.php:187 class-gf-fondy.php:189
+msgid "Posts"
+msgstr ""
+
+#: class-gf-fondy.php:129
+msgid "Production"
+msgstr ""
+
+#: class-gf-fondy.php:1321
+msgid ""
+"Reason has not been specified. For more information, contact Fondy Customer "
+"Service."
+msgstr ""
+
+#: class-gf-fondy.php:165 class-gf-fondy.php:169
+msgid "Return URL"
+msgstr ""
+
+#: class-gf-fondy.php:136
+msgid ""
+"Select Production to receive live payments. Select Test for testing purposes "
+"when using the Fondy development sandbox."
+msgstr ""
+
+#: class-gf-fondy.php:327
+msgid ""
+"Send notifications for the 'Form is submitted' event only when payment is "
+"received."
+msgstr ""
+
+#: class-gf-fondy.php:84
+msgid "Settings have been updated."
+msgstr ""
+
+#: class-gf-fondy.php:1381
+msgid "Subscription Canceled"
+msgstr ""
+
+#: class-gf-fondy.php:1380
+msgid "Subscription Created"
+msgstr ""
+
+#: class-gf-fondy.php:1382
+msgid "Subscription Expired"
+msgstr ""
+
+#: class-gf-fondy.php:1383
+msgid "Subscription Payment Added"
+msgstr ""
+
+#: class-gf-fondy.php:1384
+msgid "Subscription Payment Failed"
+msgstr ""
+
+#: class-gf-fondy.php:130
+msgid "Test"
+msgstr ""
+
+#: class-gf-fondy.php:1428
+msgid "Thank you! Fondy simple integration."
+msgstr ""
+
+#: class-gf-fondy.php:96
+#, php-format
+msgid "To get started, please configure your %sFondy Settings%s!"
+msgstr ""
+
+#: class-gf-fondy.php:260
+msgid "week(s)"
+msgstr ""
+
+#: class-gf-fondy.php:262
+msgid "year(s)"
+msgstr ""
