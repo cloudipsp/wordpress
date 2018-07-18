@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Fondy Payment Gravity Forms Add-on
-Plugin URI: https://www.gravityforms.com
+Plugin URI: https://fondy.eu
 Description: Integrates Gravity Forms with Fondy.
 Version: 1.0
 Author: DM
