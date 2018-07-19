@@ -24,7 +24,7 @@ function fondy_submit_order(e) {
         if (!f_valid_cvv2(a.val()))return fondy_error(a);
         jQuery("#checkout_fondy_form").find(".error-wrapper").hide();
         var c = r.serialize() + "&" + jQuery.param({
-                action: "generateajax_order_fondy_bank_ware_info",
+                action: "generate_ajax_order_fondy_info",
                 nonce_code: fondy_info.nonce
             });
         f_block(jQuery("#checkout_fondy_form")), f_block(jQuery("#place_order")), jQuery.post(fondy_info.url, c, function (e) {
@@ -42,11 +42,12 @@ function fondy_submit_order(e) {
                         e.sendResponse(), fondy_post_to_url(e.attr("order").response_url, e.attr("order").order_data, "post")
                     }).fail(function (e) {
                         f_unblock(jQuery("#checkout_fondy_form"));
+                        f_unblock(jQuery("#place_order"));
                         var r = e.attr("error").code ? e.attr("error").code : "";
                         jQuery("#checkout_fondy_form").find(".error-wrapper").html(r + ". " + e.attr("error").message).show()
                     })
                 })
-            } else f_unblock(jQuery("#checkout_fondy_form")), jQuery("#checkout_fondy_form").find(".error-wrapper").html(e.messages).show()
+            } else f_unblock(jQuery("#place_order")), f_unblock(jQuery("#checkout_fondy_form")), jQuery("#checkout_fondy_form").find(".error-wrapper").html(e.messages).show()
         })
     }
 }

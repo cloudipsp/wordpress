@@ -60,6 +60,7 @@ function woocommerce_fondy_init_bank_wire()
             $this->description = $this->settings['description'];
             $this->page_mode = $this->settings['page_mode'];
             $this->on_checkout_page = $this->settings['on_checkout_page'] ? $this->settings['on_checkout_page'] : false;
+            $this->force_lang = $this->settings['force_lang'] ? $this->settings['force_lang'] : false;
             $this->msg['message'] = "";
             $this->msg['class'] = "";
             $this->supports = array(
@@ -124,9 +125,15 @@ function woocommerce_fondy_init_bank_wire()
                     wp_enqueue_script('fondy_bank_pay_v2', '//unpkg.com/ipsp-js-sdk@1.0.13/dist/checkout.min.js', array('jquery'), null, true);
                     wp_enqueue_script('fondy_bank_pay_v2_woocom', plugin_dir_url(__FILE__) . 'assets/js/fondy.js', array('fondy_pay_v2'), '2.4.7', true);
                     wp_enqueue_script('fondy_bank_pay_v2_card', plugin_dir_url(__FILE__) . 'assets/js/payform.min.js', array('fondy_pay_v2_woocom'), '2.4.7', true);
-                    wp_localize_script('fondy_bank_pay_v2_woocom', 'fondy_info',
+                    if (isset($this->force_lang) and $this->force_lang == 'yes') {
+                        $endpoint = new WC_AJAX();
+                        $endpoint = $endpoint::get_endpoint('checkout');
+                    } else {
+                        $endpoint = admin_url('admin-ajax.php');
+                    }
+                    wp_localize_script('fondy_pay_v2_woocom', 'fondy_info',
                         array(
-                            'url' => admin_url('admin-ajax.php'),
+                            'url' => $endpoint,
                             'nonce' => wp_create_nonce('fondy-submit-nonce')
                         )
                     );
@@ -510,8 +517,8 @@ function woocommerce_fondy_init_bank_wire()
                     'amount' => round($order->get_total() * 100),
                     'order_desc' => $this->getProductInfo($order_id),
                     'currency' => esc_attr(get_woocommerce_currency()),
-                    'server_callback_url' => esc_attr($this->getCallbackUrl()),
-                    'response_url' => esc_attr($this->getCallbackUrl()),
+                    'server_callback_url' => $this->getCallbackUrl(),
+                    'response_url' => $this->getCallbackUrl(),
                     'lang' => esc_attr($this->getLanguage()),
                     'sender_email' => esc_attr($this->getEmail($order))
                 );
@@ -593,7 +600,13 @@ function woocommerce_fondy_init_bank_wire()
          */
         private function getCallbackUrl()
         {
-            $redirect_url = ($this->redirect_page_id == "" || $this->redirect_page_id == 0) ? get_site_url() . "/" : get_permalink($this->redirect_page_id);
+            if (isset($this->force_lang) and $this->force_lang == 'yes') {
+                $site_url = get_home_url();
+            } else {
+                $site_url = get_site_url() . "/";
+            }
+
+            $redirect_url = ($this->redirect_page_id == "" || $this->redirect_page_id == 0) ? $site_url . "/" : get_permalink($this->redirect_page_id);
 
             //For wooCoomerce 2.0
             return add_query_arg('wc-api', get_class($this), $redirect_url);
