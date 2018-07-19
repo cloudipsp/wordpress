@@ -110,5 +110,5 @@ Fixed checkout card
 Order notify update
 = 2.4.7 =
 Unification css containers
-= 2.4.7 =
+= 2.4.8 =
 Stability update

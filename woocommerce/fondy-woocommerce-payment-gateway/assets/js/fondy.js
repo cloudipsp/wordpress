@@ -42,11 +42,12 @@ function fondy_submit_order(e) {
                         e.sendResponse(), fondy_post_to_url(e.attr("order").response_url, e.attr("order").order_data, "post")
                     }).fail(function (e) {
                         f_unblock(jQuery("#checkout_fondy_form"));
+                        f_unblock(jQuery("#place_order"));
                         var r = e.attr("error").code ? e.attr("error").code : "";
                         jQuery("#checkout_fondy_form").find(".error-wrapper").html(r + ". " + e.attr("error").message).show()
                     })
                 })
-            } else f_unblock(jQuery("#checkout_fondy_form")), jQuery("#checkout_fondy_form").find(".error-wrapper").html(e.messages).show()
+            } else f_unblock(jQuery("#place_order")), f_unblock(jQuery("#checkout_fondy_form")), jQuery("#checkout_fondy_form").find(".error-wrapper").html(e.messages).show()
         })
     }
 }
