@@ -124,8 +124,8 @@ function woocommerce_fondy_init()
                 wp_enqueue_style('fondy-checkout', plugin_dir_url(__FILE__) . 'assets/css/fondy_styles.css');
                 if (isset($this->on_checkout_page) and $this->on_checkout_page == 'yes') {
                     wp_enqueue_script('fondy_pay_v2', '//unpkg.com/ipsp-js-sdk@1.0.13/dist/checkout.min.js', array('jquery'), null, true);
-                    wp_enqueue_script('fondy_pay_v2_woocom', plugin_dir_url(__FILE__) . 'assets/js/fondy.js', array('fondy_pay_v2'), '2.4.7', true);
-                    wp_enqueue_script('fondy_pay_v2_card', plugin_dir_url(__FILE__) . 'assets/js/payform.min.js', array('fondy_pay_v2_woocom'), '2.4.7', true);
+                    wp_enqueue_script('fondy_pay_v2_woocom', plugin_dir_url(__FILE__) . 'assets/js/fondy.js', array('fondy_pay_v2'), '2.4.9', true);
+                    wp_enqueue_script('fondy_pay_v2_card', plugin_dir_url(__FILE__) . 'assets/js/payform.min.js', array('fondy_pay_v2_woocom'), '2.4.9', true);
                     if (isset($this->force_lang) and $this->force_lang == 'yes') {
                         $endpoint = new WC_AJAX();
                         $endpoint = $endpoint::get_endpoint('checkout');
