@@ -4,7 +4,7 @@ Tags: fondy, woocommerce, payment, payment gateway, credit card, debit card, mer
 Requires at least: 3.5
 Tested up to: 4.9
 Requires PHP: 5.4
-Stable tag: 2.4.8
+Stable tag: 2.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,8 +46,8 @@ With us, your customers can make purchases in many currencies. Fondy payment gat
 Some answers you can find here [FAQ](https://fondy.eu/faq/)
 
 == Installation ==
-1. Upload plugin directory to the `/wp-content/plugins/` directory
-2. Activate the plugin through the `Plugins` menu in WordPress
+1. Upload plug-in directory to the `/wp-content/plugins/` directory
+2. Activate the plug-in through the `Plugins` menu in WordPress
 3. After activation, you can set options from `WooCommerce -> Settings -> Payment (tab "Fondy")
 
 == Screenshots ==
@@ -66,7 +66,7 @@ stability update
 = 2.2.3 =
 change payment complete status
 = 2.3.0 =
-some fix, dublicate update
+some fix, duplicate update
 = 2.4.0 =
 Added v2 js Api
 = 2.4.1 =
@@ -95,7 +95,7 @@ add expired callback
 = 2.2.3 =
 change payment complete status
 = 2.3.0 =
-some fix, dublicate update
+some fix, duplicate update
 = 2.4.0 =
 Added v2 js Api
 = 2.4.1 =
@@ -112,3 +112,7 @@ Order notify update
 Unification css containers
 = 2.4.8 =
 Stability update
+= 2.4.9 =
+Added multi currencies support(WMPL)
+= 2.5.0 =
+Added token caching
