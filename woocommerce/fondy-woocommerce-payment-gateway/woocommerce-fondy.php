@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.4.9
+Version: 2.5.0
 Author: Fondy
 Author URI: https://fondy.eu/
 Domain Path: /
@@ -521,7 +521,13 @@ function woocommerce_fondy_init()
                 );
 
                 $fondy_args['signature'] = $this->getSignature($fondy_args, $this->salt);
-                $token = $this->get_token($fondy_args);
+                $token = WC()->session->get('session_token_' . md5($order_id . '_' . $fondy_args['amount'] . '_' . $fondy_args['currency']));
+
+                if (empty($token)) {
+                    $token = $this->get_token($fondy_args);
+                    WC()->session->set('session_token_' . md5($order_id . '_' . $fondy_args['amount'] . '_' . $fondy_args['currency']), $token);
+                }
+
                 if ($token['result'] === 'success') {
                     return $token;
                 } else {
@@ -707,6 +713,7 @@ function woocommerce_fondy_init()
                 $order->update_status('failed');
             }
             WC()->session->__unset('session_token_' . $orderId);
+            WC()->session->__unset('session_token_' . md5($orderId . '_' . $total . '_' . $response['currency']));
             $woocommerce->cart->empty_cart();
 
             return true;
