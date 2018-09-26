@@ -704,8 +704,10 @@ function woocommerce_fondy_init()
                 $this->msg['message'] = __("Thank you for shopping with us. But your payment declined.", 'woocommerce-fondy');
                 $order->add_order_note("Fondy order status: " . $response['order_status']);
             }
-
-            if ($response['tran_type'] == 'purchase' and $response['order_status'] == self::ORDER_APPROVED and $total == $response['amount']) {
+            if ($response['tran_type'] == 'purchase'
+                and !$order->is_paid()
+                and $response['order_status'] == self::ORDER_APPROVED
+                and $total == $response['amount']) {
                 $order->payment_complete($response['order_id']);
                 $order->add_order_note('Fondy payment successful.<br/>fondy ID: ' . ' (' . $response['payment_id'] . ')');
             } elseif ($total != $response['amount']) {
