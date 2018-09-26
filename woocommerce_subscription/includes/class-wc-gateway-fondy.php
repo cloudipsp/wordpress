@@ -486,7 +486,7 @@ class WC_Fondy extends WC_Payment_Gateway {
 				$this->msg['message'] = __( "Thank you for shopping with us. Your account has been charged and your transaction is successful.", 'woocommerce-fondy' );
 			}
 			$this->msg['class'] = 'woocommerce-message';
-		} else {
+		} elseif(!$order->is_paid()) {
 			$this->msg['class']   = 'error';
 			$this->msg['message'] = $paymentInfo;
 			$order->add_order_note( "ERROR: " . $paymentInfo );
