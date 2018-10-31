@@ -2,10 +2,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce - Fondy Money\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-10 12:00+0000\n"
-"PO-Revision-Date: 2018-05-10 12:03+0000\n"
+"POT-Creation-Date: 2018-10-31 14:17+0000\n"
+"PO-Revision-Date: 2018-10-31 14:19+0000\n"
 "Last-Translator: asda asd <dm@fondy.ey>\n"
-"Language-Team: Русский\n"
+"Language-Team: Russian\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
 "n%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
@@ -23,31 +23,31 @@ msgstr ""
 "X-Loco-Target-Locale: ru_RU\n"
 "X-Generator: Loco https://localise.biz/"
 
-#: woocommerce-fondy.php:143
+#: woocommerce-fondy.php:155
 msgid "Enable/Disable"
 msgstr "Включить/Выключить"
 
-#: woocommerce-fondy.php:145
+#: woocommerce-fondy.php:157
 msgid "Enable Fondy Payment Module."
 msgstr "Включить модуль оплаты Fondy"
 
-#: woocommerce-fondy.php:150
+#: woocommerce-fondy.php:162
 msgid "Title:"
 msgstr "Заголовок:"
 
-#: woocommerce-fondy.php:152
+#: woocommerce-fondy.php:164
 msgid "Fondy Online Payments"
 msgstr "Онлайн платежи Fondy"
 
-#: woocommerce-fondy.php:153
+#: woocommerce-fondy.php:165
 msgid "This controls the title which the user sees during checkout."
 msgstr "Заголовок который, видит пользователь в процессе оформления заказа."
 
-#: woocommerce-fondy.php:157
+#: woocommerce-fondy.php:169
 msgid "Description:"
 msgstr "Описание"
 
-#: woocommerce-fondy.php:159
+#: woocommerce-fondy.php:171
 msgid ""
 "Pay securely by Credit or Debit Card or Internet Banking through fondy "
 "service."
@@ -55,179 +55,199 @@ msgstr ""
 "Оплатите безопасно с помощью кредитной или дебетовой карты или интернет-"
 "банкинга через  службы fondy."
 
-#: woocommerce-fondy.php:160
+#: woocommerce-fondy.php:172
 msgid "This controls the description which the user sees during checkout."
 msgstr "Описание которое видит пользователь в процессе оформления заказа."
 
-#: woocommerce-fondy.php:164
+#: woocommerce-fondy.php:176
 msgid "Merchant ID"
 msgstr "Merchant ID"
 
-#: woocommerce-fondy.php:170
+#: woocommerce-fondy.php:182
 msgid "Merchant secretkey"
 msgstr "Merchant secretkey"
 
-#: woocommerce-fondy.php:172
+#: woocommerce-fondy.php:184
 msgid "Given to Merchant by fondy"
 msgstr "Выдается мерчанту fondy"
 
-#: woocommerce-fondy.php:176
+#: woocommerce-fondy.php:188
 msgid "Show Logo"
 msgstr "Показать логотип"
 
-#: woocommerce-fondy.php:178
+#: woocommerce-fondy.php:190
 msgid "Show the \"fondy\" logo in the Payment Method section for the user"
 msgstr "Показать логотип \"fondy\" при оформлении заказа"
 
-#: woocommerce-fondy.php:180
+#: woocommerce-fondy.php:192
 msgid "Tick to show \"fondy\" logo"
 msgstr "Отметьте , чтобы показать логотип."
 
-#: woocommerce-fondy.php:184
+#: woocommerce-fondy.php:196
 msgid "Show calndaer on checkout"
 msgstr "Показать платежный календарь на чекауте"
 
-#: woocommerce-fondy.php:186
+#: woocommerce-fondy.php:198
 msgid "Show recurring payment calendar on checkout"
 msgstr "Показывать платежный календарь при оформлении заказа"
 
-#: woocommerce-fondy.php:188
+#: woocommerce-fondy.php:200
 msgid "Tick to show show recurring payment calendar on checkout"
 msgstr "Включает показ платежного календаря"
 
-#: woocommerce-fondy.php:192
+#: woocommerce-fondy.php:204
 msgid "Enable on checkout page mode"
 msgstr "Включить режим показа на странице чекаута (ввод карты)"
 
-#: woocommerce-fondy.php:194 woocommerce-fondy.php:196
+#: woocommerce-fondy.php:206 woocommerce-fondy.php:208
 msgid "Show payment on checkout page"
 msgstr "Показывать ввод карты на странице с оформлением заказа."
 
-#: woocommerce-fondy.php:200
+#: woocommerce-fondy.php:212
 msgid "Enable on page mode"
 msgstr "Включить режим показа на странице"
 
-#: woocommerce-fondy.php:202
+#: woocommerce-fondy.php:214
 msgid "Enable on page payment mode"
 msgstr "Включить модуль  на странице"
 
-#: woocommerce-fondy.php:204
+#: woocommerce-fondy.php:216
 msgid "Enable on page mode without redirect"
 msgstr "Включить режим без перенаправления на страницу оплаты"
 
-#: woocommerce-fondy.php:208
+#: woocommerce-fondy.php:220 woocommerce-fondy.php:222
+msgid "Enable on page mode instant redirect"
+msgstr "Моментальное перенаправление"
+
+#: woocommerce-fondy.php:224
+msgid "Enable on page mode instant redirect on submit order"
+msgstr "Включить моментальное перенаправление после формирования заказа"
+
+#: woocommerce-fondy.php:228
+msgid "Enable force detect lang"
+msgstr "Определение языковых настроек"
+
+#: woocommerce-fondy.php:230 woocommerce-fondy.php:232
+msgid "Enable detecting site lang if it used"
+msgstr ""
+
+#: woocommerce-fondy.php:236
 msgid "Return Page"
 msgstr "Страница ответа"
 
-#: woocommerce-fondy.php:210
+#: woocommerce-fondy.php:238
 msgid "Default order page"
 msgstr "Стандартная страница возврата"
 
-#: woocommerce-fondy.php:211
+#: woocommerce-fondy.php:239
 msgid "URL of success page"
 msgstr "Страница куда будет направлен пользователь после оплаты"
 
-#: woocommerce-fondy.php:215
+#: woocommerce-fondy.php:243
 msgid "Styles chekout page:"
 msgstr "Стилизировать страницу оплаты"
 
-#: woocommerce-fondy.php:218
+#: woocommerce-fondy.php:246
 msgid "You can find example here http://jsfiddle.net/8h65h91t/"
 msgstr "Вы можете посмотреть пример по ссылке http://jsfiddle.net/8h65h91t/"
 
-#: woocommerce-fondy.php:229
+#: woocommerce-fondy.php:257
 msgid "Fondy.eu"
 msgstr "Fondy.eu"
 
-#: woocommerce-fondy.php:230
+#: woocommerce-fondy.php:258
 msgid "Payment gateway"
 msgstr "Payment gateway"
 
-#: woocommerce-fondy.php:252
+#: woocommerce-fondy.php:280
 msgid "Card Number:"
 msgstr "Номер карты:"
 
-#: woocommerce-fondy.php:258
+#: woocommerce-fondy.php:286
 msgid "XXXXXXXXXXXXXXXX"
 msgstr "xxxxxxxxxxxxxx"
 
-#: woocommerce-fondy.php:264
+#: woocommerce-fondy.php:292
 msgid "Expiry Date:"
 msgstr "СРОК ДЕЙСТВИЯ: "
 
-#: woocommerce-fondy.php:267
+#: woocommerce-fondy.php:295
 msgid "CVV2:"
 msgstr "CVV2:"
 
-#: woocommerce-fondy.php:290
+#: woocommerce-fondy.php:311
+msgid "XXX"
+msgstr ""
+
+#: woocommerce-fondy.php:317
 msgid "Pay"
 msgstr "Оплатить"
 
-#: woocommerce-fondy.php:338
+#: woocommerce-fondy.php:371
 msgid "Order: "
 msgstr "Заказ №:"
 
-#: woocommerce-fondy.php:376
+#: woocommerce-fondy.php:408
 msgid "Pay via Fondy.eu"
 msgstr "Оплатить с помощью Fondy"
 
-#: woocommerce-fondy.php:548
+#: woocommerce-fondy.php:595
 msgid "Refund Fondy status: processing"
 msgstr "Статус возврата: processing"
 
-#: woocommerce-fondy.php:551 woocommerce-fondy.php:552
+#: woocommerce-fondy.php:598 woocommerce-fondy.php:599
 msgid "Refund Fondy status: Declined"
 msgstr ""
 "Статус возврата Fondy: Declined. Пожалуйста, свяжитесь с поддержкой для "
 "уточнения деталей"
 
-#: woocommerce-fondy.php:554
+#: woocommerce-fondy.php:601
 msgid "Refund Fondy status: Unknown"
 msgstr ""
 "Статус возврата Fondy: Unknown. Пожалуйста, свяжитесь с поддержкой для "
 "уточнения деталей"
 
-#: woocommerce-fondy.php:555
+#: woocommerce-fondy.php:602
 msgid "Refund Fondy status: Unknown. Try to contact support"
 msgstr "Refund Fondy status: Unknown. Try to contact support"
 
-#: woocommerce-fondy.php:605
+#: woocommerce-fondy.php:671
 msgid ""
 "An error has occurred during payment. Please contact us to ensure your order "
 "has submitted."
 msgstr "Ошибка при оплате. Пожалуйста свяжитесь с нами для уточнения деталей."
 
-#: woocommerce-fondy.php:608
+#: woocommerce-fondy.php:674
 msgid "Amount incorrect."
 msgstr "Неверная сумма"
 
-#: woocommerce-fondy.php:611
+#: woocommerce-fondy.php:677
 msgid "An error has occurred during payment. Merchant data is incorrect."
 msgstr "An error has occurred during payment. Merchant data is incorrect."
 
-#: woocommerce-fondy.php:624
+#: woocommerce-fondy.php:690
 msgid "Transaction ERROR: signature is not valid"
 msgstr "Transaction ERROR: signature is not valid"
 
-#: woocommerce-fondy.php:626
+#: woocommerce-fondy.php:692
 msgid "An error has occurred during payment. Signature is not valid."
 msgstr "An error has occurred during payment. Signature is not valid."
 
-#: woocommerce-fondy.php:630
+#: woocommerce-fondy.php:696
 msgid ""
 "Thank you for shopping with us. However, the transaction has been declined."
 msgstr "Спасибо за покупку ! . Тем не менее, оплата была отклонена ."
 
-#: woocommerce-fondy.php:640
+#: woocommerce-fondy.php:706
 msgid ""
 "Thank you for shopping with us. However, the transaction has been expired."
 msgstr "Спасибо что делаете покупки у нас. Но ваш перевод был отклонен"
 
-#: woocommerce-fondy.php:649
+#: woocommerce-fondy.php:715
 msgid "Thank you for shopping with us. But your payment declined."
 msgstr "Спасибо за покупки. Но по вашему платежу получили отказ."
 
-#: woocommerce-fondy.php:690
+#: woocommerce-fondy.php:760
 msgid ""
 "Thank you for shopping with us. Your account has been charged and your "
 "transaction is successful."
@@ -246,8 +266,8 @@ msgid "https://fondy.eu"
 msgstr "https://fondy.ru/"
 
 #. Author of the plugin
-msgid "DM"
-msgstr "Дмитрий Мирошников"
+msgid "Fondy"
+msgstr ""
 
 #. Author URI of the plugin
 msgid "https://fondy.eu/"

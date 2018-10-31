@@ -59,6 +59,7 @@ function woocommerce_fondy_init()
             $this->styles = $this->settings['styles'];
             $this->description = $this->settings['description'];
             $this->page_mode = $this->settings['page_mode'];
+            $this->page_mode_instant = $this->settings['page_mode_instant'];
             $this->on_checkout_page = $this->settings['on_checkout_page'] ? $this->settings['on_checkout_page'] : false;
             $this->force_lang = $this->settings['force_lang'] ? $this->settings['force_lang'] : false;
             $this->msg['message'] = "";
@@ -213,6 +214,14 @@ function woocommerce_fondy_init()
                     'label' => __('Enable on page payment mode', 'woocommerce-fondy'),
                     'default' => 'no',
                     'description' => __('Enable on page mode without redirect', 'woocommerce-fondy'),
+                    'desc_tip' => true
+                ),
+                'page_mode_instant' => array(
+                    'title' => __('Enable on page mode instant redirect', 'woocommerce-fondy'),
+                    'type' => 'checkbox',
+                    'label' => __('Enable on page mode instant redirect', 'woocommerce-fondy'),
+                    'default' => 'no',
+                    'description' => __('Enable on page mode instant redirect on submit order', 'woocommerce-fondy'),
                     'desc_tip' => true
                 ),
                 'force_lang' => array(
@@ -397,6 +406,8 @@ function woocommerce_fondy_init()
                 $out .= '  <form action="' . $this->liveurl . '" method="post" id="fondy_payment_form">
                     ' . implode('', $fondy_args_array) . '
                 <input type="submit" id="submit_fondy_payment_form" value="' . __('Pay via Fondy.eu', 'woocommerce-fondy') . '" />';
+                if($this->page_mode_instant == 'yes')
+                    $out .= "<script type='text/javascript'> document.getElementById('submit_fondy_payment_form').click(); </script>";
             } else {
                 $url = WC()->session->get('session_token_' . $order_id);
                 if (empty($url)) {
