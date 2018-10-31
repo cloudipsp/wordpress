@@ -4,7 +4,7 @@ Tags: fondy, woocommerce, payment, payment gateway, credit card, debit card, mer
 Requires at least: 3.5
 Tested up to: 4.9
 Requires PHP: 5.4
-Stable tag: 2.5.0
+Stable tag: 2.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
