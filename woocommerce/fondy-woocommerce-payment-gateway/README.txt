@@ -4,7 +4,7 @@ Tags: fondy, woocommerce, payment, payment gateway, credit card, debit card, mer
 Requires at least: 3.5
 Tested up to: 4.9
 Requires PHP: 5.4
-Stable tag: 2.5.2
+Stable tag: 2.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,10 @@ Added Refund function
 Fixed checkout card
 = 2.4.5 =
 Fix for php 5.3 <
+= 2.5.2 =
+Added instant redirect
+= 2.5.3 =
+Styles moved to merchant portal
 
 == Upgrade Notice ==
 
@@ -116,3 +120,7 @@ Stability update
 Added multi currencies support(WMPL)
 = 2.5.0 =
 Added token caching
+= 2.5.2 =
+Added instant redirect
+= 2.5.3 =
+Styles moved to merchant portal

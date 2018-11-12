@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.5.2
+Version: 2.5.3
 Author: Fondy
 Author URI: https://fondy.eu/
 Domain Path: /
@@ -11,7 +11,7 @@ Text Domain: woocommerce-fondy
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 2.0.0
-WC tested up to: 3.4.5
+WC tested up to: 3.5.1
 */
 add_action("init", "woocoo_fondy");
 function woocoo_fondy()
@@ -56,7 +56,6 @@ function woocommerce_fondy_init()
             $this->redirect_page_id = $this->settings['redirect_page_id'];
             $this->merchant_id = $this->settings['merchant_id'];
             $this->salt = $this->settings['salt'];
-            $this->styles = $this->settings['styles'];
             $this->description = $this->settings['description'];
             $this->page_mode = $this->settings['page_mode'];
             $this->page_mode_instant = $this->settings['page_mode_instant'];
@@ -238,13 +237,6 @@ function woocommerce_fondy_init()
                     'options' => $this->fondy_get_pages(__('Default order page', 'woocommerce-fondy')),
                     'description' => __('URL of success page', 'woocommerce-fondy'),
                     'desc_tip' => true
-                ),
-                'styles' => array(
-                    'title' => __('Styles chekout page:', 'woocommerce-fondy'),
-                    'type' => 'textarea',
-                    'default' => __("'html, body' : {'overflow' : 'hidden'}"),
-                    'description' => __('You can find example here http://jsfiddle.net/8h65h91t/', 'woocommerce-fondy'),
-                    'desc_tip' => true
                 )
             );
         }
@@ -420,14 +412,10 @@ function woocommerce_fondy_init()
                     </div>';
                 $out .= '
 			    <script>
-			    var checkoutStyles = {
-			    		' . $this->styles . '
-			    }
 			    function checkoutInit(url) {
 			    	$ipsp("checkout").scope(function() {
 					this.setCheckoutWrapper("#checkout_wrapper");
 					this.addCallback(__DEFAULTCALLBACK__);
-					this.setCssStyle(checkoutStyles);
 					this.action("show", function(data) {
 						jQuery("#checkout_loader").remove();
 						jQuery("#checkout").show();
