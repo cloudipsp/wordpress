@@ -219,7 +219,7 @@ function pmpro_fondy_insChangeMembershipLevel($txn_id, &$morder, $payment_id, $r
 
 
         //hook
-        do_action("pmpro_after_checkout", $morder->user_id);
+        do_action("pmpro_after_checkout", $morder->user_id, $morder);
 
         //setup some values for the emails
         if (!empty($morder)) {
