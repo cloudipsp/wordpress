@@ -2,7 +2,7 @@
 Contributors: Fondy
 Tags: fondy, woocommerce, payment, payment gateway, credit card, debit card, merchant account, payments processing, merchant service, payment service provider
 Requires at least: 3.5
-Tested up to: 4.9
+Tested up to: 5.1
 Requires PHP: 5.4
 Stable tag: 2.5.3
 License: GPLv2 or later

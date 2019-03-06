@@ -11,7 +11,7 @@ Text Domain: woocommerce-fondy
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 2.0.0
-WC tested up to: 3.5.1
+WC tested up to: 3.5.5
 */
 add_action("init", "woocoo_fondy");
 function woocoo_fondy()
