@@ -4,29 +4,24 @@ Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
 Version: 2.5.3
-Author: Fondy
+Author: FONDY - Unified Payment Platform
 Author URI: https://fondy.eu/
-Domain Path: /
+Domain Path: /languages
 Text Domain: woocommerce-fondy
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 2.0.0
 WC tested up to: 3.5.5
 */
-add_action("init", "woocoo_fondy");
-function woocoo_fondy()
-{
-    load_plugin_textdomain("woocommerce-fondy", false, basename(dirname(__FILE__)));
-}
 
 add_action('plugins_loaded', 'woocommerce_fondy_init', 0);
-define('IMGDIR', WP_PLUGIN_URL . "/" . plugin_basename(dirname(__FILE__)) . '/assets/img/');
 
 function woocommerce_fondy_init()
 {
     if (!class_exists('WC_Payment_Gateway')) {
         return;
     }
+    load_plugin_textdomain("woocommerce-fondy", false, basename(dirname(__FILE__)) . '/languages');
 
     /**
      * Gateway class
@@ -41,13 +36,13 @@ function woocommerce_fondy_init()
         public function __construct()
         {
             $this->id = 'fondy';
-            $this->method_title = 'Fondy';
-            $this->method_description = "Payment gateway";
+            $this->method_title = 'FONDY';
+            $this->method_description = __('Payment gateway', 'woocommerce-fondy');
             $this->has_fields = false;
             $this->init_form_fields();
             $this->init_settings();
             if ($this->settings['showlogo'] == "yes") {
-                $this->icon = IMGDIR . 'logo.png';
+                $this->icon = WP_PLUGIN_URL . "/" . plugin_basename(dirname(__FILE__)) . '/assets/img/logo.png';
             }
             $this->liveurl = 'https://api.fondy.eu/api/checkout/redirect/';
             $this->refundurl = 'https://api.fondy.eu/api/reverse/order_id';
@@ -108,7 +103,7 @@ function woocommerce_fondy_init()
          */
         function custom_order_button_html($button)
         {
-            $order_button_text = __('Place order', 'woocommerce');
+            $order_button_text = __('Place order', 'woocommerce-fondy');
             $js_event = "fondy_submit_order(event);";
             $button = '<button type="submit" onClick="' . esc_attr($js_event) . '" class="button alt" name="woocommerce_checkout_place_order" id="place_order" value="' . esc_attr($order_button_text) . '" data-value="' . esc_attr($order_button_text) . '" >' . esc_attr($order_button_text) . '</button>';
 
@@ -155,7 +150,7 @@ function woocommerce_fondy_init()
                     'type' => 'checkbox',
                     'label' => __('Enable Fondy Payment Module.', 'woocommerce-fondy'),
                     'default' => 'no',
-                    'description' => 'Show in the Payment List as a payment option'
+                    'description' => __('Show in the Payment List as a payment option', 'woocommerce-fondy')
                 ),
                 'title' => array(
                     'title' => __('Title:', 'woocommerce-fondy'),
@@ -257,7 +252,7 @@ function woocommerce_fondy_init()
         /**
          * CCard fields on generating order
          */
-        function payment_fields()
+        public function payment_fields()
         {
             if ($this->description) {
                 echo wpautop(wptexturize($this->description));
@@ -398,7 +393,7 @@ function woocommerce_fondy_init()
                 $out .= '  <form action="' . $this->liveurl . '" method="post" id="fondy_payment_form">
                     ' . implode('', $fondy_args_array) . '
                 <input type="submit" id="submit_fondy_payment_form" value="' . __('Pay via Fondy.eu', 'woocommerce-fondy') . '" />';
-                if($this->page_mode_instant == 'yes')
+                if ($this->page_mode_instant == 'yes')
                     $out .= "<script type='text/javascript'> document.getElementById('submit_fondy_payment_form').click(); </script>";
             } else {
                 $url = WC()->session->get('session_token_' . $order_id);
@@ -692,7 +687,7 @@ function woocommerce_fondy_init()
 
             if ($response['order_status'] == 'expired') {
                 $errorMessage = __("Thank you for shopping with us. However, the transaction has been expired.", 'woocommerce-fondy');
-                $order->add_order_note('Transaction ERROR: order expired<br/>Fondy ID: ' . $response['payment_id']);
+                $order->add_order_note(__('Transaction ERROR: order expired<br/>FONDY ID: ', 'woocommerce-fondy') . $response['payment_id']);
                 $order->update_status('cancelled');
 
                 return $errorMessage;
@@ -708,9 +703,9 @@ function woocommerce_fondy_init()
                 and $response['order_status'] == self::ORDER_APPROVED
                 and $total == $response['amount']) {
                 $order->payment_complete($response['order_id']);
-                $order->add_order_note('Fondy payment successful.<br/>fondy ID: ' . ' (' . $response['payment_id'] . ')');
+                $order->add_order_note(__('Fondy payment successful.<br/>FONDY ID: ', 'woocommerce-fondy') . ' (' . $response['payment_id'] . ')');
             } elseif ($total != $response['amount']) {
-                $order->add_order_note('Transaction ERROR: amount incorrect<br/>Fondy ID: ' . $response['payment_id']);
+                $order->add_order_note(__('Transaction ERROR: amount incorrect<br/>FONDY ID: ', 'woocommerce-fondy') . $response['payment_id']);
                 $order->update_status('failed');
             }
             WC()->session->__unset('session_token_' . $orderId);
@@ -747,7 +742,7 @@ function woocommerce_fondy_init()
                     $this->msg['message'] = __("Thank you for shopping with us. Your account has been charged and your transaction is successful.", 'woocommerce-fondy');
                 }
                 $this->msg['class'] = 'woocommerce-message';
-            } elseif(!$order->is_paid()) {
+            } elseif (!$order->is_paid()) {
                 $this->msg['class'] = 'error';
                 $this->msg['message'] = $paymentInfo;
                 $order->add_order_note("ERROR: " . $paymentInfo);
