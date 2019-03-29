@@ -7,7 +7,7 @@ Version: 2.5.4
 Author: FONDY - Unified Payment Platform
 Author URI: https://fondy.eu/
 Domain Path: /languages
-Text Domain: woocommerce-fondy
+Text Domain: fondy-woocommerce-payment-gateway
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 2.0.0
@@ -21,7 +21,7 @@ function woocommerce_fondy_init()
     if (!class_exists('WC_Payment_Gateway')) {
         return;
     }
-    load_plugin_textdomain("woocommerce-fondy", false, basename(dirname(__FILE__)) . '/languages');
+    load_plugin_textdomain("fondy-woocommerce-payment-gateway", false, basename(dirname(__FILE__)) . '/languages');
 
     /**
      * Gateway class
@@ -37,7 +37,7 @@ function woocommerce_fondy_init()
         {
             $this->id = 'fondy';
             $this->method_title = 'FONDY';
-            $this->method_description = __('Payment gateway', 'woocommerce-fondy');
+            $this->method_description = __('Payment gateway', 'fondy-woocommerce-payment-gateway');
             $this->has_fields = false;
             $this->init_form_fields();
             $this->init_settings();
@@ -103,7 +103,7 @@ function woocommerce_fondy_init()
          */
         function custom_order_button_html($button)
         {
-            $order_button_text = __('Place order', 'woocommerce-fondy');
+            $order_button_text = __('Place order', 'fondy-woocommerce-payment-gateway');
             $js_event = "fondy_submit_order(event);";
             $button = '<button type="submit" onClick="' . esc_attr($js_event) . '" class="button alt" name="woocommerce_checkout_place_order" id="place_order" value="' . esc_attr($order_button_text) . '" data-value="' . esc_attr($order_button_text) . '" >' . esc_attr($order_button_text) . '</button>';
 
@@ -146,91 +146,91 @@ function woocommerce_fondy_init()
         {
             $this->form_fields = array(
                 'enabled' => array(
-                    'title' => __('Enable/Disable', 'woocommerce-fondy'),
+                    'title' => __('Enable/Disable', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'checkbox',
-                    'label' => __('Enable Fondy Payment Module.', 'woocommerce-fondy'),
+                    'label' => __('Enable Fondy Payment Module.', 'fondy-woocommerce-payment-gateway'),
                     'default' => 'no',
-                    'description' => __('Show in the Payment List as a payment option', 'woocommerce-fondy')
+                    'description' => __('Show in the Payment List as a payment option', 'fondy-woocommerce-payment-gateway')
                 ),
                 'title' => array(
-                    'title' => __('Title:', 'woocommerce-fondy'),
+                    'title' => __('Title:', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'text',
-                    'default' => __('Fondy Online Payments', 'woocommerce-fondy'),
-                    'description' => __('This controls the title which the user sees during checkout.', 'woocommerce-fondy'),
+                    'default' => __('Fondy Online Payments', 'fondy-woocommerce-payment-gateway'),
+                    'description' => __('This controls the title which the user sees during checkout.', 'fondy-woocommerce-payment-gateway'),
                     'desc_tip' => true
                 ),
                 'description' => array(
-                    'title' => __('Description:', 'woocommerce-fondy'),
+                    'title' => __('Description:', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'textarea',
-                    'default' => __('Pay securely by Credit or Debit Card or Internet Banking through fondy service.', 'woocommerce-fondy'),
-                    'description' => __('This controls the description which the user sees during checkout.', 'woocommerce-fondy'),
+                    'default' => __('Pay securely by Credit or Debit Card or Internet Banking through fondy service.', 'fondy-woocommerce-payment-gateway'),
+                    'description' => __('This controls the description which the user sees during checkout.', 'fondy-woocommerce-payment-gateway'),
                     'desc_tip' => true
                 ),
                 'merchant_id' => array(
-                    'title' => __('Merchant ID', 'woocommerce-fondy'),
+                    'title' => __('Merchant ID', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'text',
                     'description' => __('Given to Merchant by fondy'),
                     'desc_tip' => true
                 ),
                 'salt' => array(
-                    'title' => __('Merchant secretkey', 'woocommerce-fondy'),
+                    'title' => __('Merchant secretkey', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'text',
-                    'description' => __('Given to Merchant by fondy', 'woocommerce-fondy'),
+                    'description' => __('Given to Merchant by fondy', 'fondy-woocommerce-payment-gateway'),
                     'desc_tip' => true
                 ),
                 'showlogo' => array(
-                    'title' => __('Show Logo', 'woocommerce-fondy'),
+                    'title' => __('Show Logo', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'checkbox',
-                    'label' => __('Show the "fondy" logo in the Payment Method section for the user', 'woocommerce-fondy'),
+                    'label' => __('Show the "fondy" logo in the Payment Method section for the user', 'fondy-woocommerce-payment-gateway'),
                     'default' => 'yes',
-                    'description' => __('Tick to show "fondy" logo', 'woocommerce-fondy'),
+                    'description' => __('Tick to show "fondy" logo', 'fondy-woocommerce-payment-gateway'),
                     'desc_tip' => true
                 ),
                 'calendar' => array(
-                    'title' => __('Show calndaer on checkout', 'woocommerce-fondy'),
+                    'title' => __('Show calndaer on checkout', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'checkbox',
-                    'label' => __('Show recurring payment calendar on checkout', 'woocommerce-fondy'),
+                    'label' => __('Show recurring payment calendar on checkout', 'fondy-woocommerce-payment-gateway'),
                     'default' => 'no',
-                    'description' => __('Tick to show show recurring payment calendar on checkout', 'woocommerce-fondy'),
+                    'description' => __('Tick to show show recurring payment calendar on checkout', 'fondy-woocommerce-payment-gateway'),
                     'desc_tip' => true
                 ),
                 'on_checkout_page' => array(
-                    'title' => __('Enable on checkout page mode', 'woocommerce-fondy'),
+                    'title' => __('Enable on checkout page mode', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'checkbox',
-                    'label' => __('Show payment on checkout page', 'woocommerce-fondy'),
+                    'label' => __('Show payment on checkout page', 'fondy-woocommerce-payment-gateway'),
                     'default' => 'no',
-                    'description' => __('Show payment on checkout page', 'woocommerce-fondy'),
+                    'description' => __('Show payment on checkout page', 'fondy-woocommerce-payment-gateway'),
                     'desc_tip' => true
                 ),
                 'page_mode' => array(
-                    'title' => __('Enable on page mode', 'woocommerce-fondy'),
+                    'title' => __('Enable on page mode', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'checkbox',
-                    'label' => __('Enable on page payment mode', 'woocommerce-fondy'),
+                    'label' => __('Enable on page payment mode', 'fondy-woocommerce-payment-gateway'),
                     'default' => 'no',
-                    'description' => __('Enable on page mode without redirect', 'woocommerce-fondy'),
+                    'description' => __('Enable on page mode without redirect', 'fondy-woocommerce-payment-gateway'),
                     'desc_tip' => true
                 ),
                 'page_mode_instant' => array(
-                    'title' => __('Enable on page mode instant redirect', 'woocommerce-fondy'),
+                    'title' => __('Enable on page mode instant redirect', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'checkbox',
-                    'label' => __('Enable on page mode instant redirect', 'woocommerce-fondy'),
+                    'label' => __('Enable on page mode instant redirect', 'fondy-woocommerce-payment-gateway'),
                     'default' => 'no',
-                    'description' => __('Enable on page mode instant redirect on submit order', 'woocommerce-fondy'),
+                    'description' => __('Enable on page mode instant redirect on submit order', 'fondy-woocommerce-payment-gateway'),
                     'desc_tip' => true
                 ),
                 'force_lang' => array(
-                    'title' => __('Enable force detect lang', 'woocommerce-fondy'),
+                    'title' => __('Enable force detect lang', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'checkbox',
-                    'label' => __('Enable detecting site lang if it used', 'woocommerce-fondy'),
+                    'label' => __('Enable detecting site lang if it used', 'fondy-woocommerce-payment-gateway'),
                     'default' => 'no',
-                    'description' => __('Enable detecting site lang if it used', 'woocommerce-fondy'),
+                    'description' => __('Enable detecting site lang if it used', 'fondy-woocommerce-payment-gateway'),
                     'desc_tip' => true
                 ),
                 'redirect_page_id' => array(
-                    'title' => __('Return Page', 'woocommerce-fondy'),
+                    'title' => __('Return Page', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'select',
-                    'options' => $this->fondy_get_pages(__('Default order page', 'woocommerce-fondy')),
-                    'description' => __('URL of success page', 'woocommerce-fondy'),
+                    'options' => $this->fondy_get_pages(__('Default order page', 'fondy-woocommerce-payment-gateway')),
+                    'description' => __('URL of success page', 'fondy-woocommerce-payment-gateway'),
                     'desc_tip' => true
                 )
             );
@@ -241,8 +241,8 @@ function woocommerce_fondy_init()
          **/
         public function admin_options()
         {
-            echo '<h3>' . __('Fondy.eu', 'woocommerce-fondy') . '</h3>';
-            echo '<p>' . __('Payment gateway', 'woocommerce-fondy') . '</p>';
+            echo '<h3>' . __('Fondy.eu', 'fondy-woocommerce-payment-gateway') . '</h3>';
+            echo '<p>' . __('Payment gateway', 'fondy-woocommerce-payment-gateway') . '</p>';
             echo '<table class="form-table">';
             // Generate the HTML For the settings form.
             $this->generate_settings_html();
@@ -264,22 +264,22 @@ function woocommerce_fondy_init()
                     <div class="f-container">
                         <div class="input-wrapper">
                             <div class="input-label w-1">
-                                <?php esc_html_e('Card Number:', 'woocommerce-fondy') ?>
+                                <?php esc_html_e('Card Number:', 'fondy-woocommerce-payment-gateway') ?>
                             </div>
                             <div class="input-field w-1">
                                 <input required type="tel" name="card_number" class="input fondy-credit-cart"
                                        id="fondy_ccard"
                                        autocomplete="cc-number"
-                                       placeholder="<?php esc_html_e('XXXXXXXXXXXXXXXX', 'woocommerce-fondy') ?>"/>
+                                       placeholder="<?php esc_html_e('XXXXXXXXXXXXXXXX', 'fondy-woocommerce-payment-gateway') ?>"/>
                                 <div id="f_card_sep"></div>
                             </div>
                         </div>
                         <div class="input-wrapper">
                             <div class="input-label w-3-2">
-                                <?php esc_html_e('Expiry Date:', 'woocommerce-fondy') ?>
+                                <?php esc_html_e('Expiry Date:', 'fondy-woocommerce-payment-gateway') ?>
                             </div>
                             <div class="input-label w-4 w-rigth">
-                                <?php esc_html_e('CVV2:', 'woocommerce-fondy') ?>
+                                <?php esc_html_e('CVV2:', 'fondy-woocommerce-payment-gateway') ?>
                             </div>
                             <div class="input-field w-4">
                                 <input required type="tel" name="expiry_month" id="fondy_expiry_month"
@@ -295,13 +295,13 @@ function woocommerce_fondy_init()
                                 <input autocomplete="off" required type="tel" name="cvv2" id="fondy_cvv2"
                                        onkeydown="nextInput(this,event)"
                                        class="input"
-                                       placeholder="<?php esc_html_e('XXX', 'woocommerce-fondy') ?>"/>
+                                       placeholder="<?php esc_html_e('XXX', 'fondy-woocommerce-payment-gateway') ?>"/>
                             </div>
                         </div>
                         <div style="display: none" class="input-wrapper stack-1">
                             <div class="input-field w-1">
                                 <input id="submit_fondy_checkout_form" type="submit" class="button">
-                                value="<?php esc_html_e('Pay', 'woocommerce-fondy') ?>"/>
+                                value="<?php esc_html_e('Pay', 'fondy-woocommerce-payment-gateway') ?>"/>
                             </div>
                         </div>
                         <div class="error-wrapper"></div>
@@ -355,7 +355,7 @@ function woocommerce_fondy_init()
 
         private function getProductInfo($order_id)
         {
-            return __('Order: ', 'woocommerce-fondy') . $order_id;
+            return __('Order: ', 'fondy-woocommerce-payment-gateway') . $order_id;
         }
 
         /**
@@ -392,7 +392,7 @@ function woocommerce_fondy_init()
                 }
                 $out .= '  <form action="' . $this->liveurl . '" method="post" id="fondy_payment_form">
                     ' . implode('', $fondy_args_array) . '
-                <input type="submit" id="submit_fondy_payment_form" value="' . __('Pay via Fondy.eu', 'woocommerce-fondy') . '" />';
+                <input type="submit" id="submit_fondy_payment_form" value="' . __('Pay via Fondy.eu', 'fondy-woocommerce-payment-gateway') . '" />';
                 if ($this->page_mode_instant == 'yes')
                     $out .= "<script type='text/javascript'> document.getElementById('submit_fondy_payment_form').click(); </script>";
             } else {
@@ -575,20 +575,20 @@ function woocommerce_fondy_init()
                         case 'approved':
                             return true;
                         case 'processing':
-                            $order->add_order_note(__('Refund Fondy status: processing', 'woocommerce-fondy'));
+                            $order->add_order_note(__('Refund Fondy status: processing', 'fondy-woocommerce-payment-gateway'));
                             return true;
                         case 'declined':
-                            $order->add_order_note(__('Refund Fondy status: Declined', 'woocommerce-fondy'));
-                            return new WP_Error('error', __('Refund Fondy status: Declined', 'woocommerce-fondy'), 'woocommerce-fondy');
+                            $order->add_order_note(__('Refund Fondy status: Declined', 'fondy-woocommerce-payment-gateway'));
+                            return new WP_Error('error', __('Refund Fondy status: Declined', 'fondy-woocommerce-payment-gateway'), 'fondy-woocommerce-payment-gateway');
                         default:
-                            $order->add_order_note(__('Refund Fondy status: Unknown', 'woocommerce-fondy'));
-                            return new WP_Error('error', __('Refund Fondy status: Unknown. Try to contact support', 'woocommerce-fondy'), 'woocommerce-fondy');
+                            $order->add_order_note(__('Refund Fondy status: Unknown', 'fondy-woocommerce-payment-gateway'));
+                            return new WP_Error('error', __('Refund Fondy status: Unknown. Try to contact support', 'fondy-woocommerce-payment-gateway'), 'fondy-woocommerce-payment-gateway');
                     }
                 } else {
-                    return new WP_Error('error', __($fondy_response['error_code'] . '. ' . $fondy_response['error_message'], 'woocommerce-fondy'));
+                    return new WP_Error('error', __($fondy_response['error_code'] . '. ' . $fondy_response['error_message'], 'fondy-woocommerce-payment-gateway'));
                 }
             } catch (Exception $e) {
-                return new WP_Error('error', __($e->getMessage(), 'woocommerce-fondy'));
+                return new WP_Error('error', __($e->getMessage(), 'fondy-woocommerce-payment-gateway'));
             }
         }
 
@@ -651,13 +651,13 @@ function woocommerce_fondy_init()
             $order = new WC_Order($orderId);
             $total = round($order->get_total() * 100);
             if ($order === false) {
-                return __('An error has occurred during payment. Please contact us to ensure your order has submitted.', 'woocommerce-fondy');
+                return __('An error has occurred during payment. Please contact us to ensure your order has submitted.', 'fondy-woocommerce-payment-gateway');
             }
             if ($response['amount'] != $total) {
-                return __('Amount incorrect.', 'woocommerce-fondy');
+                return __('Amount incorrect.', 'fondy-woocommerce-payment-gateway');
             }
             if ($this->merchant_id != $response['merchant_id']) {
-                return __('An error has occurred during payment. Merchant data is incorrect.', 'woocommerce-fondy');
+                return __('An error has occurred during payment. Merchant data is incorrect.', 'fondy-woocommerce-payment-gateway');
             }
 
             $responseSignature = $response['signature'];
@@ -670,13 +670,13 @@ function woocommerce_fondy_init()
 
             if ($this->getSignature($response, $this->salt) != $responseSignature) {
                 $order->update_status('failed');
-                $order->add_order_note(__('Transaction ERROR: signature is not valid', 'woocommerce-fondy'));
+                $order->add_order_note(__('Transaction ERROR: signature is not valid', 'fondy-woocommerce-payment-gateway'));
 
-                return __('An error has occurred during payment. Signature is not valid.', 'woocommerce-fondy');
+                return __('An error has occurred during payment. Signature is not valid.', 'fondy-woocommerce-payment-gateway');
             }
 
             if ($response['order_status'] == self::ORDER_DECLINED) {
-                $errorMessage = __("Thank you for shopping with us. However, the transaction has been declined.", 'woocommerce-fondy');
+                $errorMessage = __("Thank you for shopping with us. However, the transaction has been declined.", 'fondy-woocommerce-payment-gateway');
                 $order->add_order_note('Transaction ERROR: order declined<br/>Fondy ID: ' . $response['payment_id']);
                 $order->update_status('failed');
 
@@ -686,8 +686,8 @@ function woocommerce_fondy_init()
             }
 
             if ($response['order_status'] == 'expired') {
-                $errorMessage = __("Thank you for shopping with us. However, the transaction has been expired.", 'woocommerce-fondy');
-                $order->add_order_note(__('Transaction ERROR: order expired<br/>FONDY ID: ', 'woocommerce-fondy') . $response['payment_id']);
+                $errorMessage = __("Thank you for shopping with us. However, the transaction has been expired.", 'fondy-woocommerce-payment-gateway');
+                $order->add_order_note(__('Transaction ERROR: order expired<br/>FONDY ID: ', 'fondy-woocommerce-payment-gateway') . $response['payment_id']);
                 $order->update_status('cancelled');
 
                 return $errorMessage;
@@ -695,7 +695,7 @@ function woocommerce_fondy_init()
 
             if ($response['tran_type'] == 'purchase' and $response['order_status'] != self::ORDER_APPROVED) {
                 $this->msg['class'] = 'woocommerce-error';
-                $this->msg['message'] = __("Thank you for shopping with us. But your payment declined.", 'woocommerce-fondy');
+                $this->msg['message'] = __("Thank you for shopping with us. But your payment declined.", 'fondy-woocommerce-payment-gateway');
                 $order->add_order_note("Fondy order status: " . $response['order_status']);
             }
             if ($response['tran_type'] == 'purchase'
@@ -703,9 +703,9 @@ function woocommerce_fondy_init()
                 and $response['order_status'] == self::ORDER_APPROVED
                 and $total == $response['amount']) {
                 $order->payment_complete($response['order_id']);
-                $order->add_order_note(__('Fondy payment successful.<br/>FONDY ID: ', 'woocommerce-fondy') . ' (' . $response['payment_id'] . ')');
+                $order->add_order_note(__('Fondy payment successful.<br/>FONDY ID: ', 'fondy-woocommerce-payment-gateway') . ' (' . $response['payment_id'] . ')');
             } elseif ($total != $response['amount']) {
-                $order->add_order_note(__('Transaction ERROR: amount incorrect<br/>FONDY ID: ', 'woocommerce-fondy') . $response['payment_id']);
+                $order->add_order_note(__('Transaction ERROR: amount incorrect<br/>FONDY ID: ', 'fondy-woocommerce-payment-gateway') . $response['payment_id']);
                 $order->update_status('failed');
             }
             WC()->session->__unset('session_token_' . $orderId);
@@ -734,12 +734,12 @@ function woocommerce_fondy_init()
             $order = new WC_Order($orderId);
             $paymentInfo = $this->isPaymentValid($_POST);
             if ($paymentInfo === true and $_POST['order_status'] == 'reversed') {
-                $order->add_order_note(__('Refund Fondy status: ' . esc_sql($_POST['order_status']) . ', Refund payment id: ' . esc_sql($_POST['payment_id']), 'woocommerce-fondy'));
+                $order->add_order_note(__('Refund Fondy status: ' . esc_sql($_POST['order_status']) . ', Refund payment id: ' . esc_sql($_POST['payment_id']), 'fondy-woocommerce-payment-gateway'));
                 die('Order Reversed');
             }
             if ($paymentInfo === true and !$order->is_paid()) {
                 if ($_POST['order_status'] == self::ORDER_APPROVED) {
-                    $this->msg['message'] = __("Thank you for shopping with us. Your account has been charged and your transaction is successful.", 'woocommerce-fondy');
+                    $this->msg['message'] = __("Thank you for shopping with us. Your account has been charged and your transaction is successful.", 'fondy-woocommerce-payment-gateway');
                 }
                 $this->msg['class'] = 'woocommerce-message';
             } elseif (!$order->is_paid()) {

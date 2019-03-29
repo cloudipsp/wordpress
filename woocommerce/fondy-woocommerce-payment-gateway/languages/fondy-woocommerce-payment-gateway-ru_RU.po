@@ -3,26 +3,26 @@ msgstr ""
 "Project-Id-Version: WooCommerce - Fondy Money\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-28 20:19+0000\n"
-"PO-Revision-Date: 2019-03-28 20:23+0000\n"
+"PO-Revision-Date: 2019-03-29 14:33+0200\n"
 "Last-Translator: dm <asda@mail.do>\n"
 "Language-Team: Русский\n"
 "Language: ru_RU\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
-"n%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && n"
+"%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
-"X-Poedit-SearchPath-0: ../../plugins/woocommerce-oplata\n"
 "X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
 "__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
 "_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
 "esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
 "esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
 "X-Loco-Target-Locale: ru_RU\n"
-"X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.2.1; wp-5.1.1"
+"X-Generator: Poedit 1.8.4\n"
+"X-Loco-Version: 2.2.1; wp-5.1.1\n"
+"X-Poedit-SearchPath-0: ../../plugins/woocommerce-oplata\n"
 
 #: woocommerce-fondy.php:40 woocommerce-fondy.php:245
 msgid "Payment gateway"
@@ -38,7 +38,7 @@ msgstr "Включить/Выключить"
 
 #: woocommerce-fondy.php:151
 msgid "Enable Fondy Payment Module."
-msgstr "Включить модуль оплаты Fondy"
+msgstr "Включить модуль оплаты FONDY"
 
 #: woocommerce-fondy.php:153
 msgid "Show in the Payment List as a payment option"
@@ -50,7 +50,7 @@ msgstr "Заголовок:"
 
 #: woocommerce-fondy.php:158
 msgid "Fondy Online Payments"
-msgstr "Онлайн платежи Fondy"
+msgstr "Онлайн платежи FONDY"
 
 #: woocommerce-fondy.php:159
 msgid "This controls the title which the user sees during checkout."
@@ -66,7 +66,7 @@ msgid ""
 "service."
 msgstr ""
 "Оплатите безопасно с помощью кредитной или дебетовой карты или интернет-"
-"банкинга через  службы fondy."
+"банкинга через  службы FONDY."
 
 #: woocommerce-fondy.php:166
 msgid "This controls the description which the user sees during checkout."
@@ -82,7 +82,7 @@ msgstr "Merchant secretkey"
 
 #: woocommerce-fondy.php:178
 msgid "Given to Merchant by fondy"
-msgstr "Выдается мерчанту fondy"
+msgstr "Выдается мерчанту FONDY"
 
 #: woocommerce-fondy.php:182
 msgid "Show Logo"
@@ -90,7 +90,7 @@ msgstr "Показать логотип"
 
 #: woocommerce-fondy.php:184
 msgid "Show the \"fondy\" logo in the Payment Method section for the user"
-msgstr "Показать логотип \"fondy\" при оформлении заказа"
+msgstr "Показать логотип \"FONDY\" при оформлении заказа"
 
 #: woocommerce-fondy.php:186
 msgid "Tick to show \"fondy\" logo"
@@ -158,7 +158,7 @@ msgstr "Страница куда будет направлен пользова
 
 #: woocommerce-fondy.php:244
 msgid "Fondy.eu"
-msgstr "Fondy.eu"
+msgstr "FONDY.eu"
 
 #: woocommerce-fondy.php:267
 msgid "Card Number:"
@@ -178,7 +178,7 @@ msgstr "CVV2:"
 
 #: woocommerce-fondy.php:298
 msgid "XXX"
-msgstr ""
+msgstr "XXX"
 
 #: woocommerce-fondy.php:304
 msgid "Pay"
@@ -190,7 +190,7 @@ msgstr "Заказ №:"
 
 #: woocommerce-fondy.php:395
 msgid "Pay via Fondy.eu"
-msgstr "Оплатить с помощью Fondy"
+msgstr "Оплатить с помощью FONDY"
 
 #: woocommerce-fondy.php:578
 msgid "Refund Fondy status: processing"
@@ -199,18 +199,20 @@ msgstr "Статус возврата: processing"
 #: woocommerce-fondy.php:581 woocommerce-fondy.php:582
 msgid "Refund Fondy status: Declined"
 msgstr ""
-"Статус возврата Fondy: Declined. Пожалуйста, свяжитесь с поддержкой для "
+"Статус возврата FONDY: Declined. Пожалуйста, свяжитесь с поддержкой для "
 "уточнения деталей"
 
 #: woocommerce-fondy.php:584
 msgid "Refund Fondy status: Unknown"
 msgstr ""
-"Статус возврата Fondy: Unknown. Пожалуйста, свяжитесь с поддержкой для "
+"Статус возврата FONDY: Unknown. Пожалуйста, свяжитесь с поддержкой для "
 "уточнения деталей"
 
 #: woocommerce-fondy.php:585
 msgid "Refund Fondy status: Unknown. Try to contact support"
-msgstr "Refund Fondy status: Unknown. Try to contact support"
+msgstr ""
+"Статус возврата FONDY: Unknown. Пожалуйста, свяжитесь с поддержкой для "
+"уточнения деталей"
 
 #: woocommerce-fondy.php:654
 msgid ""
@@ -224,15 +226,15 @@ msgstr "Неверная сумма"
 
 #: woocommerce-fondy.php:660
 msgid "An error has occurred during payment. Merchant data is incorrect."
-msgstr "An error has occurred during payment. Merchant data is incorrect."
+msgstr "Произошла ошибка во время оплаты. Данные мерчанта неверны."
 
 #: woocommerce-fondy.php:673
 msgid "Transaction ERROR: signature is not valid"
-msgstr "Transaction ERROR: signature is not valid"
+msgstr "ОШИБКА транзакции: подпись недействительна"
 
 #: woocommerce-fondy.php:675
 msgid "An error has occurred during payment. Signature is not valid."
-msgstr "An error has occurred during payment. Signature is not valid."
+msgstr "Произошла ошибка во время оплаты. Подпись недействительна."
 
 #: woocommerce-fondy.php:679
 msgid ""
@@ -268,11 +270,11 @@ msgstr "Спасибо за покупку. Оплата прошла успеш
 
 #. Name of the plugin
 msgid "WooCommerce - Fondy payment gateway"
-msgstr "WooCommerce - платежный шлюз Fondy"
+msgstr "WooCommerce - платежный шлюз FONDY"
 
 #. Description of the plugin
 msgid "Fondy Payment Gateway for WooCommerce."
-msgstr "Платежный шлюз Fondy для WooCommerce."
+msgstr "Платежный шлюз FONDY для WooCommerce."
 
 #. URI of the plugin
 msgid "https://fondy.eu"
