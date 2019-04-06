@@ -1,10 +1,10 @@
-=== FONDY WooCommerce Payment Gateway ===
+=== FONDY — WooCommerce Payment Gateway ===
 Contributors: FONDY
-Tags: woocommerce payment gateways, wordpress payment plugin, wordpress payment gateway, wordpress online payment, wordpress payment module, wordpress payment button, wordpress credit card payment, woocommerce payment settings, wordpress Payment system, woocommerce payment system, wordpress merchant, payment on wordpress, wordpress payment processing, payment button wordpress
+Tags: payments, payment gateway, woocommerce, online payment, merchant
 Requires at least: 3.5
 Tested up to: 5.1
 Requires PHP: 5.4
-Stable tag: 2.5.4
+Stable tag: 2.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,18 +13,18 @@ WooCommerce extension allow clients make payment with FONDY.
 
 What is payment gateway and why does the customer need it?
 In 2018 more and more customers made their purchases on the Internet. That is why we do need more progressive and easy way to pay in 1 click. 
-[FONDY](https://fondy.eu/en-eu/?utm_source=wordpress.org&utm_medium=specials) is the multifunctional payment gateway that integrates all methods of payment and lets your business enter the E-Commerce world. 
+[FONDY](https://fondy.eu/en-eu/?utm_source=wordpress.org&utm_medium=cms) is the multifunctional payment gateway that integrates all methods of payment and lets your business enter the E-Commerce world. 
 
-[Unified Payment Platform FONDY](https://fondy.eu/en-eu/?utm_source=wordpress.org&utm_medium=specials) currently operates in 120 countries. The system enables simultaneous cooperation with international  acquires banks in Europe and provides its services for more than 1500 web businesses around the globe.
+[Unified Payment Platform FONDY](https://fondy.eu/en-eu/?utm_source=wordpress.org&utm_medium=cms) currently operates in 120 countries. The system enables simultaneous cooperation with international  acquires banks in Europe and provides its services for more than 1500 web businesses around the globe.
 
-[This wordpress payment plugin](https://fondy.eu/en-eu/cms/wordpress/?utm_source=wordpress.org&utm_medium=specials) adds FONDY gateway as a payment method to your WooCommerce store. FONDY can accept VISA and MasterCard securely, quickly and easily on your store in minutes. Simple, straightforward pricing, top-notch fraud intelligence, and 24/7 support. FONDY payment gateway for WooCommerce is easy to download without any programming skills. 
+[This wordpress payment plugin](https://fondy.eu/en-eu/cms/wordpress/?utm_source=wordpress.org&utm_medium=cms) adds FONDY gateway as a payment method to your WooCommerce store. FONDY can accept VISA and MasterCard securely, quickly and easily on your store in minutes. Simple, straightforward pricing, top-notch fraud intelligence, and 24/7 support. FONDY payment gateway for WooCommerce is easy to download without any programming skills. 
 
 
 == Start with FONDY ==
-[Create Free FONDY Account](https://portal.fondy.eu/mportal/#/account/registration?utm_source=wordpress.org&utm_medium=specials)
+[Create Free FONDY Account](https://portal.fondy.eu/mportal/#/account/registration?utm_source=wordpress.org&utm_medium=cms)
 
 == FONDY PAYMENT GATEWAY FEATURES ==
-* [Total security and scalability](https://fondy.eu/en-eu/security/?utm_source=wordpress.org&utm_medium=specials)
+* [Total security and scalability](https://fondy.eu/en-eu/security/?utm_source=wordpress.org&utm_medium=cms)
 * Stability and the consistent payments
 * Encryption and information transmission on a security protocol TLS with the Key Length 2048 bit
 * Certificate PCI DSS LEVEL 1
@@ -57,7 +57,7 @@ Bank transfers:
 INDIVIDUALLY
 
 == Frequently Asked Questions ==
-Some answers you can find here [FAQ](https://fondy.eu/faq/?utm_source=wordpress.org&utm_medium=specials)
+Some answers you can find here [FAQ](https://fondy.eu/faq/?utm_source=wordpress.org&utm_medium=cms)
 
 == Installation ==
 1. Upload plug-in directory to the `/wp-content/plugins/` directory

@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.5.4
+Version: 2.5.5
 Author: FONDY - Unified Payment Platform
 Author URI: https://fondy.eu/
 Domain Path: /languages
@@ -688,7 +688,7 @@ function woocommerce_fondy_init()
             if ($response['order_status'] == 'expired') {
                 $errorMessage = __("Thank you for shopping with us. However, the transaction has been expired.", 'fondy-woocommerce-payment-gateway');
                 $order->add_order_note(__('Transaction ERROR: order expired<br/>FONDY ID: ', 'fondy-woocommerce-payment-gateway') . $response['payment_id']);
-                $order->update_status('cancelled');
+                $order->update_status('failed');
 
                 return $errorMessage;
             }
