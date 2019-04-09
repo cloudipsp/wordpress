@@ -1,300 +1,317 @@
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce - Fondy payment gateway\n"
+"Project-Id-Version: WooCommerce - Fondy Money\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-09 10:03+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: \n"
-"Language: \n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"PO-Revision-Date: 2019-04-09 10:14+0000\n"
+"Last-Translator: dm <asda@mail.do>\n"
+"Language-Team: Polish\n"
+"Language: pl_PL\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
+"n%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
+"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
+"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
+"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Loco-Target-Locale: ru_RU\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.2.1; wp-5.1.1"
+"X-Loco-Version: 2.2.1; wp-5.1.1\n"
+"X-Poedit-SearchPath-0: ../../plugins/woocommerce-oplata\n"
 
 #: woocommerce-fondy.php:45 woocommerce-fondy.php:291
 msgid "Payment gateway"
-msgstr ""
+msgstr "Bramka płatności"
 
 #: woocommerce-fondy.php:114
 msgid "Place order"
-msgstr ""
+msgstr "Zamawiam"
 
 #: woocommerce-fondy.php:157
 msgid "Enable/Disable"
-msgstr ""
+msgstr "Włącz/Wyłącz"
 
 #: woocommerce-fondy.php:159
 msgid "Enable Fondy Payment Module."
-msgstr ""
+msgstr "Włącz moduł płatności FONDY."
 
 #: woocommerce-fondy.php:161
 msgid "Show in the Payment List as a payment option"
-msgstr ""
+msgstr "Pokaż na liście płatności jako opcję płatności"
 
 #: woocommerce-fondy.php:164
 msgid "Title:"
-msgstr ""
+msgstr "Tytuł:"
 
 #: woocommerce-fondy.php:166
 msgid "Fondy Online Payments"
-msgstr ""
+msgstr "Płatności online FONDY"
 
 #: woocommerce-fondy.php:167
 msgid "This controls the title which the user sees during checkout."
-msgstr ""
+msgstr "To kontroluje tytuł, który użytkownik widzi podczas płatności."
 
 #: woocommerce-fondy.php:171
 msgid "Description:"
-msgstr ""
+msgstr "Opis:"
 
 #: woocommerce-fondy.php:173
 msgid ""
 "Pay securely by Credit or Debit Card or Internet Banking through fondy "
 "service."
 msgstr ""
+"Płać bezpiecznie za pomocą karty kredytowej lub debetowej lub bankowości "
+"internetowej za pośrednictwem usługi FONDY."
 
 #: woocommerce-fondy.php:174
 msgid "This controls the description which the user sees during checkout."
-msgstr ""
+msgstr "To kontroluje opis, który użytkownik widzi podczas płatności."
 
 #: woocommerce-fondy.php:178
 msgid "Merchant ID"
-msgstr ""
+msgstr "Merchant ID"
 
 #: woocommerce-fondy.php:184
 msgid "Merchant secretkey"
-msgstr ""
+msgstr "Merchant secretkey"
 
 #: woocommerce-fondy.php:186
 msgid "Given to Merchant by fondy"
-msgstr ""
+msgstr "Dana Merchantowi przez FONDY"
 
 #: woocommerce-fondy.php:190
 msgid "Show Logo"
-msgstr ""
+msgstr "Pokaż logo"
 
 #: woocommerce-fondy.php:192
 msgid "Show the \"fondy\" logo in the Payment Method section for the user"
-msgstr ""
+msgstr "Pokaż logo „FONDY” w sekcji Metoda płatności dla użytkownika"
 
 #: woocommerce-fondy.php:194
 msgid "Tick to show \"fondy\" logo"
-msgstr ""
+msgstr "Zaznacz, aby wyświetlić logo „FONDY”"
 
 #: woocommerce-fondy.php:198
 msgid "Show calndaer on checkout"
-msgstr ""
+msgstr "Pokaż kalendarz płatności przy kasie"
 
 #: woocommerce-fondy.php:200
 msgid "Show recurring payment calendar on checkout"
-msgstr ""
+msgstr "Pokaż powtarzający się kalendarz płatności przy kasie"
 
 #: woocommerce-fondy.php:202
 msgid "Tick to show show recurring payment calendar on checkout"
-msgstr ""
+msgstr "Zaznacz, aby pokazywać kalendarz płatności cyklicznych przy kasie"
 
 #: woocommerce-fondy.php:206
 msgid "Enable on checkout page mode"
-msgstr ""
+msgstr "Włącz tryb strony przy kasie"
 
 #: woocommerce-fondy.php:208 woocommerce-fondy.php:210
 msgid "Show payment on checkout page"
-msgstr ""
+msgstr "Pokaż płatność na stronie kasy"
 
 #: woocommerce-fondy.php:214
 msgid "Enable on page mode"
-msgstr ""
+msgstr "Włącz tryb strony"
 
 #: woocommerce-fondy.php:216
 msgid "Enable on page payment mode"
-msgstr ""
+msgstr "Włącz tryb płatności na stronie"
 
 #: woocommerce-fondy.php:218
 msgid "Enable on page mode without redirect"
-msgstr ""
+msgstr "Włącz tryb strony bez przekierowania"
 
 #: woocommerce-fondy.php:222 woocommerce-fondy.php:224
 msgid "Enable on page mode instant redirect"
-msgstr ""
+msgstr "Włącz natychmiastowe przekierowanie trybu strony"
 
 #: woocommerce-fondy.php:226
 msgid "Enable on page mode instant redirect on submit order"
 msgstr ""
+"Włącz na stronie tryb natychmiastowego przekierowania na zamówienie wysyłania"
 
 #: woocommerce-fondy.php:230
 msgid "Enable force detect lang"
-msgstr ""
+msgstr "Włącz wykrywanie siły lang"
 
 #: woocommerce-fondy.php:232 woocommerce-fondy.php:234
 msgid "Enable detecting site lang if it used"
-msgstr ""
+msgstr "Włącz wykrywanie języka witryny, jeśli był używany"
 
 #: woocommerce-fondy.php:238
 msgid "Return Page"
-msgstr ""
+msgstr "Powrót"
 
 #: woocommerce-fondy.php:240
 msgid "Default order page"
-msgstr ""
+msgstr "Domyślna kolejność"
 
 #: woocommerce-fondy.php:241
 msgid "URL of success page"
-msgstr ""
+msgstr "URL strony sukcesu"
 
 #: woocommerce-fondy.php:245
 msgid "Payment completed order status"
-msgstr ""
+msgstr "Status zamówienia pomyślna płatność"
 
 #: woocommerce-fondy.php:249
 msgid "The default order status after successful payment."
-msgstr ""
+msgstr "Status zamówienia po pomyślnej płatności"
 
 #: woocommerce-fondy.php:252
 msgid "Payment expired order status"
-msgstr ""
+msgstr "Status zamówienia wygasł Płatność"
 
 #: woocommerce-fondy.php:256
 msgid "Order status when payment was expired."
-msgstr ""
+msgstr "Status zamówienia przy wygasłej płatności"
 
 #: woocommerce-fondy.php:259
 msgid "Payment declined order status"
-msgstr ""
+msgstr "Status zamówienia nie został opłacony"
 
 #: woocommerce-fondy.php:263
 msgid "Order status when payment was declined."
-msgstr ""
+msgstr "Status zamówienia w przypadku nieudanej płatności"
 
 #: woocommerce-fondy.php:275
 msgid "Default status"
-msgstr ""
+msgstr "Status standardowy"
 
 #: woocommerce-fondy.php:290
 msgid "Fondy.eu"
-msgstr ""
+msgstr "FONDY.eu"
 
 #: woocommerce-fondy.php:313
 msgid "Card Number:"
-msgstr ""
+msgstr "Numer karty"
 
 #: woocommerce-fondy.php:319
 msgid "XXXXXXXXXXXXXXXX"
-msgstr ""
+msgstr "xxxxxxxxxxxxxx"
 
 #: woocommerce-fondy.php:325
 msgid "Expiry Date:"
-msgstr ""
+msgstr "Data wygaśnięcia:"
 
 #: woocommerce-fondy.php:328
 msgid "CVV2:"
-msgstr ""
+msgstr "CVV2:"
 
 #: woocommerce-fondy.php:344
 msgid "XXX"
-msgstr ""
+msgstr "XXX"
 
 #: woocommerce-fondy.php:350
 msgid "Pay"
-msgstr ""
+msgstr "Zapłać"
 
 #: woocommerce-fondy.php:404
 msgid "Order: "
-msgstr ""
+msgstr "Kolejność:"
 
 #: woocommerce-fondy.php:441
 msgid "Pay via Fondy.eu"
-msgstr ""
+msgstr "Zapłać przez FONDY.eu"
 
 #: woocommerce-fondy.php:624
 msgid "Refund Fondy status: processing"
-msgstr ""
+msgstr "Zwrot statusu FONDY: przetwarzanie"
 
 #: woocommerce-fondy.php:627 woocommerce-fondy.php:628
 msgid "Refund Fondy status: Declined"
-msgstr ""
+msgstr "Zwrot statusu FONDY: odrzucony"
 
 #: woocommerce-fondy.php:630
 msgid "Refund Fondy status: Unknown"
-msgstr ""
+msgstr "Status zwrotu FONDY: Nieznany"
 
 #: woocommerce-fondy.php:631
 msgid "Refund Fondy status: Unknown. Try to contact support"
 msgstr ""
+"Status zwrotu FONDY: Nieznany. Spróbuj skontaktować się z pomocą techniczną"
 
 #: woocommerce-fondy.php:700
 msgid ""
 "An error has occurred during payment. Please contact us to ensure your order "
 "has submitted."
 msgstr ""
+"Wystąpił błąd podczas płatności. Skontaktuj się z nami, aby upewnić się, że "
+"Twoje zamówienie zostało złożone."
 
 #: woocommerce-fondy.php:703
 msgid "Amount incorrect."
-msgstr ""
+msgstr "Nieprawidłowa kwota."
 
 #: woocommerce-fondy.php:706
 msgid "An error has occurred during payment. Merchant data is incorrect."
-msgstr ""
+msgstr "Wystąpił błąd podczas płatności. Dane sprzedawcy są nieprawidłowe."
 
 #: woocommerce-fondy.php:719
 msgid "Transaction ERROR: signature is not valid"
-msgstr ""
+msgstr "BŁĄD Transakcji: podpis jest nieprawidłowy"
 
 #: woocommerce-fondy.php:721
 msgid "An error has occurred during payment. Signature is not valid."
-msgstr ""
+msgstr "Wystąpił błąd podczas płatności. Podpis jest nieprawidłowy."
 
 #: woocommerce-fondy.php:725
 msgid ""
 "Thank you for shopping with us. However, the transaction has been declined."
-msgstr ""
+msgstr "Dziękujemy za zakupy z nami. Jednak transakcja została odrzucona."
 
 #: woocommerce-fondy.php:739
 msgid ""
 "Thank you for shopping with us. However, the transaction has been expired."
-msgstr ""
+msgstr "Dziękujemy za zakupy z nami. Jednak transakcja wygasła."
 
 #: woocommerce-fondy.php:740
 msgid "Transaction ERROR: order expired<br/>FONDY ID: "
-msgstr ""
+msgstr "BŁĄD Transakcji: zamówienie wygasło <br/> ID FONDY:"
 
 #: woocommerce-fondy.php:752
 msgid "Thank you for shopping with us. But your payment declined."
-msgstr ""
+msgstr "Dziękujemy za zakupy z nami. Ale Twoja płatność została odrzucona."
 
 #: woocommerce-fondy.php:760
 msgid "Fondy payment successful.<br/>FONDY ID: "
-msgstr ""
+msgstr "Płatność FONDY zakończyła się sukcesem. <br/> ID FONDY:"
 
 #: woocommerce-fondy.php:765
 msgid "Transaction ERROR: amount incorrect<br/>FONDY ID: "
-msgstr ""
+msgstr "BŁĄD Transakcji: nieprawidłowa kwota <br/> ID FONDY:"
 
 #: woocommerce-fondy.php:803
 msgid ""
 "Thank you for shopping with us. Your account has been charged and your "
 "transaction is successful."
 msgstr ""
+"Dziękujemy za zakupy z nami. Twoje konto zostało obciążone, a transakcja "
+"powiodła się."
 
 #. Name of the plugin
 msgid "WooCommerce - Fondy payment gateway"
-msgstr ""
+msgstr "WooCommerce - bramka płatnicza FONDY"
 
 #. Description of the plugin
 msgid "Fondy Payment Gateway for WooCommerce."
-msgstr ""
+msgstr "FONDY — Payment Gateway dla WooCommerce."
 
 #. URI of the plugin
 msgid "https://fondy.eu"
-msgstr ""
+msgstr "https://fondy.eu/pl-pl/"
 
 #. Author of the plugin
 msgid "FONDY - Unified Payment Platform"
-msgstr ""
+msgstr "FONDY - Unified Payment Platform"
 
 #. Author URI of the plugin
 msgid "https://fondy.eu/"
-msgstr ""
+msgstr "https://fondy.eu/pl-pl/"

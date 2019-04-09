@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.5.5
+Version: 2.5.6
 Author: FONDY - Unified Payment Platform
 Author URI: https://fondy.eu/
 Domain Path: /languages
@@ -13,6 +13,10 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 2.0.0
 WC tested up to: 3.5.7
 */
+
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
 
 add_action('plugins_loaded', 'woocommerce_fondy_init', 0);
 
@@ -30,6 +34,7 @@ function woocommerce_fondy_init()
     {
         const ORDER_APPROVED = 'approved';
         const ORDER_DECLINED = 'declined';
+        const ORDER_EXPIRED = 'expired';
         const SIGNATURE_SEPARATOR = '|';
         const ORDER_SEPARATOR = ":";
 
@@ -56,6 +61,9 @@ function woocommerce_fondy_init()
             $this->page_mode_instant = $this->settings['page_mode_instant'];
             $this->on_checkout_page = $this->settings['on_checkout_page'] ? $this->settings['on_checkout_page'] : false;
             $this->force_lang = $this->settings['force_lang'] ? $this->settings['force_lang'] : false;
+            $this->default_order_status = $this->settings['default_order_status'] ? $this->settings['default_order_status'] : false;
+            $this->expired_order_status = $this->settings['expired_order_status'] ? $this->settings['expired_order_status'] : false;
+            $this->declined_order_status = $this->settings['declined_order_status'] ? $this->settings['declined_order_status'] : false;
             $this->msg['message'] = "";
             $this->msg['class'] = "";
             $this->supports = array(
@@ -232,8 +240,46 @@ function woocommerce_fondy_init()
                     'options' => $this->fondy_get_pages(__('Default order page', 'fondy-woocommerce-payment-gateway')),
                     'description' => __('URL of success page', 'fondy-woocommerce-payment-gateway'),
                     'desc_tip' => true
-                )
+                ),
+                'default_order_status' => array(
+                    'title' => __('Payment completed order status', 'fondy-woocommerce-payment-gateway'),
+                    'type' => 'select',
+                    'options' => $this->getPaymentOrderStatuses(),
+                    'default' => 'none',
+                    'description' => __('The default order status after successful payment.', 'fondy-woocommerce-payment-gateway')
+                ),
+                'expired_order_status' => array(
+                    'title' => __('Payment expired order status', 'fondy-woocommerce-payment-gateway'),
+                    'type' => 'select',
+                    'options' => $this->getPaymentOrderStatuses(),
+                    'default' => 'none',
+                    'description' => __('Order status when payment was expired.', 'fondy-woocommerce-payment-gateway')
+                ),
+                'declined_order_status' => array(
+                    'title' => __('Payment declined order status', 'fondy-woocommerce-payment-gateway'),
+                    'type' => 'select',
+                    'options' => $this->getPaymentOrderStatuses(),
+                    'default' => 'none',
+                    'description' => __('Order status when payment was declined.', 'fondy-woocommerce-payment-gateway')
+                ),
             );
+        }
+
+        /*
+         * Getting all available woocommerce order statuses
+         */
+        private function getPaymentOrderStatuses()
+        {
+            $order_statuses = function_exists('wc_get_order_statuses') ? wc_get_order_statuses() : array();
+            $statuses = array(
+                'default' => __('Default status', 'fondy-woocommerce-payment-gateway')
+            );
+            if ($order_statuses) {
+                foreach ($order_statuses as $k => $v) {
+                    $statuses[str_replace('wc-', '', $k)] = $v;
+                }
+            }
+            return $statuses;
         }
 
         /**
@@ -678,17 +724,25 @@ function woocommerce_fondy_init()
             if ($response['order_status'] == self::ORDER_DECLINED) {
                 $errorMessage = __("Thank you for shopping with us. However, the transaction has been declined.", 'fondy-woocommerce-payment-gateway');
                 $order->add_order_note('Transaction ERROR: order declined<br/>Fondy ID: ' . $response['payment_id']);
-                $order->update_status('failed');
+                if ($this->declined_order_status and $this->declined_order_status != 'default') {
+                    $order->update_status($this->declined_order_status);
+                } else {
+                    $order->update_status('failed');
+                }
 
                 wp_mail($response['sender_email'], 'Order declined', $errorMessage);
 
                 return $errorMessage;
             }
 
-            if ($response['order_status'] == 'expired') {
+            if ($response['order_status'] == self::ORDER_EXPIRED) {
                 $errorMessage = __("Thank you for shopping with us. However, the transaction has been expired.", 'fondy-woocommerce-payment-gateway');
                 $order->add_order_note(__('Transaction ERROR: order expired<br/>FONDY ID: ', 'fondy-woocommerce-payment-gateway') . $response['payment_id']);
-                $order->update_status('failed');
+                if ($this->expired_order_status and $this->expired_order_status != 'default') {
+                    $order->update_status($this->expired_order_status);
+                } else {
+                    $order->update_status('cancelled');
+                }
 
                 return $errorMessage;
             }
@@ -704,9 +758,16 @@ function woocommerce_fondy_init()
                 and $total == $response['amount']) {
                 $order->payment_complete($response['order_id']);
                 $order->add_order_note(__('Fondy payment successful.<br/>FONDY ID: ', 'fondy-woocommerce-payment-gateway') . ' (' . $response['payment_id'] . ')');
+                if ($this->default_order_status and $this->default_order_status != 'default') {
+                    $order->update_status($this->default_order_status);
+                }
             } elseif ($total != $response['amount']) {
                 $order->add_order_note(__('Transaction ERROR: amount incorrect<br/>FONDY ID: ', 'fondy-woocommerce-payment-gateway') . $response['payment_id']);
-                $order->update_status('failed');
+                if ($this->declined_order_status and $this->declined_order_status != 'default') {
+                    $order->update_status($this->declined_order_status);
+                } else {
+                    $order->update_status('failed');
+                }
             }
             WC()->session->__unset('session_token_' . $orderId);
             WC()->session->__unset('session_token_' . md5($orderId . '_' . $total . '_' . $response['currency']));
