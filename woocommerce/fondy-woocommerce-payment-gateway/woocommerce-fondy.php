@@ -705,7 +705,9 @@ function woocommerce_fondy_init()
             if ($this->merchant_id != $response['merchant_id']) {
                 return __('An error has occurred during payment. Merchant data is incorrect.', 'fondy-woocommerce-payment-gateway');
             }
-
+			if ($order->get_payment_method() != $this->id) {
+                return __('Payment method incorrect.', 'fondy-woocommerce-payment-gateway');
+            }
             $responseSignature = $response['signature'];
             if (isset($response['response_signature_string'])) {
                 unset($response['response_signature_string']);
