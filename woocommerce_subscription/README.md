@@ -18,6 +18,8 @@ wordpress
 5. Select `Return Page` where users will be returned after payment.
 6. Save settings.
 
+![Скриншот][1]
+
 ---------
 
 #RU
@@ -39,7 +41,9 @@ wordpress
 6. Сохраните настройки.
 
 
-![Скриншот][1]
+![Скриншот][2]
 ----
 
-[1]: https://raw.githubusercontent.com/cloudipsp/wordpress/master/woocommerce/settings1.png
+[1]: https://raw.githubusercontent.com/cloudipsp/wordpress/master/woocommerce/settings-en.png
+
+[2]: https://raw.githubusercontent.com/cloudipsp/wordpress/master/woocommerce/settings1.png
