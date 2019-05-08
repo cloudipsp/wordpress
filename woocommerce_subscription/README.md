@@ -44,6 +44,6 @@ wordpress
 ![Скриншот][2]
 ----
 
-[1]: https://raw.githubusercontent.com/cloudipsp/wordpress/master/woocommerce/settings-en.png
+[1]: https://raw.githubusercontent.com/cloudipsp/wordpress/master/woocommerce-subscription/settings-en.png
 
 [2]: https://raw.githubusercontent.com/cloudipsp/wordpress/master/woocommerce/settings1.png
