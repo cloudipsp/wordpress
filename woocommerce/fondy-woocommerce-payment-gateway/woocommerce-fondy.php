@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.5.7
+Version: 2.5.8
 Author: FONDY - Unified Payment Platform
 Author URI: https://fondy.eu/
 Domain Path: /languages
@@ -11,7 +11,7 @@ Text Domain: fondy-woocommerce-payment-gateway
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 2.0.0
-WC tested up to: 3.5.7
+WC tested up to: 3.6.3
 */
 
 if (!defined('ABSPATH')) {
@@ -22,7 +22,7 @@ add_action('plugins_loaded', 'woocommerce_fondy_init', 0);
 
 function woocommerce_fondy_init()
 {
-    if (!class_exists('WC_Payment_Gateway')) {
+    if (!class_exists('WC_Payment_Gateway') or class_exists('WC_PaymentFondy')) {
         return;
     }
     load_plugin_textdomain("fondy-woocommerce-payment-gateway", false, basename(dirname(__FILE__)) . '/languages');
@@ -38,6 +38,23 @@ function woocommerce_fondy_init()
         const SIGNATURE_SEPARATOR = '|';
         const ORDER_SEPARATOR = ":";
 
+        public $merchant_id;
+        public $salt;
+        public $test_mode;
+
+        public $liveurl;
+        public $refundurl;
+        public $calendar;
+        public $redirect_page_id;
+        public $page_mode;
+        public $page_mode_instant;
+        public $on_checkout_page;
+        public $force_lang;
+        public $default_order_status;
+        public $expired_order_status;
+        public $declined_order_status;
+        public $msg = array();
+
         public function __construct()
         {
             $this->id = 'fondy';
@@ -47,11 +64,12 @@ function woocommerce_fondy_init()
             $this->init_form_fields();
             $this->init_settings();
             if ($this->settings['showlogo'] == "yes") {
-                $this->icon = WP_PLUGIN_URL . "/" . plugin_basename(dirname(__FILE__)) . '/assets/img/logo.png';
+                $this->icon = WP_PLUGIN_URL . "/" . plugin_basename(dirname(__FILE__)) . '/assets/img/master_visa_fondy.svg';
             }
             $this->liveurl = 'https://api.fondy.eu/api/checkout/redirect/';
             $this->refundurl = 'https://api.fondy.eu/api/reverse/order_id';
             $this->title = $this->settings['title'];
+            $this->test_mode = $this->settings['test_mode'];
             $this->calendar = $this->settings['calendar'];
             $this->redirect_page_id = $this->settings['redirect_page_id'];
             $this->merchant_id = $this->settings['merchant_id'];
@@ -88,6 +106,10 @@ function woocommerce_fondy_init()
             }
             if (isset($this->on_checkout_page) and $this->on_checkout_page == 'yes') {
                 add_filter('woocommerce_order_button_html', array(&$this, 'custom_order_button_html'));
+            }
+            if ($this->test_mode == 'yes'){
+                $this->merchant_id = '1396424';
+                $this->salt = 'test';
             }
             add_action('woocommerce_receipt_fondy', array(&$this, 'receipt_page'));
             add_action('wp_enqueue_scripts', array($this, 'fondy_checkout_scripts'));
@@ -160,6 +182,14 @@ function woocommerce_fondy_init()
                     'default' => 'no',
                     'description' => __('Show in the Payment List as a payment option', 'fondy-woocommerce-payment-gateway')
                 ),
+                'test_mode' => array(
+                    'title' => __('Test mode:', 'fondy-woocommerce-payment-gateway'),
+                    'type' => 'checkbox',
+                    'label' => __('Enable Test Mode', 'fondy-woocommerce-payment-gateway'),
+                    'default' => 'no',
+                    'description' => __('Place the payment gateway in test mode using test Merchant id.', 'fondy-woocommerce-payment-gateway'),
+                    'desc_tip' => true
+                ),
                 'title' => array(
                     'title' => __('Title:', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'text',
@@ -187,15 +217,15 @@ function woocommerce_fondy_init()
                     'desc_tip' => true
                 ),
                 'showlogo' => array(
-                    'title' => __('Show Logo', 'fondy-woocommerce-payment-gateway'),
+                    'title' => __('Show MasterCard & Visa logos', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'checkbox',
-                    'label' => __('Show the "fondy" logo in the Payment Method section for the user', 'fondy-woocommerce-payment-gateway'),
+                    'label' => __('Show the MasterCard & Visa logo in the payment method section for the user', 'fondy-woocommerce-payment-gateway'),
                     'default' => 'yes',
                     'description' => __('Tick to show "fondy" logo', 'fondy-woocommerce-payment-gateway'),
                     'desc_tip' => true
                 ),
                 'calendar' => array(
-                    'title' => __('Show calndaer on checkout', 'fondy-woocommerce-payment-gateway'),
+                    'title' => __('Show calendar on checkout', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'checkbox',
                     'label' => __('Show recurring payment calendar on checkout', 'fondy-woocommerce-payment-gateway'),
                     'default' => 'no',
@@ -705,7 +735,7 @@ function woocommerce_fondy_init()
             if ($this->merchant_id != $response['merchant_id']) {
                 return __('An error has occurred during payment. Merchant data is incorrect.', 'fondy-woocommerce-payment-gateway');
             }
-			if ($order->get_payment_method() != $this->id) {
+            if ($order->get_payment_method() != $this->id) {
                 return __('Payment method incorrect.', 'fondy-woocommerce-payment-gateway');
             }
             $responseSignature = $response['signature'];
@@ -851,6 +881,15 @@ function woocommerce_fondy_init()
         }
     }
 
+    function fondy_plugin_action_links($links)
+    {
+        $plugin_links = array(
+            '<a href="' . admin_url('admin.php?page=wc-settings&tab=checkout&section=fondy') . '">' . __('Settings', 'fondy-woocommerce-payment-gateway') . '</a>',
+        );
+
+        return array_merge($plugin_links, $links);
+    }
+
     /**
      * Add the Gateway to WooCommerce
      **/
@@ -869,4 +908,5 @@ function woocommerce_fondy_init()
         'generate_ajax_order_fondy_info'
     ), 99);
     add_filter('woocommerce_payment_gateways', 'woocommerce_add_fondy_gateway');
+    add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'fondy_plugin_action_links');
 }

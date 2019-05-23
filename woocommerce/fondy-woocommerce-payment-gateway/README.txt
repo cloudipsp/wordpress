@@ -2,9 +2,9 @@
 Contributors: FONDY
 Tags: payments, payment gateway, woocommerce, online payment, merchant
 Requires at least: 3.5
-Tested up to: 5.1
+Tested up to: 5.2
 Requires PHP: 5.4
-Stable tag: 2.5.7
+Stable tag: 2.5.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,6 +97,10 @@ Fix for php 5.3 <
 Added instant redirect
 = 2.5.3 =
 Styles moved to merchant portal
+= 2.5.6 =
+Added order statuses to settings page
+= 2.5.8 =
+New logo and testing mode
 
 == Upgrade Notice ==
 
