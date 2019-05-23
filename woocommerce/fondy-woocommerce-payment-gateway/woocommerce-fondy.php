@@ -107,7 +107,7 @@ function woocommerce_fondy_init()
             if (isset($this->on_checkout_page) and $this->on_checkout_page == 'yes') {
                 add_filter('woocommerce_order_button_html', array(&$this, 'custom_order_button_html'));
             }
-            if ($this->test_mode == 'yes'){
+            if ($this->test_mode == 'yes') {
                 $this->merchant_id = '1396424';
                 $this->salt = 'test';
             }
@@ -472,10 +472,10 @@ function woocommerce_fondy_init()
                 if ($this->page_mode_instant == 'yes')
                     $out .= "<script type='text/javascript'> document.getElementById('submit_fondy_payment_form').click(); </script>";
             } else {
-                $url = WC()->session->get('session_token_' . $order_id);
+                $url = WC()->session->get('session_token_' . $this->merchant_id . '_' . $order_id);
                 if (empty($url)) {
                     $url = $this->get_checkout($fondy_args);
-                    WC()->session->set('session_token_' . $order_id, $url);
+                    WC()->session->set('session_token_' . $this->merchant_id . '_' . $order_id, $url);
                 }
                 $out = '
                     <div id="checkout">
@@ -591,11 +591,11 @@ function woocommerce_fondy_init()
                 );
 
                 $fondy_args['signature'] = $this->getSignature($fondy_args, $this->salt);
-                $token = WC()->session->get('session_token_' . md5($order_id . '_' . $fondy_args['amount'] . '_' . $fondy_args['currency']));
+                $token = WC()->session->get('session_token_' . md5($this->merchant_id . '_' . $order_id . '_' . $fondy_args['amount'] . '_' . $fondy_args['currency']));
 
                 if (empty($token)) {
                     $token = $this->get_token($fondy_args);
-                    WC()->session->set('session_token_' . md5($order_id . '_' . $fondy_args['amount'] . '_' . $fondy_args['currency']), $token);
+                    WC()->session->set('session_token_' . md5($this->merchant_id . '_' . $order_id . '_' . $fondy_args['amount'] . '_' . $fondy_args['currency']), $token);
                 }
 
                 if ($token['result'] === 'success') {
@@ -801,8 +801,8 @@ function woocommerce_fondy_init()
                     $order->update_status('failed');
                 }
             }
-            WC()->session->__unset('session_token_' . $orderId);
-            WC()->session->__unset('session_token_' . md5($orderId . '_' . $total . '_' . $response['currency']));
+            WC()->session->__unset('session_token_' . $this->merchant_id . '_' . $orderId);
+            WC()->session->__unset('session_token_' . md5($this->merchant_id . '_' . $orderId . '_' . $total . '_' . $response['currency']));
             $woocommerce->cart->empty_cart();
 
             return true;
