@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.5.8
+Version: 2.5.9
 Author: FONDY - Unified Payment Platform
 Author URI: https://fondy.eu/
 Domain Path: /languages
@@ -63,9 +63,7 @@ function woocommerce_fondy_init()
             $this->has_fields = false;
             $this->init_form_fields();
             $this->init_settings();
-            if ($this->settings['showlogo'] == "yes") {
-                $this->icon = WP_PLUGIN_URL . "/" . plugin_basename(dirname(__FILE__)) . '/assets/img/master_visa_fondy.svg';
-            }
+
             $this->liveurl = 'https://api.fondy.eu/api/checkout/redirect/';
             $this->refundurl = 'https://api.fondy.eu/api/reverse/order_id';
             $this->title = $this->settings['title'];
@@ -84,6 +82,7 @@ function woocommerce_fondy_init()
             $this->declined_order_status = $this->settings['declined_order_status'] ? $this->settings['declined_order_status'] : false;
             $this->msg['message'] = "";
             $this->msg['class'] = "";
+
             $this->supports = array(
                 'products',
                 'refunds'
@@ -113,6 +112,19 @@ function woocommerce_fondy_init()
             }
             add_action('woocommerce_receipt_fondy', array(&$this, 'receipt_page'));
             add_action('wp_enqueue_scripts', array($this, 'fondy_checkout_scripts'));
+            if ($this->settings['showlogo'] == "yes") {
+                add_filter('woocommerce_gateway_icon', array($this, 'custom_fondy_woocommerce_icons'));
+            }
+        }
+
+        /**
+         * Fondy Logo
+         * @return string
+         */
+        function custom_fondy_woocommerce_icons()
+        {
+            $icon = '<img style="width: 100%;max-width:210px;" src="' . WP_PLUGIN_URL . "/" . plugin_basename(dirname(__FILE__)) . '/assets/img/master_visa_fondy.svg' . '" alt="Fondy Logo" />';
+            return $icon;
         }
 
         /**
