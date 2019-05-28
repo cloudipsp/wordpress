@@ -76,12 +76,21 @@ function woocommerce_fondy_init()
             $this->page_mode = $this->settings['page_mode'];
             $this->page_mode_instant = $this->settings['page_mode_instant'];
             $this->on_checkout_page = $this->settings['on_checkout_page'] ? $this->settings['on_checkout_page'] : false;
+            $this->payment_type = $this->settings['payment_type'] ? $this->settings['payment_type'] : false;
             $this->force_lang = $this->settings['force_lang'] ? $this->settings['force_lang'] : false;
             $this->default_order_status = $this->settings['default_order_status'] ? $this->settings['default_order_status'] : false;
             $this->expired_order_status = $this->settings['expired_order_status'] ? $this->settings['expired_order_status'] : false;
             $this->declined_order_status = $this->settings['declined_order_status'] ? $this->settings['declined_order_status'] : false;
             $this->msg['message'] = "";
             $this->msg['class'] = "";
+
+            if ($this->settings['payment_type'] == 'page_mode') {
+                $this->page_mode = 'yes';
+            } elseif ($this->settings['payment_type'] == 'on_checkout_page') {
+                $this->on_checkout_page = 'yes';
+            } elseif ($this->settings['payment_type'] == 'page_mode_instant') {
+                $this->page_mode_instant = 'yes';
+            }
 
             $this->supports = array(
                 'products',
@@ -241,6 +250,13 @@ function woocommerce_fondy_init()
                     'description' => __('Tick to show "fondy" logo', 'fondy-woocommerce-payment-gateway'),
                     'desc_tip' => true
                 ),
+                'payment_type' => array(
+                    'title' => __('Payment type', 'fondy-woocommerce-payment-type'),
+                    'type' => 'select',
+                    'options' => $this->fondy_get_payment_type(),
+                    'description' => __('Payment type', 'fondy-woocommerce-payment-type'),
+                    'desc_tip' => true
+                ),
                 'calendar' => array(
                     'title' => __('Show calendar on checkout', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'checkbox',
@@ -249,30 +265,30 @@ function woocommerce_fondy_init()
                     'description' => __('Tick to show show recurring payment calendar on checkout', 'fondy-woocommerce-payment-gateway'),
                     'desc_tip' => true
                 ),
-                'on_checkout_page' => array(
-                    'title' => __('Enable on checkout page mode', 'fondy-woocommerce-payment-gateway'),
-                    'type' => 'checkbox',
-                    'label' => __('Show payment on checkout page', 'fondy-woocommerce-payment-gateway'),
-                    'default' => 'no',
-                    'description' => __('Show payment on checkout page', 'fondy-woocommerce-payment-gateway'),
-                    'desc_tip' => true
-                ),
-                'page_mode' => array(
-                    'title' => __('Enable on page mode', 'fondy-woocommerce-payment-gateway'),
-                    'type' => 'checkbox',
-                    'label' => __('Enable on page payment mode', 'fondy-woocommerce-payment-gateway'),
-                    'default' => 'no',
-                    'description' => __('Enable on page mode without redirect', 'fondy-woocommerce-payment-gateway'),
-                    'desc_tip' => true
-                ),
-                'page_mode_instant' => array(
-                    'title' => __('Enable on page mode instant redirect', 'fondy-woocommerce-payment-gateway'),
-                    'type' => 'checkbox',
-                    'label' => __('Enable on page mode instant redirect', 'fondy-woocommerce-payment-gateway'),
-                    'default' => 'no',
-                    'description' => __('Enable on page mode instant redirect on submit order', 'fondy-woocommerce-payment-gateway'),
-                    'desc_tip' => true
-                ),
+//                'on_checkout_page' => array(
+//                    'title' => __('Enable on checkout page mode', 'fondy-woocommerce-payment-gateway'),
+//                    'type' => 'checkbox',
+//                    'label' => __('Show payment on checkout page', 'fondy-woocommerce-payment-gateway'),
+//                    'default' => 'no',
+//                    'description' => __('Show payment on checkout page', 'fondy-woocommerce-payment-gateway'),
+//                    'desc_tip' => true
+//                ),
+//                'page_mode' => array(
+//                    'title' => __('Enable on page mode', 'fondy-woocommerce-payment-gateway'),
+//                    'type' => 'checkbox',
+//                    'label' => __('Enable on page payment mode', 'fondy-woocommerce-payment-gateway'),
+//                    'default' => 'no',
+//                    'description' => __('Enable on page mode without redirect', 'fondy-woocommerce-payment-gateway'),
+//                    'desc_tip' => true
+//                ),
+//                'page_mode_instant' => array(
+//                    'title' => __('Enable on page mode instant redirect', 'fondy-woocommerce-payment-gateway'),
+//                    'type' => 'checkbox',
+//                    'label' => __('Enable on page mode instant redirect', 'fondy-woocommerce-payment-gateway'),
+//                    'default' => 'no',
+//                    'description' => __('Enable on page mode instant redirect on submit order', 'fondy-woocommerce-payment-gateway'),
+//                    'desc_tip' => true
+//                ),
                 'force_lang' => array(
                     'title' => __('Enable force detect lang', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'checkbox',
@@ -393,8 +409,8 @@ function woocommerce_fondy_init()
                         </div>
                         <div style="display: none" class="input-wrapper stack-1">
                             <div class="input-field w-1">
-                                <input id="submit_fondy_checkout_form" type="submit" class="button">
-                                value="<?php esc_html_e('Pay', 'fondy-woocommerce-payment-gateway') ?>"/>
+                                <input id="submit_fondy_checkout_form" type="submit" class="button"
+                                       value="<?php esc_html_e('Pay', 'fondy-woocommerce-payment-gateway') ?>"/>
                             </div>
                         </div>
                         <div class="error-wrapper"></div>
@@ -895,6 +911,16 @@ function woocommerce_fondy_init()
             }
 
             return $page_list;
+        }
+
+        // get all payment type
+        function fondy_get_payment_type()
+        {
+            return array(
+                'on_checkout_page' => __('Built-in form', 'fondy-woocommerce-payment-gateway'),
+                'page_mode' => __('In-store payment page', 'fondy-woocommerce-payment-gateway'),
+                'page_mode_instant' => __('Redirection', 'fondy-woocommerce-payment-gateway'),
+            );
         }
     }
 
