@@ -18,10 +18,31 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
+if (!defined('FONDY_WOOCOMMERCE_VERSION')) {
+    define('FONDY_WOOCOMMERCE_VERSION', '2.6.1');
+}
+
 add_action('plugins_loaded', 'woocommerce_fondy_init', 0);
 
 function woocommerce_fondy_init()
 {
+    if (FONDY_WOOCOMMERCE_VERSION !== get_option('fondy_woocommerce_version')) {
+        update_option('fondy_woocommerce_version', FONDY_WOOCOMMERCE_VERSION);
+        $settings = maybe_unserialize(get_option('woocommerce_fondy_settings'));
+        if (!isset($settings['payment_type'])) {
+            if ($settings['page_mode'] == 'yes') {
+                $settings['payment_type'] = 'page_mode';
+            } elseif ($settings['on_checkout_page'] == 'yes') {
+                $settings['payment_type'] = 'on_checkout_page';
+            } elseif ($settings['page_mode_instant'] == 'yes') {
+                $settings['payment_type'] = 'page_mode_instant';
+            } else {
+                $settings['payment_type'] = 'page_mode';
+            }
+        }
+        update_option('woocommerce_fondy_settings', $settings);
+    }
+
     if (!class_exists('WC_Payment_Gateway') or class_exists('WC_PaymentFondy')) {
         return;
     }
@@ -49,6 +70,7 @@ function woocommerce_fondy_init()
         public $page_mode;
         public $page_mode_instant;
         public $on_checkout_page;
+        public $payment_type;
         public $force_lang;
         public $default_order_status;
         public $expired_order_status;
@@ -84,13 +106,9 @@ function woocommerce_fondy_init()
             $this->msg['message'] = "";
             $this->msg['class'] = "";
 
-            if ($this->settings['payment_type'] == 'page_mode') {
-                $this->page_mode = 'yes';
-            } elseif ($this->settings['payment_type'] == 'on_checkout_page') {
-                $this->on_checkout_page = 'yes';
-            } elseif ($this->settings['payment_type'] == 'page_mode_instant') {
-                $this->page_mode_instant = 'yes';
-            }
+            $this->page_mode = ($this->settings['payment_type'] == 'page_mode') ? 'yes' : 'no';
+            $this->on_checkout_page = ($this->settings['payment_type'] == 'on_checkout_page') ? 'yes' : 'no';
+            $this->page_mode_instant = ($this->settings['payment_type'] == 'page_mode_instant') ? 'yes' : 'no';
 
             $this->supports = array(
                 'products',
