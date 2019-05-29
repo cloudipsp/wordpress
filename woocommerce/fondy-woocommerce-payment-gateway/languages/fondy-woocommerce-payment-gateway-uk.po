@@ -2,13 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce - Fondy Money\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-23 19:36+0000\n"
-"PO-Revision-Date: 2019-05-28 16:52+0300\n"
+"POT-Creation-Date: 2019-05-29 13:43+0000\n"
+"PO-Revision-Date: 2019-05-29 13:44+0000\n"
 "Last-Translator: dm <asda@mail.do>\n"
 "Language-Team: Ukrainian\n"
 "Language: uk\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && n"
-"%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
+"n%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,60 +20,60 @@ msgstr ""
 "esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
 "esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
 "X-Loco-Target-Locale: ru_RU\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.2.2; wp-5.1.1\n"
 "X-Poedit-SearchPath-0: ../../plugins/woocommerce-oplata\n"
 
-#: woocommerce-fondy.php:62 woocommerce-fondy.php:321
+#: woocommerce-fondy.php:84 woocommerce-fondy.php:372
 msgid "Payment gateway"
 msgstr "Платіжний шлюз"
 
-#: woocommerce-fondy.php:136
+#: woocommerce-fondy.php:180
 msgid "Place order"
 msgstr "Замовити"
 
-#: woocommerce-fondy.php:179
+#: woocommerce-fondy.php:223
 msgid "Enable/Disable"
 msgstr "Увімкнути / Вимкнути"
 
-#: woocommerce-fondy.php:181
+#: woocommerce-fondy.php:225
 msgid "Enable Fondy Payment Module."
 msgstr "Увімкнути модуль оплати FONDY"
 
-#: woocommerce-fondy.php:183
+#: woocommerce-fondy.php:227
 msgid "Show in the Payment List as a payment option"
 msgstr "Показати в списку платежів як спосіб оплати"
 
-#: woocommerce-fondy.php:186
+#: woocommerce-fondy.php:230
 msgid "Test mode:"
 msgstr "Тестовий режим:"
 
-#: woocommerce-fondy.php:188
+#: woocommerce-fondy.php:232
 msgid "Enable Test Mode"
 msgstr "Увімкнути тестовий режим:"
 
-#: woocommerce-fondy.php:190
+#: woocommerce-fondy.php:234
 msgid "Place the payment gateway in test mode using test Merchant id."
 msgstr ""
 "Перевести платіжний шлюз до тестовому режиму установивши тестовий Merchant ID"
 
-#: woocommerce-fondy.php:194
+#: woocommerce-fondy.php:238
 msgid "Title:"
 msgstr "Заголовок:"
 
-#: woocommerce-fondy.php:196
+#: woocommerce-fondy.php:240
 msgid "Fondy Online Payments"
 msgstr "Онлайн платежі FONDY"
 
-#: woocommerce-fondy.php:197
+#: woocommerce-fondy.php:241
 msgid "This controls the title which the user sees during checkout."
 msgstr "Заголовок який, бачить користувач в процесі оформлення замовлення."
 
-#: woocommerce-fondy.php:201
+#: woocommerce-fondy.php:245
 msgid "Description:"
 msgstr "Опис:"
 
-#: woocommerce-fondy.php:203
+#: woocommerce-fondy.php:247
 msgid ""
 "Pay securely by Credit or Debit Card or Internet Banking through fondy "
 "service."
@@ -81,242 +81,226 @@ msgstr ""
 "Сплатіть безпечно за допомогою кредитної або дебетової картки чи інтернет-"
 "банкінгу через служби FONDY."
 
-#: woocommerce-fondy.php:204
+#: woocommerce-fondy.php:248
 msgid "This controls the description which the user sees during checkout."
 msgstr "Опис, який бачить користувач в процесі оформлення замовлення."
 
-#: woocommerce-fondy.php:208
+#: woocommerce-fondy.php:252
 msgid "Merchant ID"
 msgstr "Merchant ID"
 
-#: woocommerce-fondy.php:214
+#: woocommerce-fondy.php:258
 msgid "Merchant secretkey"
 msgstr "Merchant secretkey"
 
-#: woocommerce-fondy.php:216
+#: woocommerce-fondy.php:260
 msgid "Given to Merchant by fondy"
 msgstr "Видається мерчанту FONDY"
 
-#: woocommerce-fondy.php:220
+#: woocommerce-fondy.php:264
 msgid "Show MasterCard & Visa logos"
 msgstr "Показувати MasterCard & Visa логотипи"
 
-#: woocommerce-fondy.php:222
+#: woocommerce-fondy.php:266
 msgid ""
 "Show the MasterCard & Visa logo in the payment method section for the user"
 msgstr ""
 "Показувати логотип MasterCard & Visa в розділі способу оплати для користувача"
 
-#: woocommerce-fondy.php:224
+#: woocommerce-fondy.php:268
 msgid "Tick to show \"fondy\" logo"
 msgstr "Відзначте, щоб показати логотип."
 
-#: woocommerce-fondy.php:228
+#: woocommerce-fondy.php:279
 msgid "Show calendar on checkout"
 msgstr "Показувати календар"
 
-#: woocommerce-fondy.php:230
+#: woocommerce-fondy.php:281
 msgid "Show recurring payment calendar on checkout"
 msgstr "Показувати платіжний календар при оформленні замовлення"
 
-#: woocommerce-fondy.php:232
+#: woocommerce-fondy.php:283
 msgid "Tick to show show recurring payment calendar on checkout"
 msgstr "Вмикає показ платіжного календаря"
 
-#: woocommerce-fondy.php:236
-msgid "Enable on checkout page mode"
-msgstr "Увімкнути режим показу на сторінці чекаута (введення картки)"
-
-#: woocommerce-fondy.php:238 woocommerce-fondy.php:240
-msgid "Show payment on checkout page"
-msgstr "Показувати введення карти на сторінці з оформленням замовлення."
-
-#: woocommerce-fondy.php:244
-msgid "Enable on page mode"
-msgstr "Увімкнути режим показу на сторінці"
-
-#: woocommerce-fondy.php:246
-msgid "Enable on page payment mode"
-msgstr "Увімкнути модуль на сторінці"
-
-#: woocommerce-fondy.php:248
-msgid "Enable on page mode without redirect"
-msgstr "Увімкнути режим без перенаправлення на сторінку оплати"
-
-#: woocommerce-fondy.php:252 woocommerce-fondy.php:254
-msgid "Enable on page mode instant redirect"
-msgstr "Моментальне перенаправлення"
-
-#: woocommerce-fondy.php:256
-msgid "Enable on page mode instant redirect on submit order"
-msgstr "Увімкнути моментальне перенаправлення після формування замовлення"
-
-#: woocommerce-fondy.php:260
+#: woocommerce-fondy.php:311
 msgid "Enable force detect lang"
 msgstr "Визначення мовних налаштувань"
 
-#: woocommerce-fondy.php:262 woocommerce-fondy.php:264
+#: woocommerce-fondy.php:313 woocommerce-fondy.php:315
 msgid "Enable detecting site lang if it used"
 msgstr "Увімкнути визначення мови"
 
-#: woocommerce-fondy.php:268
+#: woocommerce-fondy.php:319
 msgid "Return Page"
 msgstr "Сторінка повернення"
 
-#: woocommerce-fondy.php:270
+#: woocommerce-fondy.php:321
 msgid "Default order page"
 msgstr "Стандартна сторінка повернення"
 
-#: woocommerce-fondy.php:271
+#: woocommerce-fondy.php:322
 msgid "URL of success page"
 msgstr "Сторінка куди буде направлений користувач після оплати"
 
-#: woocommerce-fondy.php:275
+#: woocommerce-fondy.php:326
 msgid "Payment completed order status"
 msgstr "Статус замовлення при успішному платежі"
 
-#: woocommerce-fondy.php:279
+#: woocommerce-fondy.php:330
 msgid "The default order status after successful payment."
 msgstr "Стандартний статус замовлення при успішній оплаті"
 
-#: woocommerce-fondy.php:282
+#: woocommerce-fondy.php:333
 msgid "Payment expired order status"
 msgstr "Статус замовлення при сплившей оплаті"
 
-#: woocommerce-fondy.php:286
+#: woocommerce-fondy.php:337
 msgid "Order status when payment was expired."
 msgstr "Зміна статусу замовлення при сплившему платежі"
 
-#: woocommerce-fondy.php:289
+#: woocommerce-fondy.php:340
 msgid "Payment declined order status"
 msgstr "Статус замовлення при відхиленому платежі"
 
-#: woocommerce-fondy.php:293
+#: woocommerce-fondy.php:344
 msgid "Order status when payment was declined."
 msgstr "Зміна статусу замовлення при сплившему відхиленому платежі"
 
-#: woocommerce-fondy.php:305
+#: woocommerce-fondy.php:356
 msgid "Default status"
 msgstr "Стандартний статус"
 
-#: woocommerce-fondy.php:320
+#: woocommerce-fondy.php:371
 msgid "Fondy.eu"
 msgstr "FONDY.eu"
 
-#: woocommerce-fondy.php:343
+#: woocommerce-fondy.php:394
 msgid "Card Number:"
 msgstr "Номер картки:"
 
-#: woocommerce-fondy.php:349
+#: woocommerce-fondy.php:400
 msgid "XXXXXXXXXXXXXXXX"
 msgstr "xxxxxxxxxxxxxx"
 
-#: woocommerce-fondy.php:355
+#: woocommerce-fondy.php:406
 msgid "Expiry Date:"
 msgstr "ТЕРМІН ДІЇ:"
 
-#: woocommerce-fondy.php:358
+#: woocommerce-fondy.php:409
 msgid "CVV2:"
 msgstr "CVV2:"
 
-#: woocommerce-fondy.php:374
+#: woocommerce-fondy.php:425
 msgid "XXX"
 msgstr "XXX"
 
-#: woocommerce-fondy.php:380
+#: woocommerce-fondy.php:431
 msgid "Pay"
 msgstr "Оплатити"
 
-#: woocommerce-fondy.php:434
+#: woocommerce-fondy.php:485
 msgid "Order: "
 msgstr "Замовлення №:"
 
-#: woocommerce-fondy.php:471
+#: woocommerce-fondy.php:522
 msgid "Pay via Fondy.eu"
 msgstr "Оплатити за допомогою FONDY"
 
-#: woocommerce-fondy.php:654
+#: woocommerce-fondy.php:705
 msgid "Refund Fondy status: processing"
 msgstr "Статус повернення: processing"
 
-#: woocommerce-fondy.php:657 woocommerce-fondy.php:658
+#: woocommerce-fondy.php:708 woocommerce-fondy.php:709
 msgid "Refund Fondy status: Declined"
 msgstr ""
 "Статус повернення FONDY: Declined. Будь ласка, зв'яжіться з підтримкою для "
 "уточнення деталей"
 
-#: woocommerce-fondy.php:660
+#: woocommerce-fondy.php:711
 msgid "Refund Fondy status: Unknown"
 msgstr ""
 "Статус повернення FONDY: Unknown. Будь ласка, зв'яжіться з підтримкою для "
 "уточнення деталей"
 
-#: woocommerce-fondy.php:661
+#: woocommerce-fondy.php:712
 msgid "Refund Fondy status: Unknown. Try to contact support"
 msgstr ""
 "Статус повернення FONDY: Unknown. Будь ласка, зв'яжіться з підтримкою для "
 "уточнення деталей"
 
-#: woocommerce-fondy.php:730
+#: woocommerce-fondy.php:781
 msgid ""
 "An error has occurred during payment. Please contact us to ensure your order "
 "has submitted."
 msgstr ""
 "Помилка при оплаті. Будь ласка зв'яжіться з нами для уточнення деталей."
 
-#: woocommerce-fondy.php:733
+#: woocommerce-fondy.php:784
 msgid "Amount incorrect."
 msgstr "Сума неправильна."
 
-#: woocommerce-fondy.php:736
+#: woocommerce-fondy.php:787
 msgid "An error has occurred during payment. Merchant data is incorrect."
 msgstr "Під час оплати сталася помилка. Дані мерчанта невірні."
 
-#: woocommerce-fondy.php:739
+#: woocommerce-fondy.php:790
 msgid "Payment method incorrect."
 msgstr "Платіжний метод не корректний"
 
-#: woocommerce-fondy.php:751
+#: woocommerce-fondy.php:802
 msgid "Transaction ERROR: signature is not valid"
 msgstr "ПОМИЛКА транзакції: підпис недійсний"
 
-#: woocommerce-fondy.php:753
+#: woocommerce-fondy.php:804
 msgid "An error has occurred during payment. Signature is not valid."
 msgstr "Сталася помилка під час оплати. Підпис недійсний."
 
-#: woocommerce-fondy.php:757
+#: woocommerce-fondy.php:808
 msgid ""
 "Thank you for shopping with us. However, the transaction has been declined."
 msgstr "Дякуємо за покупки з нами. Однак транзакція була відхилена."
 
-#: woocommerce-fondy.php:771
+#: woocommerce-fondy.php:822
 msgid ""
 "Thank you for shopping with us. However, the transaction has been expired."
 msgstr "Дякуємо за покупки з нами. Проте термін дії транзакції закінчився."
 
-#: woocommerce-fondy.php:772
+#: woocommerce-fondy.php:823
 msgid "Transaction ERROR: order expired<br/>FONDY ID: "
 msgstr "ПОМИЛКА: термін дії замовлення закінчився<br/> FONDY ID:"
 
-#: woocommerce-fondy.php:784
+#: woocommerce-fondy.php:835
 msgid "Thank you for shopping with us. But your payment declined."
 msgstr "Дякуємо за покупки з нами. Але ваш платіж відхилено."
 
-#: woocommerce-fondy.php:792
+#: woocommerce-fondy.php:843
 msgid "Fondy payment successful.<br/>FONDY ID: "
 msgstr "Платіж успішний.<br/>FONDY ID: "
 
-#: woocommerce-fondy.php:797
+#: woocommerce-fondy.php:848
 msgid "Transaction ERROR: amount incorrect<br/>FONDY ID: "
 msgstr "Помилка транзакції: сума неправильна <br/> ID FONDY:"
 
-#: woocommerce-fondy.php:835
+#: woocommerce-fondy.php:886
 msgid ""
 "Thank you for shopping with us. Your account has been charged and your "
 "transaction is successful."
 msgstr "Дякуємо за покупку. Оплата пройшла успішно"
 
-#: woocommerce-fondy.php:887
+#: woocommerce-fondy.php:938
+msgid "Built-in form"
+msgstr "Вбудована форма"
+
+#: woocommerce-fondy.php:939
+msgid "In-store payment page"
+msgstr "Сторінка оплати всередині магазину"
+
+#: woocommerce-fondy.php:940
+msgid "Redirection"
+msgstr "Перенаправлення"
+
+#: woocommerce-fondy.php:948
 msgid "Settings"
 msgstr "Налаштування"
 
@@ -339,15 +323,3 @@ msgstr "FONDY - Unified Payment Platform"
 #. Author URI of the plugin
 msgid "https://fondy.eu/"
 msgstr "https://fondy.ua/"
-
-#: woocommerce-fondy.php:921
-msgid "Built-in form"
-msgstr "Вбудована форма"
-
-#: woocommerce-fondy.php:922
-msgid "In-store payment page"
-msgstr "Сторінка оплати всередині магазину"
-
-#: woocommerce-fondy.php:923
-msgid "Redirection"
-msgstr "Перенаправлення"

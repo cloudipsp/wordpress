@@ -269,10 +269,10 @@ function woocommerce_fondy_init()
                     'desc_tip' => true
                 ),
                 'payment_type' => array(
-                    'title' => __('Payment type', 'fondy-woocommerce-payment-type'),
+                    'title' => __('Payment type', 'fondy-woocommerce-payment-gateway'),
                     'type' => 'select',
                     'options' => $this->fondy_get_payment_type(),
-                    'description' => __('Payment type', 'fondy-woocommerce-payment-type'),
+                    'description' => __('Payment type', 'fondy-woocommerce-payment-gateway'),
                     'desc_tip' => true
                 ),
                 'calendar' => array(
