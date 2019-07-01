@@ -65,7 +65,7 @@ function rcp_fondy_admin_page()
                 <tr>
                     <th>
                         <label
-                            for="rcp_fondy_settings[fondy_merchant_id]"><?php _e('Fondy MID', 'fondy_rcp'); ?></label>
+                                for="rcp_fondy_settings[fondy_merchant_id]"><?php _e('Fondy MID', 'fondy_rcp'); ?></label>
                     </th>
                     <td>
                         <input class="regular-text" id="rcp_fondy_settings[fondy_merchant_id]" style="width: 300px;"
@@ -79,7 +79,7 @@ function rcp_fondy_admin_page()
                 <tr>
                     <th>
                         <label
-                            for="rcp_fondy_settings[fondy_secret]"><?php _e('Fondy Secret Key', 'fondy_rcp'); ?></label>
+                                for="rcp_fondy_settings[fondy_secret]"><?php _e('Fondy Secret Key', 'fondy_rcp'); ?></label>
                     </th>
                     <td>
                         <input class="regular-text" id="rcp_fondy_settings[stripe_test_secret]" style="width: 300px;"
@@ -93,7 +93,7 @@ function rcp_fondy_admin_page()
                 <tr>
                     <th>
                         <label
-                            for="rcp_fondy_settings[fondy_reccuring]"><?php _e('Fondy Subscription', 'fondy_rcp'); ?></label>
+                                for="rcp_fondy_settings[fondy_reccuring]"><?php _e('Fondy Subscription', 'fondy_rcp'); ?></label>
                     </th>
                     <td>
                         <input class="checkbox" type="checkbox" id="rcp_fondy_settings[fondy_reccuring]"
@@ -110,6 +110,6 @@ function rcp_fondy_admin_page()
             <input type="submit" class="button-primary" value="<?php _e('Save Options', 'fondy_rcp'); ?>"/>
         </p>
     </form>
-<?php endif; ?>
-    <?php
+<?php
+endif;
 }

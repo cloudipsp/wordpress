@@ -1,5 +1,5 @@
 <?php
-if (!class_exists('RCP_Payment_Gateway')) {
+if (!class_exists('Restrict_Content_Pro')) {
     return;
 }
 
@@ -75,7 +75,7 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
             )),
             'currency' => $this->currency,
             'server_callback_url' => add_query_arg('listener', 'fondy', home_url('index.php')),
-            'response_url' => get_permalink($rcp_options['registration_page']),
+            'response_url' => add_query_arg('listener', 'fondy', home_url('index.php')),//add_query_arg( array( 'rcp-confirm' => 'fondy', 'membership_id' => $this->membership->get_id() ), get_permalink( $rcp_options['registration_page'] ) ),
             'sender_email' => $member->user_email
         );
 
@@ -181,8 +181,6 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
         if (!isset($_GET['listener']) || $_GET['listener'] != 'fondy') {
             return;
         }
-        global $rcp_options;
-        global $rcp_payments_db;
         global $rcp_fondy_options;
         rcp_log('Starting to process Fondy webhook.');
 

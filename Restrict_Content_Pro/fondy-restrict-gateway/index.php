@@ -13,8 +13,8 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 define("RCP_FONDY_DIR", dirname(__FILE__));
 //load payment gateway class
-add_filter('rcp_payment_gateways', 'pw_rcp_register_fondy_gateway', 0);
-add_action('plugins_loaded', 'pw_rcp_register_fondy_mainClass', 1);
+add_filter('rcp_payment_gateways', 'pw_rcp_register_fondy_gateway', 1);
+add_action('plugins_loaded', 'pw_rcp_register_fondy_mainClass', 99);
 
 function pw_rcp_register_fondy_gateway($gateways)
 {
