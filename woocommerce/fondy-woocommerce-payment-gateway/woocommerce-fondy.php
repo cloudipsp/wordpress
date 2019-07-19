@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.6.1
+Version: 2.6.3
 Author: FONDY - Unified Payment Platform
 Author URI: https://fondy.eu/
 Domain Path: /languages
@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('FONDY_WOOCOMMERCE_VERSION')) {
-    define('FONDY_WOOCOMMERCE_VERSION', '2.6.1');
+    define('FONDY_WOOCOMMERCE_VERSION', '2.6.2');
 }
 
 add_action('plugins_loaded', 'woocommerce_fondy_init', 0);
@@ -88,27 +88,27 @@ function woocommerce_fondy_init()
 
             $this->liveurl = 'https://api.fondy.eu/api/checkout/redirect/';
             $this->refundurl = 'https://api.fondy.eu/api/reverse/order_id';
-            $this->title = $this->settings['title'];
-            $this->test_mode = $this->settings['test_mode'];
-            $this->calendar = $this->settings['calendar'];
-            $this->redirect_page_id = $this->settings['redirect_page_id'];
-            $this->merchant_id = $this->settings['merchant_id'];
-            $this->salt = $this->settings['salt'];
-            $this->description = $this->settings['description'];
-            $this->page_mode = $this->settings['page_mode'];
-            $this->page_mode_instant = $this->settings['page_mode_instant'];
-            $this->on_checkout_page = $this->settings['on_checkout_page'] ? $this->settings['on_checkout_page'] : false;
-            $this->payment_type = $this->settings['payment_type'] ? $this->settings['payment_type'] : false;
-            $this->force_lang = $this->settings['force_lang'] ? $this->settings['force_lang'] : false;
-            $this->default_order_status = $this->settings['default_order_status'] ? $this->settings['default_order_status'] : false;
-            $this->expired_order_status = $this->settings['expired_order_status'] ? $this->settings['expired_order_status'] : false;
-            $this->declined_order_status = $this->settings['declined_order_status'] ? $this->settings['declined_order_status'] : false;
+            $this->title = $this->get_option('title');
+            $this->test_mode = $this->get_option('test_mode');
+            $this->calendar = $this->get_option('calendar');
+            $this->redirect_page_id = $this->get_option('redirect_page_id');
+            $this->merchant_id = $this->get_option('merchant_id');
+            $this->salt = $this->get_option('salt');
+            $this->description = $this->get_option('description');
+            $this->page_mode = $this->get_option('page_mode');
+            $this->page_mode_instant = $this->get_option('page_mode_instant');
+            $this->on_checkout_page = $this->get_option('on_checkout_page') ? $this->get_option('on_checkout_page') : false;
+            $this->payment_type = $this->get_option('payment_type') ? $this->get_option('payment_type') : false;
+            $this->force_lang = $this->get_option('force_lang') ? $this->get_option('force_lang') : false;
+            $this->default_order_status = $this->get_option('default_order_status') ? $this->get_option('default_order_status') : false;
+            $this->expired_order_status = $this->get_option('expired_order_status') ? $this->get_option('expired_order_status') : false;
+            $this->declined_order_status = $this->get_option('declined_order_status') ? $this->get_option('declined_order_status') : false;
             $this->msg['message'] = "";
             $this->msg['class'] = "";
 
-            $this->page_mode = ($this->settings['payment_type'] == 'page_mode') ? 'yes' : 'no';
-            $this->on_checkout_page = ($this->settings['payment_type'] == 'on_checkout_page') ? 'yes' : 'no';
-            $this->page_mode_instant = ($this->settings['payment_type'] == 'page_mode_instant') ? 'yes' : 'no';
+            $this->page_mode = ($this->get_option('payment_type') == 'page_mode') ? 'yes' : 'no';
+            $this->on_checkout_page = ($this->get_option('payment_type') == 'on_checkout_page') ? 'yes' : 'no';
+            $this->page_mode_instant = ($this->get_option('payment_type') == 'page_mode_instant') ? 'yes' : 'no';
 
             $this->supports = array(
                 'products',
@@ -152,7 +152,7 @@ function woocommerce_fondy_init()
                     style="width: 100%;max-width:170px;min-width: 120px;float: right;" 
                     src="' . WP_PLUGIN_URL . "/" . plugin_basename(dirname(__FILE__)) . '/assets/img/master_visa_fondy.svg' . '" 
                     alt="Fondy Logo" />';
-            if ($this->settings['showlogo'] == "yes") {
+            if ($this->get_option('showlogo') == "yes") {
                 return apply_filters('woocommerce_gateway_icon', $icon, $this->id);
             } else {
                 return false;
@@ -466,6 +466,9 @@ function woocommerce_fondy_init()
          */
         protected function getSignature($data, $password, $encoded = true)
         {
+            if(isset($data['additional_info'])) {
+                $data['additional_info'] = str_replace("\\", "", $data['additional_info']);
+            }
             $data = array_filter($data, array($this, 'fondy_filter'));
             ksort($data);
 
@@ -773,20 +776,23 @@ function woocommerce_fondy_init()
         protected function isPaymentValid($response)
         {
             global $woocommerce;
-
             list($orderId,) = explode(self::ORDER_SEPARATOR, $response['order_id']);
             $order = new WC_Order($orderId);
             $total = round($order->get_total() * 100);
             if ($order === false) {
+                $this->clear_fondy_cache($orderId, $total, $response['currency']);
                 return __('An error has occurred during payment. Please contact us to ensure your order has submitted.', 'fondy-woocommerce-payment-gateway');
             }
             if ($response['amount'] != $total) {
+                $this->clear_fondy_cache($orderId, $total, $response['currency']);
                 return __('Amount incorrect.', 'fondy-woocommerce-payment-gateway');
             }
             if ($this->merchant_id != $response['merchant_id']) {
+                $this->clear_fondy_cache($orderId, $total, $response['currency']);
                 return __('An error has occurred during payment. Merchant data is incorrect.', 'fondy-woocommerce-payment-gateway');
             }
             if ($order->get_payment_method() != $this->id) {
+                $this->clear_fondy_cache($orderId, $total, $response['currency']);
                 return __('Payment method incorrect.', 'fondy-woocommerce-payment-gateway');
             }
             $responseSignature = $response['signature'];
@@ -800,7 +806,7 @@ function woocommerce_fondy_init()
             if ($this->getSignature($response, $this->salt) != $responseSignature) {
                 $order->update_status('failed');
                 $order->add_order_note(__('Transaction ERROR: signature is not valid', 'fondy-woocommerce-payment-gateway'));
-
+                $this->clear_fondy_cache($orderId, $total, $response['currency']);
                 return __('An error has occurred during payment. Signature is not valid.', 'fondy-woocommerce-payment-gateway');
             }
 
@@ -814,7 +820,7 @@ function woocommerce_fondy_init()
                 }
 
                 wp_mail($response['sender_email'], 'Order declined', $errorMessage);
-
+                $this->clear_fondy_cache($orderId, $total, $response['currency']);
                 return $errorMessage;
             }
 
@@ -826,7 +832,7 @@ function woocommerce_fondy_init()
                 } else {
                     $order->update_status('cancelled');
                 }
-
+                $this->clear_fondy_cache($orderId, $total, $response['currency']);
                 return $errorMessage;
             }
 
@@ -852,13 +858,15 @@ function woocommerce_fondy_init()
                     $order->update_status('failed');
                 }
             }
-            WC()->session->__unset('session_token_' . $this->merchant_id . '_' . $orderId);
-            WC()->session->__unset('session_token_' . md5($this->merchant_id . '_' . $orderId . '_' . $total . '_' . $response['currency']));
+            $this->clear_fondy_cache($orderId, $total, $response['currency']);
             $woocommerce->cart->empty_cart();
 
             return true;
         }
-
+        function clear_fondy_cache ($orderId, $total, $cur) {
+            WC()->session->__unset('session_token_' . $this->merchant_id . '_' . $orderId);
+            WC()->session->__unset('session_token_' . md5($this->merchant_id . '_' . $orderId . '_' . $total . '_' . $cur));
+        }
         /**
          * Response Handler
          */
