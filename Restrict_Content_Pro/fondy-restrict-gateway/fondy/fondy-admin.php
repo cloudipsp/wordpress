@@ -38,6 +38,8 @@ function rcp_fondy_sanitize_settings($data)
         __('Successfully saved', 'fondy_rcp'),
         'updated'
     );
+    if(!isset($data['fondy_reccuring']))
+        $data['fondy_reccuring'] = false;
     $return = array(
         'fondy_merchant_id' => (int)$data['fondy_merchant_id'],
         'fondy_secret' => (string)$data['fondy_secret'],

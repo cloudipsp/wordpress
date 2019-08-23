@@ -62,6 +62,11 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
             }
         }
 
+        $return = add_query_arg( array( 'rcp-confirm' => 'fondy', 'membership_id' => $this->membership->get_id() ), get_permalink( $rcp_options['registration_page'] ) );
+        if(isset($this->return_url)) {
+            $return = $this->return_url;
+        }
+
         $fondy_args = array(
             'order_id' => $this->payment->id . '#' . $member->ID,
             'merchant_id' => $rcp_fondy_options['fondy_merchant_id'],
@@ -75,7 +80,7 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
             )),
             'currency' => $this->currency,
             'server_callback_url' => add_query_arg('listener', 'fondy', home_url('index.php')),
-            'response_url' => add_query_arg('listener', 'fondy', home_url('index.php')),//add_query_arg( array( 'rcp-confirm' => 'fondy', 'membership_id' => $this->membership->get_id() ), get_permalink( $rcp_options['registration_page'] ) ),
+            'response_url' => $return,
             'sender_email' => $member->user_email
         );
 
