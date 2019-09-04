@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.6.3
+Version: 2.6.4
 Author: FONDY - Unified Payment Platform
 Author URI: https://fondy.eu/
 Domain Path: /languages
@@ -11,7 +11,7 @@ Text Domain: fondy-woocommerce-payment-gateway
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 2.0.0
-WC tested up to: 3.6.3
+WC tested up to: 3.6.5
 */
 
 if (!defined('ABSPATH')) {
@@ -75,6 +75,7 @@ function woocommerce_fondy_init()
         public $default_order_status;
         public $expired_order_status;
         public $declined_order_status;
+        public $fondy_unique;
         public $msg = array();
 
         public function __construct()
@@ -112,8 +113,8 @@ function woocommerce_fondy_init()
 
             $this->supports = array(
                 'products',
-                'refunds'
-                //'pre-orders'
+                'refunds',
+                'pre-orders'
             );
             if (version_compare(WOOCOMMERCE_VERSION, '2.0.0', '>=')) {
                 /* 2.0.0 */
@@ -137,8 +138,12 @@ function woocommerce_fondy_init()
                 $this->merchant_id = '1396424';
                 $this->salt = 'test';
             }
+            if ($this->fondy_unique = get_option('fondy_unique', true)) {
+                add_option('fondy_unique', time());
+            }
             add_action('woocommerce_receipt_fondy', array(&$this, 'receipt_page'));
             add_action('wp_enqueue_scripts', array($this, 'fondy_checkout_scripts'));
+            add_action('woocommerce_order_status_completed', array(&$this, 'fondy_preorder_capture'));
         }
 
         /**
@@ -466,7 +471,7 @@ function woocommerce_fondy_init()
          */
         protected function getSignature($data, $password, $encoded = true)
         {
-            if(isset($data['additional_info'])) {
+            if (isset($data['additional_info'])) {
                 $data['additional_info'] = str_replace("\\", "", $data['additional_info']);
             }
             $data = array_filter($data, array($this, 'fondy_filter'));
@@ -497,7 +502,7 @@ function woocommerce_fondy_init()
         {
             $order = new WC_Order($order_id);
             $fondy_args = array(
-                'order_id' => $order_id . self::ORDER_SEPARATOR . time(),
+                'order_id' => $order_id . self::ORDER_SEPARATOR . $this->fondy_unique,
                 'merchant_id' => $this->merchant_id,
                 'order_desc' => $this->getProductInfo($order_id),
                 'amount' => round($order->get_total() * 100),
@@ -511,6 +516,14 @@ function woocommerce_fondy_init()
                 $fondy_args['required_rectoken'] = 'Y';
                 $fondy_args['subscription'] = 'Y';
                 $fondy_args['subscription_callback_url'] = $this->getCallbackUrl();
+            }
+
+
+            if (WC_Pre_Orders_Order::order_contains_pre_order($order_id)) {
+                if (WC_Pre_Orders_Order::order_requires_payment_tokenization($order_id)) {
+                    $fondy_args['preauth'] = 'Y';
+                    WC_Pre_Orders_Order::mark_order_as_pre_ordered($order_id);
+                }
             }
             $fondy_args['signature'] = $this->getSignature($fondy_args, $this->salt);
 
@@ -633,7 +646,7 @@ function woocommerce_fondy_init()
             if ($this->on_checkout_page == 'yes') {
 
                 $fondy_args = array(
-                    'order_id' => $order_id . self::ORDER_SEPARATOR . time(),
+                    'order_id' => $order_id . self::ORDER_SEPARATOR . $this->fondy_unique,
                     'merchant_id' => esc_attr($this->merchant_id),
                     'amount' => round($order->get_total() * 100),
                     'order_desc' => $this->getProductInfo($order_id),
@@ -657,6 +670,7 @@ function woocommerce_fondy_init()
                 } else {
                     wp_send_json($token);
                 }
+
             } else {
                 return array(
                     'result' => 'success',
@@ -664,6 +678,7 @@ function woocommerce_fondy_init()
                 );
             }
         }
+
 
         /**
          * Refunds function
@@ -863,10 +878,13 @@ function woocommerce_fondy_init()
 
             return true;
         }
-        function clear_fondy_cache ($orderId, $total, $cur) {
+
+        function clear_fondy_cache($orderId, $total, $cur)
+        {
             WC()->session->__unset('session_token_' . $this->merchant_id . '_' . $orderId);
             WC()->session->__unset('session_token_' . md5($this->merchant_id . '_' . $orderId . '_' . $total . '_' . $cur));
         }
+
         /**
          * Response Handler
          */
@@ -948,6 +966,59 @@ function woocommerce_fondy_init()
                 'page_mode_instant' => __('Redirection', 'fondy-woocommerce-payment-gateway'),
             );
         }
+
+        /**
+         * Send capture request
+         * @param $args
+         * @return array
+         * */
+        protected function get_capture($args)
+        {
+            $conf = array(
+                'redirection' => 2,
+                'user-agent' => 'CMS Woocommerce',
+                'headers' => array("Content-type" => "application/json;charset=UTF-8"),
+                'body' => json_encode(array('request' => $args))
+            );
+            $response = wp_remote_post('https://api.fondy.eu/api/capture/order_id', $conf);
+            $response_code = wp_remote_retrieve_response_code($response);
+            if ($response_code != 200) {
+                $error = "Return code is {$response_code}";
+                return array('result' => 'failture', 'messages' => $error);
+            }
+            $result = json_decode($response['body'], true);
+            return array('data' => $result['response']);
+        }
+
+        /**
+         * Process capture
+         * @param $order_id
+         * */
+        public function fondy_preorder_capture($order_id)
+        {
+            if (!$order_id) {
+                return;
+            }
+            $order = new WC_Order($order_id);
+            $fondy_args = array(
+                'order_id' => $order_id . self::ORDER_SEPARATOR . $this->fondy_unique,
+                'currency' => esc_attr(get_woocommerce_currency()),
+                'amount' => round($order->get_total() * 100),
+                'merchant_id' => esc_attr($this->merchant_id),
+            );
+            $fondy_args['signature'] = $this->getSignature($fondy_args, $this->salt);
+            $result = $this->get_capture($fondy_args);
+            if ($result['result'] == 'failture') {
+                $order->add_order_note('Transaction ERROR:<br/> ' . $result['messages']);
+            } else {
+                if ($result['data']['response_status'] == 'success') {
+                    $order->add_order_note(__('Fondy payment successful'));
+                } else {
+                    $request_id = '<br>Request_id: ' . $result['data']['request_id'];
+                    $order->add_order_note('Transaction: ' . $result['data']['response_status'] . '  <br/> ' . $result['data']['error_message'] . $request_id);
+                }
+            }
+        }
     }
 
     function fondy_plugin_action_links($links)
@@ -967,6 +1038,7 @@ function woocommerce_fondy_init()
         $methods[] = 'WC_fondy';
         return $methods;
     }
+
 
     add_action('wp_ajax_nopriv_generate_ajax_order_fondy_info', array(
         'WC_fondy',
