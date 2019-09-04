@@ -519,7 +519,7 @@ function woocommerce_fondy_init()
             }
 
 
-            if (WC_Pre_Orders_Order::order_contains_pre_order($order_id)) {
+            if (class_exists('WC_Pre_Orders_Order') && WC_Pre_Orders_Order::order_contains_pre_order($order_id)) {
                 if (WC_Pre_Orders_Order::order_requires_payment_tokenization($order_id)) {
                     $fondy_args['preauth'] = 'Y';
                     WC_Pre_Orders_Order::mark_order_as_pre_ordered($order_id);
