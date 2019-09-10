@@ -2,9 +2,9 @@
 Contributors: FONDY
 Tags: payments, payment gateway, woocommerce, online payment, merchant
 Requires at least: 3.5
-Tested up to: 5.2
+Tested up to: 5.2.3
 Requires PHP: 5.4
-Stable tag: 2.6.3
+Stable tag: 2.6.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
