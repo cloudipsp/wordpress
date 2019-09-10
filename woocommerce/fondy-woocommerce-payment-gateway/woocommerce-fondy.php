@@ -1000,7 +1000,7 @@ function woocommerce_fondy_init()
         public function process_pre_order_payments($order)
         {
             if (!$order) {
-                return;
+                return new WP_Error('fallen', 'Order not found');
             }
             $fondy_args = array(
                 'order_id' => $order->get_id() . self::ORDER_SEPARATOR . $this->fondy_unique,
