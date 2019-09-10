@@ -10,8 +10,8 @@ Domain Path: /languages
 Text Domain: fondy-woocommerce-payment-gateway
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-WC requires at least: 2.5.0
-WC tested up to: 3.7.0
+WC requires at least: 2.0.0
+WC tested up to: 3.6.5
 */
 
 if (!defined('ABSPATH')) {
