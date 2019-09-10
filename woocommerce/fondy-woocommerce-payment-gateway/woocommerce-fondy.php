@@ -143,7 +143,9 @@ function woocommerce_fondy_init()
             }
             add_action('woocommerce_receipt_fondy', array(&$this, 'receipt_page'));
             add_action('wp_enqueue_scripts', array($this, 'fondy_checkout_scripts'));
-            add_action('woocommerce_order_status_completed', array(&$this, 'fondy_preorder_capture'));
+            if (class_exists('WC_Pre_Orders_Order')) {
+                add_action('wc_pre_orders_process_pre_order_completion_payment_' . $this->id, array($this, 'process_pre_order_payments'));
+            }
         }
 
         /**
@@ -518,12 +520,8 @@ function woocommerce_fondy_init()
                 $fondy_args['subscription_callback_url'] = $this->getCallbackUrl();
             }
 
-
-            if (class_exists('WC_Pre_Orders_Order') && WC_Pre_Orders_Order::order_contains_pre_order($order_id)) {
-                if (WC_Pre_Orders_Order::order_requires_payment_tokenization($order_id)) {
-                    $fondy_args['preauth'] = 'Y';
-                    WC_Pre_Orders_Order::mark_order_as_pre_ordered($order_id);
-                }
+            if ($this->checkPreOrders($order_id)) {
+                $fondy_args['preauth'] = 'Y';
             }
             $fondy_args['signature'] = $this->getSignature($fondy_args, $this->salt);
 
@@ -860,10 +858,14 @@ function woocommerce_fondy_init()
                 and !$order->is_paid()
                 and $response['order_status'] == self::ORDER_APPROVED
                 and $total == $response['amount']) {
-                $order->payment_complete($response['order_id']);
-                $order->add_order_note(__('Fondy payment successful.<br/>FONDY ID: ', 'fondy-woocommerce-payment-gateway') . ' (' . $response['payment_id'] . ')');
-                if ($this->default_order_status and $this->default_order_status != 'default') {
-                    $order->update_status($this->default_order_status);
+                if ($this->checkPreOrders($orderId, true)) {
+                    WC_Pre_Orders_Order::mark_order_as_pre_ordered($order);
+                } else {
+                    $order->payment_complete();
+                    $order->add_order_note(__('Fondy payment successful.<br/>FONDY ID: ', 'fondy-woocommerce-payment-gateway') . ' (' . $response['payment_id'] . ')');
+                    if ($this->default_order_status and $this->default_order_status != 'default') {
+                        $order->update_status($this->default_order_status);
+                    }
                 }
             } elseif ($total != $response['amount']) {
                 $order->add_order_note(__('Transaction ERROR: amount incorrect<br/>FONDY ID: ', 'fondy-woocommerce-payment-gateway') . $response['payment_id']);
@@ -992,32 +994,55 @@ function woocommerce_fondy_init()
 
         /**
          * Process capture
-         * @param $order_id
+         * @param $order
+         * @return void
          * */
-        public function fondy_preorder_capture($order_id)
+        public function process_pre_order_payments($order)
         {
-            if (!$order_id) {
+            if (!$order) {
                 return;
             }
-            $order = new WC_Order($order_id);
             $fondy_args = array(
-                'order_id' => $order_id . self::ORDER_SEPARATOR . $this->fondy_unique,
+                'order_id' => $order->get_id() . self::ORDER_SEPARATOR . $this->fondy_unique,
                 'currency' => esc_attr(get_woocommerce_currency()),
                 'amount' => round($order->get_total() * 100),
                 'merchant_id' => esc_attr($this->merchant_id),
             );
             $fondy_args['signature'] = $this->getSignature($fondy_args, $this->salt);
             $result = $this->get_capture($fondy_args);
-            if ($result['result'] == 'failture') {
-                $order->add_order_note('Transaction ERROR:<br/> ' . $result['messages']);
-            } else {
-                if ($result['data']['response_status'] == 'success') {
-                    $order->add_order_note(__('Fondy payment successful'));
+            if (isset($result) && $result) {
+                if (isset($result['result']) && $result['result'] == 'failture') {
+                    $order->add_order_note('Transaction ERROR:<br/> ' . $result['messages']);
                 } else {
-                    $request_id = '<br>Request_id: ' . $result['data']['request_id'];
-                    $order->add_order_note('Transaction: ' . $result['data']['response_status'] . '  <br/> ' . $result['data']['error_message'] . $request_id);
+                    if ($result['data']['response_status'] == 'success' && $result['data']['capture_status'] == 'captured') {
+                        $order->add_order_note(__('Fondy payment successful.<br/>FONDY ID: ', 'fondy-woocommerce-payment-gateway') . ' (' . $result['data']['order_id'] . ')');
+                        $order->update_status('completed');
+                    } else {
+                        $request_id = '<br>Request_id: ' . $result['data']['request_id'];
+                        $order->add_order_note('Transaction: ' . $result['data']['response_status'] . '  <br/> ' . $result['data']['error_message'] . $request_id);
+                    }
                 }
             }
+        }
+
+        /**
+         * Check pre order class and order status
+         * @param $order_id
+         * @return boolean
+         * */
+        public function checkPreOrders($order_id, $withoutToken = false)
+        {
+            if (class_exists('WC_Pre_Orders_Order')
+                && WC_Pre_Orders_Order::order_contains_pre_order($order_id)) {
+                if ($withoutToken) {
+                    return true;
+                } else {
+                    if (WC_Pre_Orders_Order::order_requires_payment_tokenization($order_id)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 
