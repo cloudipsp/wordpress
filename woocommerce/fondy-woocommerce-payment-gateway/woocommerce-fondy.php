@@ -10,8 +10,8 @@ Domain Path: /languages
 Text Domain: fondy-woocommerce-payment-gateway
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-WC requires at least: 2.0.0
-WC tested up to: 3.6.5
+WC requires at least: 2.5.0
+WC tested up to: 3.7.0
 */
 
 if (!defined('ABSPATH')) {
@@ -1018,7 +1018,7 @@ function woocommerce_fondy_init()
                 } else {
                     if ($result['data']['response_status'] == 'success' && $result['data']['capture_status'] == 'captured') {
                         $order->add_order_note(__('Fondy payment successful.<br/>FONDY ID: ', 'fondy-woocommerce-payment-gateway') . ' (' . $result['data']['order_id'] . ')');
-                        $order->update_status('completed');
+                        $order->payment_complete();
                     } else {
                         $request_id = '<br>Request_id: ' . $result['data']['request_id'];
                         $order->add_order_note('Transaction: ' . $result['data']['response_status'] . '  <br/> ' . $result['data']['error_message'] . $request_id);
