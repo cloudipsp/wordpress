@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.6.5
+Version: 2.6.6
 Author: FONDY - Unified Payment Platform
 Author URI: https://fondy.eu/
 Domain Path: /languages
@@ -11,7 +11,7 @@ Text Domain: fondy-woocommerce-payment-gateway
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 2.5.0
-WC tested up to: 3.7.0
+WC tested up to: 3.7.1
 */
 
 if (!defined('ABSPATH')) {
@@ -476,6 +476,7 @@ function woocommerce_fondy_init()
             if (isset($data['additional_info'])) {
                 $data['additional_info'] = str_replace("\\", "", $data['additional_info']);
             }
+
             $data = array_filter($data, array($this, 'fondy_filter'));
             ksort($data);
 
@@ -526,22 +527,16 @@ function woocommerce_fondy_init()
             $fondy_args['signature'] = $this->getSignature($fondy_args, $this->salt);
 
             $out = '';
+            $url = WC()->session->get('session_token_' . $this->merchant_id . '_' . $order_id);
+            if (empty($url)) {
+                $url = $this->get_checkout($fondy_args);
+                WC()->session->set('session_token_' . $this->merchant_id . '_' . $order_id, $url);
+            }
             if ($this->page_mode == 'no') {
-                $fondy_args_array = array();
-                foreach ($fondy_args as $key => $value) {
-                    $fondy_args_array[] = "<input type='hidden' name='$key' value='$value'/>";
-                }
-                $out .= '  <form action="' . $this->liveurl . '" method="post" id="fondy_payment_form">
-                    ' . implode('', $fondy_args_array) . '
-                <input type="submit" id="submit_fondy_payment_form" value="' . __('Pay via Fondy.eu', 'fondy-woocommerce-payment-gateway') . '" />';
+                $out .= '<a class="button alt f-custom-button" href="'.$url.'" id="submit_fondy_payment_form">' . __('Pay via Fondy.eu', 'fondy-woocommerce-payment-gateway') . '</a>';
                 if ($this->page_mode_instant == 'yes')
                     $out .= "<script type='text/javascript'> document.getElementById('submit_fondy_payment_form').click(); </script>";
             } else {
-                $url = WC()->session->get('session_token_' . $this->merchant_id . '_' . $order_id);
-                if (empty($url)) {
-                    $url = $this->get_checkout($fondy_args);
-                    WC()->session->set('session_token_' . $this->merchant_id . '_' . $order_id, $url);
-                }
                 $out = '
                     <div id="checkout">
                     <div id="checkout_wrapper"></div>
@@ -593,8 +588,16 @@ function woocommerce_fondy_init()
                 $error = "Return code is {$response_code}";
                 wp_die($error);
             }
+
             if ($result->response->response_status == 'failure') {
-                wp_die($result->response->error_message);
+                if($result->response->error_code == 1013 && !$this->checkPreOrders($args['order_id'], true)) {
+                    $args['order_id'] = $args['order_id'] . self::ORDER_SEPARATOR . time();
+                    unset($args['signature']);
+                    $args['signature'] = $this->getSignature($args, $this->salt);
+                    return $this->get_checkout($args);
+                } else {
+                    wp_die($result->response->error_message);
+                }
             }
             $url = $result->response->checkout_url;
             return $url;
@@ -997,8 +1000,8 @@ function woocommerce_fondy_init()
         /**
          * Process capture
          * @param $order
-         * @return void
-         * */
+         * @return WP_Error
+         */
         public function process_pre_order_payments($order)
         {
             if (!$order) {
@@ -1030,8 +1033,9 @@ function woocommerce_fondy_init()
         /**
          * Check pre order class and order status
          * @param $order_id
+         * @param bool $withoutToken
          * @return boolean
-         * */
+         */
         public function checkPreOrders($order_id, $withoutToken = false)
         {
             if (class_exists('WC_Pre_Orders_Order')
