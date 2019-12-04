@@ -11,8 +11,8 @@ Text Domain: woocommerce-fondy
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
-define( 'IMGDIR', WP_PLUGIN_URL . "/" . plugin_basename( dirname( __FILE__ ) ) . '/assets/img/' );
 defined( 'ABSPATH' ) or exit;
+define( 'FONDY_BASE_PATH' ,  plugin_dir_url( __FILE__ ) );
 if ( ! class_exists( 'WC_PaymentFondy' ) ) :
 	class WC_PaymentFondy {
 		private $subscription_support_enabled = false;

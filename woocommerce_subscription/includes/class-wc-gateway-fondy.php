@@ -21,18 +21,18 @@ class WC_Fondy extends WC_Payment_Gateway {
 		$this->has_fields         = false;
 		$this->init_form_fields();
 		$this->init_settings();
-		if ( $this->settings['showlogo'] == "yes" ) {
-			$this->icon = IMGDIR . 'logo.png';
+		if ( $this->get_option('showlogo') == "yes" ) {
+			$this->icon = FONDY_BASE_PATH . 'assets/img/logo.png';
 		}
 		$this->liveurl          = 'https://api.fondy.eu/api/checkout/redirect/';
-		$this->title            = $this->settings['title'];
-		$this->redirect_page_id = $this->settings['redirect_page_id'];
-		$this->merchant_id      = $this->settings['merchant_id'];
-		$this->salt             = $this->settings['salt'];
-		$this->styles           = $this->settings['styles'];
-		$this->description      = $this->settings['description'];
-		$this->page_mode        = $this->settings['page_mode'];
-		$this->msg['message']   = "";
+        $this->title = $this->get_option('title');
+        $this->redirect_page_id = $this->get_option('redirect_page_id');
+        $this->merchant_id = $this->get_option('merchant_id');
+        $this->salt = $this->get_option('salt');
+        $this->description = $this->get_option('description');
+        $this->page_mode = $this->get_option('page_mode');
+
+        $this->msg['message']   = "";
 		$this->msg['class']     = "";
 		$this->supports         = array(
 			'products',
@@ -127,15 +127,6 @@ class WC_Fondy extends WC_Payment_Gateway {
 				'type'        => 'select',
 				'options'     => $this->fondy_get_pages( 'Select Page' ),
 				'description' => __( 'URL of success page', 'woocommerce-fondy' ),
-				'desc_tip'    => true
-			),
-			'styles'           => array(
-				'title'       => __( 'Styles chekout page:', 'woocommerce-fondy' ),
-				'type'        => 'textarea',
-				'default'     => __( "'html , body' : {
-														  'overflow' : 'hidden'
-														   }," ),
-				'description' => __( 'You can find example here http://jsfiddle.net/8h65h91t/', 'woocommerce-fondy' ),
 				'desc_tip'    => true
 			)
 		);
@@ -235,14 +226,10 @@ class WC_Fondy extends WC_Payment_Gateway {
 			$url = $this->get_checkout( $fondy_args );
 			$out .= '
 			    <script>
-			    var checkoutStyles = {
-			    		' . $this->styles . '
-			    }
 			    function checkoutInit(url) {
 			    	$ipsp("checkout").scope(function() {
 					this.setCheckoutWrapper("#checkout_wrapper");
 					this.addCallback(__DEFAULTCALLBACK__);
-					this.setCssStyle(checkoutStyles);
 					this.action("show", function(data) {
 						jQuery("#checkout_loader").remove();
 						jQuery("#checkout").show();
