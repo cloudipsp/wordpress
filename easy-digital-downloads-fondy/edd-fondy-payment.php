@@ -232,7 +232,7 @@ if (!class_exists('EDD_Fondy')) :
                     $return_url = add_query_arg('payment-confirmation', 'fondy', get_permalink($edd_options['success_page']));
                     $listener_url = trailingslashit(home_url()) . '?fondy=notify';
                     $merchant_data = stripslashes_deep(html_entity_decode(wp_strip_all_tags(edd_get_purchase_summary($purchase_data, false)), ENT_COMPAT, 'UTF-8'));
-                    $order_desc = sprintf(__('Order №: %s', 'edd_fondy'), $payment);
+                    $order_desc = sprintf(__('Order #: %s', 'edd_fondy'), $payment);
                     $amount = round($purchase_data['price'] - $purchase_data['tax'], 2) * 100;
 
                     $fondy_args = array(
