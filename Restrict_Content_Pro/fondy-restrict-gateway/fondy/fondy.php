@@ -18,6 +18,7 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
         $this->supports[] = 'one-time';
         $this->supports[] = 'recurring';
         $this->supports[] = 'fees';
+        $this->supports[] = 'trial';
         $this->api_endpoint = 'https://api.fondy.eu/api/checkout/url/';
         if (!class_exists('Fondy_API')) {
             require_once RCP_FONDY_DIR . '/fondy/fondy.inc.php';
@@ -40,11 +41,14 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
             $amount = $this->initial_amount;
         }
         $member = new RCP_Member($this->user_id);
+
         if ($this->is_trial()) {
             $rcp_payments_db->update($this->payment->id, array(
                 'payment_type' => 'Fondy',
                 'status' => 'complete'
             ));
+
+            $amount = 1;
         }
         /**
          * Cancel existing subscription if the member just upgraded to another one.
@@ -84,7 +88,7 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
             'sender_email' => $member->user_email
         );
 
-        if ($rcp_fondy_options['fondy_reccuring'] == true and $this->auto_renew) {
+        if ($rcp_fondy_options['fondy_reccuring'] == true and ($this->auto_renew || $this->is_trial())) {
 
             $fondy_args['recurring_data'] = array(
                 'start_time' => date('Y-m-d', strtotime('+ ' . $this->subscription_data['length'] . ' ' . $this->subscription_data['length_unit'])),
@@ -272,6 +276,8 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
                 'gateway' => 'Fondy',
                 'transaction_id' => $trans_id,
                 'status' => 'complete'
+
+
             );
             $rcp_payments = new RCP_Payments();
 
