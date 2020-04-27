@@ -43,10 +43,10 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
         $member = new RCP_Member($this->user_id);
 
         if ($this->is_trial()) {
-            $rcp_payments_db->update($this->payment->id, array(
+            /*$rcp_payments_db->update($this->payment->id, array(
                 'payment_type' => 'Fondy',
                 'status' => 'complete'
-            ));
+            ));*/
 
             $amount = 1;
         }
@@ -66,8 +66,8 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
             }
         }
 
-        $return = add_query_arg( array( 'rcp-confirm' => 'fondy', 'membership_id' => $this->membership->get_id() ), get_permalink( $rcp_options['registration_page'] ) );
-        if(isset($this->return_url)) {
+        $return = add_query_arg(array('rcp-confirm' => 'fondy', 'membership_id' => $this->membership->get_id()), get_permalink($rcp_options['registration_page']));
+        if (isset($this->return_url)) {
             $return = $this->return_url;
         }
 
@@ -91,7 +91,7 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
         if ($rcp_fondy_options['fondy_reccuring'] == true and ($this->auto_renew || $this->is_trial())) {
 
             $fondy_args['recurring_data'] = array(
-                'start_time' => date('Y-m-d', strtotime('+ ' . $this->subscription_data['length'] . ' ' . $this->subscription_data['length_unit'])),
+                'start_time' => date('Y-m-d', strtotime($this->is_trial() ? $this->subscription_start_date : '+ ' . $this->subscription_data['length'] . ' ' . $this->subscription_data['length_unit'])),
                 'amount' => round($this->subscription_data['recurring_price'] * 100),
                 'every' => intval($this->subscription_data['length']),
                 'period' => $this->subscription_data['length_unit'],
@@ -161,12 +161,12 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
     /**
      * Add credit card form
      *
-     * @since 2.1
      * @return string
+     * @since 2.1
      */
     public function fields()
     {
-        return __('Вы будете перенаправлены на страницу оплаты', 'fondy_rcp');
+        return ($_POST['level_has_trial']) === 'true' ? __('Вы будете перенаправлены на страницу оплаты для привязки карты<br>При этом будет удержана сумма 1$ с последующим возвращением', 'fondy_rcp') : __('Вы будете перенаправлены на страницу оплаты', 'fondy_rcp');
     }
 
     /**
