@@ -166,7 +166,9 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
      */
     public function fields()
     {
-        return ($_POST['level_has_trial']) === 'true' ? __('Вы будете перенаправлены на страницу оплаты для привязки карты<br>При этом будет удержана сумма 1$ с последующим возвращением', 'fondy_rcp') : __('Вы будете перенаправлены на страницу оплаты', 'fondy_rcp');
+        $currency = get_option('rcp_settings')['currency'] ?? 'USD';
+
+        return ($_POST['level_has_trial']) === 'true' ? sprintf(__('Вы будете перенаправлены на страницу оплаты для привязки карты<br>При этом будет удержана сумма 1 %s с последующим возвращением', 'fondy_rcp'), $currency) : __('Вы будете перенаправлены на страницу оплаты', 'fondy_rcp');
     }
 
     /**
