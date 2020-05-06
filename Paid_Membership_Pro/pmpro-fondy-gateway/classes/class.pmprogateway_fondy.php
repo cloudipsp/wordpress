@@ -186,7 +186,12 @@ class PMProGateway_fondy extends PMProGateway
     {
         global $gateway, $pmpro_requirebilling;
 
-        //show our submit buttons
+        if (version_compare('1.8.13.6', PMPRO_VERSION, '<=')) {
+            $text_domain = 'paid-memberships-pro';
+        } else {
+            $text_domain = 'pmpro';
+        }
+
         ?>
 
         <span id="pmpro_fondy_checkout"
@@ -194,9 +199,9 @@ class PMProGateway_fondy extends PMProGateway
 				<input type="hidden" name="submit-checkout" value="1"/>
 				<input type="submit" class="pmpro_btn pmpro_btn-submit-checkout"
                        value="<?php if ($pmpro_requirebilling) {
-                           _e('Submit and Check Out', 'pmpro');
+                           _e('Submit and Check Out', $text_domain);
                        } else {
-                           _e('Submit and Confirm', 'pmpro');
+                           _e('Submit and Confirm', $text_domain);
                        } ?> &raquo;"/>
 		</span>
         <?php
