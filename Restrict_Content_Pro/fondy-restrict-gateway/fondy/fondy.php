@@ -85,7 +85,8 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
             'currency' => $this->currency,
             'server_callback_url' => add_query_arg('listener', 'fondy', home_url('index.php')),
             'response_url' => $return,
-            'sender_email' => $member->user_email
+            'sender_email' => $member->user_email,
+            'verification'  => $this->is_trial() ? 'y' : 'n'
         );
 
         if ($rcp_fondy_options['fondy_reccuring'] == true and ($this->auto_renew || $this->is_trial())) {
