@@ -14,7 +14,7 @@ wordpress
 1. Go to Woocommerce -> Settings -> Payment.
 2. Go to tab "Fondy". If it doesn't exist - activate the plugin.
 3. Allow this payment method (Enable). Name it "Online Payments".
-4. Fill out the fields `Merchant Key` and `Merchant Salt`.
+4. Fill out the fields `Merchant ID` and `Payment Key`.
 5. Select `Return Page` where users will be returned after payment.
 6. Save settings.
 
@@ -34,7 +34,7 @@ wordpress
 1. Зайдите в "WooCommerce > Настройки > Оплата"
 2. Зайдите на таб "Fondy". Если его нет - активируйте плагин.
 3. Разрешите этот способ оплаты (Enable). Назовите его "Online Payments".
-4. Заполните поля `Merchant Key` и `Merchant Salt` данными полученными от fondy.eu.
+4. Заполните поля `ID мерчанта` и `Ключ платежа` данными полученными от fondy.eu.
 5. Выберите `Return Page` куда будет напрявлять пользователей платежная система после оплаты.
 6. Сохраните настройки.
 
