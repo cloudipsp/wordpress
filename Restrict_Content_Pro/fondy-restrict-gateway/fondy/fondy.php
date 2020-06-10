@@ -284,48 +284,36 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
             rcp_log(sprintf('Processing Fondy. Payment status: %s', $posted['order_status']));
 
             switch (strtolower($posted['order_status'])) :
-                case 'approved' :
-
+                case 'approved':
                     if ($member->just_upgraded() && $member->can_cancel()) {
                         $cancelled = $member->cancel_payment_profile(false);
+
                         if ($cancelled) {
-
                             $member->set_payment_profile_id('');
-
                         }
                     }
 
-                    if (empty($payment_data['transaction_id']) || $rcp_payments->payment_exists($payment_data['transaction_id'])) {
-                        rcp_log(sprintf('Not inserting Fondy web_accept payment. Transaction ID not given or payment already exists. ID: %s', $payment_data['transaction_id']));
+                    if (!empty($payment_data['transaction_id']) && $rcp_payments->payment_exists($payment_data['transaction_id'])) { // if transaction is already exists, just update
                         $rcp_payments->update($payment_data['transaction_id'], $payment_data);
-                        if (!empty($posted['rectoken'])) {
-                            $member->set_payment_profile_id($posted['rectoken']);
-                            $pending_payment_id = $member->get_pending_payment_id();
+                    } elseif (!empty($payment_data['payment_id'])) {
+                        $member->set_payment_profile_id($posted['payment_id']);
 
-                            if (!empty($pending_payment_id)) {
+                        if ($pending_id = $member->get_pending_payment_id()) { // has pending payment, just update
+                            $rcp_payments->update($pending_id, $payment_data);
 
-                                $payment_id = $pending_payment_id;
-                                $member->set_recurring(true);
+                            do_action('rcp_gateway_payment_processed', $member, $pending_id, $this);
+                        } else {
+                            $payment_data['transaction_type'] = 'renewal';
+                            $payment_id = $rcp_payments->insert($payment_data);
 
-                                // This activates the membership.
-                                $rcp_payments->update($pending_payment_id, $payment_data);
+                            $member->renew(true);
 
-                            } else {
-                                $payment_id = $rcp_payments->insert($payment_data);
-                                $member->renew(true);
-                            }
                             do_action('rcp_webhook_recurring_payment_processed', $member, $payment_id, $this);
                             do_action('rcp_gateway_payment_processed', $member, $payment_id, $this);
                         }
-                    } else {
-                        $member->set_payment_profile_id($posted['payment_id']);
-                        $payment_id = $rcp_payments->insert($payment_data);
-                        $member->renew(true);
-                        do_action('rcp_webhook_recurring_payment_processed', $member, $payment_id, $this);
-                        do_action('rcp_gateway_payment_processed', $member, $payment_id, $this);
                     }
-                    break;
 
+                    break;
                 case 'declined' :
                     rcp_log('Processing Fondy declined webhook.');
                     $member->cancel();
