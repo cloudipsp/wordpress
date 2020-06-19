@@ -78,6 +78,9 @@ function woocommerce_fondy_init()
         public $fondy_unique;
         public $msg = array();
 
+        private $subscription_support_enabled = false;
+        private static $instance;
+
         public function __construct()
         {
             $this->id = 'fondy';
@@ -114,8 +117,13 @@ function woocommerce_fondy_init()
             $this->supports = array(
                 'products',
                 'refunds',
-                'pre-orders'
+                'pre-orders',
+                'subscriptions',
+                'subscription_reactivation',
+                'subscription_amount_changes',
+                'subscription_suspension'
             );
+
             if (version_compare(WOOCOMMERCE_VERSION, '2.0.0', '>=')) {
                 /* 2.0.0 */
                 add_action('woocommerce_api_' . strtolower(get_class($this)), array(
@@ -143,9 +151,24 @@ function woocommerce_fondy_init()
             }
             add_action('woocommerce_receipt_fondy', array(&$this, 'receipt_page'));
             add_action('wp_enqueue_scripts', array($this, 'fondy_checkout_scripts'));
+
             if (class_exists('WC_Pre_Orders_Order')) {
                 add_action('wc_pre_orders_process_pre_order_completion_payment_' . $this->id, array($this, 'process_pre_order_payments'));
             }
+
+            if ( class_exists( 'WC_Subscriptions_Order' ) && function_exists( 'wcs_create_renewal_order' ) ) {
+                $this->subscription_support_enabled = true;
+
+                require_once( dirname( __FILE__ ) . '/includes/wc-fondy-subscriptions.php' );
+            }
+        }
+
+        public static function get_instance() {
+            if ( null === self::$instance ) {
+                self::$instance = new self();
+            }
+
+            return self::$instance;
         }
 
         /**
@@ -1066,7 +1089,12 @@ function woocommerce_fondy_init()
      **/
     function woocommerce_add_fondy_gateway($methods)
     {
-        $methods[] = 'WC_fondy';
+        if ( $this->subscription_support_enabled ) {
+            $methods[] = 'WC_Fondy_Subscriptions';
+        } else {
+            $methods[] = 'WC_Fondy';
+        }
+
         return $methods;
     }
 
@@ -1081,4 +1109,6 @@ function woocommerce_fondy_init()
     ), 99);
     add_filter('woocommerce_payment_gateways', 'woocommerce_add_fondy_gateway');
     add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'fondy_plugin_action_links');
+
+    $GLOBALS['wc_fondy'] = WC_fondy::get_instance();
 }
