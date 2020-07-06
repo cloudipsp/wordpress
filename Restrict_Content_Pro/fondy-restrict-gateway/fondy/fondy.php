@@ -298,7 +298,7 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
 
                     if (!empty($payment_data['transaction_id']) && $rcp_payments->payment_exists($payment_data['transaction_id'])) { // if transaction is already exists, just update
                         $rcp_payments->update($payment_data['transaction_id'], $payment_data);
-                    } elseif (!empty($payment_data['payment_id'])) {
+                    } else {
                         $member->set_payment_profile_id($posted['payment_id']);
 
                         if ($pending_id = $member->get_pending_payment_id()) { // has pending payment, just update
