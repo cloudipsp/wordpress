@@ -3,20 +3,23 @@
 
 require_once(dirname(__FILE__) . "/fondy.lib.php");
 
-/**
- * PMProGateway_gatewayname Class
- *
- * Handles fondy integration.
- *
- */
-if (!class_exists('PMProGateway')) {
-    return;
-} else {
-    add_action('init', array('PMProGateway_fondy', 'init'));
-}
-
 class PMProGateway_fondy extends PMProGateway
 {
+    static function install()
+    {
+        file_put_contents(__DIR__ . '/success.txt', 'installed');
+        global $wpdb;
+
+        $wpdb->query('ALTER TABLE $wpdb->pmpro_membership_orders ADD fondy_token TEXT');
+    }
+
+    static function uninstall()
+    {
+        global $wpdb;
+
+        $wpdb->query('ALTER TABLE $wpdb->pmpro_membership_orders DROP COLUMN fondy_token');
+    }
+
     function PMProGateway($gateway = null)
     {
         $this->gateway = $gateway;
@@ -31,13 +34,6 @@ class PMProGateway_fondy extends PMProGateway
      */
     static function init()
     {
-        global $wpdb;
-        $result = $wpdb->query("SELECT fondy_token from `$wpdb->pmpro_membership_orders` LIMIT 1");
-        if (!$result) {
-            $wpdb->query("ALTER TABLE $wpdb->pmpro_membership_orders ADD fondy_token TEXT");
-        }
-
-
         //make sure fondy is a gateway option
         add_filter('pmpro_gateways', array('PMProGateway_fondy', 'pmpro_gateways'));
 
