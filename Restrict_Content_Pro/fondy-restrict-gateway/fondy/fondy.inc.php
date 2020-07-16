@@ -27,7 +27,6 @@ class Fondy_API
 
     public static function isPaymentValid($fondySettings, $response, $base64_data, $sign)
     {
-
         if ($fondySettings['mid'] != $response['merchant_id']) {
             return 'An error has occurred during payment. Merchant data is incorrect.';
         }
@@ -40,10 +39,14 @@ class Fondy_API
         if (isset($response['merchant_data'])) {
             $response['merchant_data'] = stripslashes($response['merchant_data']);
         }
-        if ($sign != sha1($fondySettings['secret_key'] . '|' . $base64_data)) {
+        if (!empty($base64_data)) {
+            if ($sign != sha1($fondySettings['secret_key'] . '|' . $base64_data)) {
+                return 'An error has occurred during payment. Signature is not valid.';
+            }
+        } elseif ($sign != self::getSignature($response, $fondySettings['secret_key'])) {
             return 'An error has occurred during payment. Signature is not valid.';
         }
+
         return true;
     }
-
 }

@@ -20,6 +20,7 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
         $this->supports[] = 'fees';
         $this->supports[] = 'trial';
         $this->api_endpoint = 'https://api.fondy.eu/api/checkout/url/';
+
         if (!class_exists('Fondy_API')) {
             require_once RCP_FONDY_DIR . '/fondy/fondy.inc.php';
         }
@@ -35,11 +36,13 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
         global $rcp_options;
         global $rcp_fondy_options;
         global $rcp_payments_db;
+
         if ($this->auto_renew) {
             $amount = $this->initial_amount;
         } else {
             $amount = $this->initial_amount;
         }
+
         $member = new RCP_Member($this->user_id);
 
         if ($this->is_trial()) {
@@ -81,7 +84,7 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
             'server_callback_url' => add_query_arg('listener', 'fondy', home_url('index.php')),
             'response_url' => $return,
             'sender_email' => $member->user_email,
-            'verification'  => $this->is_trial() ? 'y' : 'n'
+            'verification' => $this->is_trial() ? 'y' : 'n'
         );
 
         if ($rcp_fondy_options['fondy_reccuring'] == true and ($this->auto_renew || $this->is_trial())) {
@@ -187,34 +190,40 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
             return;
         }
 
-        file_put_contents(__DIR__ . '/data.txt', file_get_contents("php://input"));
         global $rcp_fondy_options;
+
         rcp_log('Starting to process Fondy webhook.');
 
         if (empty($_POST)) {
             $callback = json_decode(file_get_contents("php://input"));
+
             if (empty($callback)) {
                 die('go away!');
             }
-            $_POST = array();
+
+            $_POST = [];
+
             foreach ($callback as $key => $val) {
                 $_POST[esc_sql($key)] = esc_sql($val);
             }
         }
 
         $posted = apply_filters('rcp_ipn_post', $_POST);
-        $base64_data = $posted['data'];
         $sign = $posted['signature'];
-        $posted = json_decode(base64_decode($posted['data']), true)['order'];
+
+        if (isset($posted['data'])) { // new protocol
+            $base64_data = $posted['data'];
+            $posted = json_decode(base64_decode($posted['data']), true)['order'];
+        }
 
         $fondySettings = array(
             'mid' => $rcp_fondy_options['fondy_merchant_id'],
             'secret_key' => $rcp_fondy_options['fondy_secret']
         );
-        $paymentInfo = Fondy_API::isPaymentValid($fondySettings, $posted, $base64_data, $sign);
+        $paymentInfo = Fondy_API::isPaymentValid($fondySettings, $posted, $base64_data ?? '', $sign);
 
         if ($paymentInfo === true) {
-            $exploded = explode('#', $posted['order_id'] ?? $posted['parent_order_id']);
+            $exploded = explode('#', $posted['parent_order_id'] ?: $posted['order_id']);
             $user_id = $exploded[1];
 
             if (empty($user_id) && !empty($posted['sender_email'])) {
@@ -266,7 +275,7 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
                 'date' => date('Y-m-d H:i:s', strtotime($posted['order_time'])),
                 'subscription' => $subscription_level->name,
                 'payment_type' => 'Fondy Credit Card',
-                'subscription_key' => $data['subscription_key'],
+                'subscription_key' => $member->get_subscription_key(),
                 'amount' => $member->is_trialing() ? 0 : $amount,
                 'fees' => $amount,
                 'subtotal' => $subtotal,
@@ -294,7 +303,7 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
                         $rcp_payments->update($pending_id, $payment_data);
 
                         do_action('rcp_gateway_payment_processed', $member, $pending_id, $this);
-                    } elseif (isset($posted['parent_order_id']) && $rcp_payments->payment_exists($payment_data['transaction_id'])) { // recurring and payment already exists
+                    } elseif (isset($posted['parent_order_id']) && !$rcp_payments->payment_exists($payment_data['transaction_id'])) { // recurring and payment already exists
                         $payment_data['transaction_type'] = 'renewal';
                         $payment_id = $rcp_payments->insert($payment_data);
 
@@ -323,7 +332,6 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
             endswitch;
 
         } else {
-
             rcp_log('Error: ' . $paymentInfo);
             die;
         }
