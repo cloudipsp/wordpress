@@ -70,7 +70,7 @@ class RCP_Payment_Gateway_Fondy extends RCP_Payment_Gateway
         }
 
         $fondy_args = array(
-            'order_id' => $this->payment->id . '#' . $member->ID,
+            'order_id' => $this->payment->id . '#' . $member->ID . '#' . time(),
             'merchant_id' => $rcp_fondy_options['fondy_merchant_id'],
             'order_desc' => $this->subscription_name,
             'amount' => round($amount * 100),
