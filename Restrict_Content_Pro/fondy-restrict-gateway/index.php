@@ -3,7 +3,7 @@
 Plugin Name: Restrict Content Pro - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for Restrict Content.
-Version: 1.0.2
+Version: 1.0.3
 Author: Dmitriy Miroshnikov
 Author URI: https://fondy.eu/
 Domain Path: /languages
@@ -18,7 +18,6 @@ add_action('plugins_loaded', 'pw_rcp_register_fondy_mainClass', 99);
 
 function pw_rcp_register_fondy_gateway($gateways)
 {
-
     $gateways['Fondy'] = array(
         'label' => 'Fondy',
         'admin_label' => 'Fondy',
