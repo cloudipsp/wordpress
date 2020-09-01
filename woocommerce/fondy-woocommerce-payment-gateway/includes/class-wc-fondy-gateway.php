@@ -876,7 +876,7 @@ class WC_fondy extends WC_Payment_Gateway
                     $order->update_status($this->default_order_status);
                 }
             }
-        } elseif ($total != $response['amount']) {
+        } elseif ($total != $response['amount'] and $response['tran_type'] != 'verification') {
             $order->add_order_note(__('Transaction ERROR: amount incorrect<br/>FONDY ID: ', 'fondy-woocommerce-payment-gateway') . $response['payment_id']);
             if ($this->declined_order_status and $this->declined_order_status != 'default') {
                 $order->update_status($this->declined_order_status);
