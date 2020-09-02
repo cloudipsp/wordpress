@@ -1,11 +1,17 @@
 <?php
 /*
 Plugin Name: EDD Fondy Payment
+Plugin URI: https://fondy.eu
 Description: Fondy Payment integration for EDD plugin
-Version: 1.0.0
+Version: 1.0.2
+Domain Path: /languages
 Text Domain: edd_fondy
-Author: Dmitriy Miroshnikov
-License: GPL version 2 or later
+Author: FONDY - Unified Payment Platform
+Author URI: https://fondy.eu/
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+EDD requires at least: 2.0.0
+EDD tested up to: 2.9.24
 */
 
 if (!class_exists('EDD_Fondy')) :
@@ -58,7 +64,7 @@ if (!class_exists('EDD_Fondy')) :
         private function __construct($file)
         {
 
-            $this->version = '1.0.0';
+            $this->version = '1.0.2';
             $this->file = $file;
             $this->plugin_url = trailingslashit(plugins_url('', $plugin = $file));
             $this->plugin_path = trailingslashit(dirname($file));
