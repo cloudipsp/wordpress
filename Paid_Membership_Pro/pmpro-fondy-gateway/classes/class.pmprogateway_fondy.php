@@ -312,7 +312,7 @@ class PMProGateway_fondy extends PMProGateway
             $fondy_args['recurring_data'] =
                 array(
                     'start_time' => date('Y-m-d', strtotime('+ ' . intval($order->BillingFrequency) . ' ' . $period)),
-                    'amount' => $order->PaymentAmount * 100,
+                    'amount' => round($order->PaymentAmount * 100),
                     'every' => intval($order->BillingFrequency),
                     'period' => $period,
                     'state' => 'y',
