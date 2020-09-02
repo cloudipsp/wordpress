@@ -3,10 +3,10 @@
 Plugin Name: PmP Fondy Payment
 Plugin URI: https://fondy.eu
 Description: Fondy Gateway for Paid Memberships Pro
-Version: 1.0
+Version: 1.0.3
 Domain Path: /
 Text Domain: fondy
-Author: Dmitriy Miroshnikov
+Author: FONDY - Unified Payment Platform
 Author URI: https://fondy.eu/
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
