@@ -4,7 +4,7 @@ Tags: payments, payment gateway, woocommerce, online payment, merchant
 Requires at least: 3.5
 Tested up to: 5.5
 Requires PHP: 5.4
-Stable tag: 2.6.7
+Stable tag: 2.6.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -207,3 +207,7 @@ Added instant redirect
 Styles moved to merchant portal
 = 2.6.5 =
 Added pre-orders
+= 2.6.7 =
+Added subscription
+= 2.6.8 =
+Refund fix
