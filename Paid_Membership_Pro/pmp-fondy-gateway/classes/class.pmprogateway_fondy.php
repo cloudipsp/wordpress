@@ -37,6 +37,11 @@ class PMProGateway_fondy extends PMProGateway
         //make sure fondy is a gateway option
         add_filter('pmpro_gateways', array('PMProGateway_fondy', 'pmpro_gateways'));
 
+        //add plugin setting button
+        add_filter( 'plugin_action_links_' . plugin_basename(PMPRO_FONDY_DIR . '/pmpro-fondy-gateway.php'),
+            array('PMProGateway_fondy', 'plugin_action_links')
+        );
+
         //add fields to payment settings
         add_filter('pmpro_payment_options', array('PMProGateway_fondy', 'pmpro_payment_options'));
         add_filter('pmpro_payment_option_fields', array(
@@ -116,6 +121,18 @@ class PMProGateway_fondy extends PMProGateway
         $options = array_merge($fondy_options, $options);
 
         return $options;
+    }
+
+    /**
+     * add plugin setting button
+     *
+     * @param $links
+     * @return mixed
+     */
+    public function plugin_action_links($links){
+        $settings_link = '<a href="'. admin_url('admin.php?page=pmpro-paymentsettings') .'">'. __("Settings") .'</a>';
+        array_unshift( $links, $settings_link );
+        return $links;
     }
 
     /**
