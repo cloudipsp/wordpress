@@ -37,6 +37,14 @@ class PMProGateway_fondy extends PMProGateway
         //make sure fondy is a gateway option
         add_filter('pmpro_gateways', array('PMProGateway_fondy', 'pmpro_gateways'));
 
+        //add plugin setting button
+        add_filter( 'plugin_action_links_' . plugin_basename(PMPRO_FONDY_DIR . '/pmpro-fondy-gateway.php'),
+            array('PMProGateway_fondy', 'plugin_action_links')
+        );
+
+        //add plugin doc button
+        add_filter( 'plugin_row_meta', array('PMProGateway_fondy', 'plugin_row_meta'), 10, 2);
+
         //add fields to payment settings
         add_filter('pmpro_payment_options', array('PMProGateway_fondy', 'pmpro_payment_options'));
         add_filter('pmpro_payment_option_fields', array(
@@ -119,6 +127,39 @@ class PMProGateway_fondy extends PMProGateway
     }
 
     /**
+     * add plugin setting button
+     *
+     * @param $links
+     * @return mixed
+     */
+    public function plugin_action_links($links)
+    {
+        $settings_link = '<a href="'. admin_url('admin.php?page=pmpro-paymentsettings') .'">'. __("Settings") .'</a>';
+        array_unshift( $links, $settings_link );
+
+        return $links;
+    }
+
+    /**
+     * add plugin row buttons
+     *
+     * @param $links
+     * @param $file
+     * @return array
+     */
+    public function plugin_row_meta($links, $file)
+    {
+        if(strpos($file, 'pmpro-fondy-gateway.php') !== false) {
+            $row_links = array(
+                '<a href="https://fondy.eu/en/cms/wordpress/wordpress-paid-membership-pro/" title="' . __('View Documentation', 'pmp-fondy-payment') . '">' . __('Docs', 'pmp-fondy-payment') . '</a>',
+            );
+            $links = array_merge( $links, $row_links );
+        }
+
+        return $links;
+    }
+
+    /**
      * Display fields for fondy options.
      *
      * @since 1.8
@@ -129,12 +170,12 @@ class PMProGateway_fondy extends PMProGateway
         <tr class="pmpro_settings_divider gateway gateway_fondy"
             <?php if ($gateway != "fondy") { ?>style="display: none;"<?php } ?>>
             <td colspan="2">
-                <?php _e('Fondy Settings', 'fondy'); ?>
+                <?php _e('Fondy Settings', 'pmp-fondy-payment'); ?>
             </td>
         </tr>
         <tr class="gateway gateway_fondy" <?php if ($gateway != "fondy") { ?>style="display: none;"<?php } ?>>
             <th scope="row" valign="top">
-                <label for="fondy_merchantid"><?php _e('Merchant ID', 'fondy'); ?>:</label>
+                <label for="fondy_merchantid"><?php _e('Merchant ID', 'pmp-fondy-payment'); ?>:</label>
             </th>
             <td>
                 <input type="text" id="fondy_merchantid" name="fondy_merchantid" size="60"
@@ -143,7 +184,7 @@ class PMProGateway_fondy extends PMProGateway
         </tr>
         <tr class="gateway gateway_fondy" <?php if ($gateway != "fondy") { ?>style="display: none;"<?php } ?>>
             <th scope="row" valign="top">
-                <label for="fondy_securitykey"><?php _e('Secret Key', 'fondy'); ?>:</label>
+                <label for="fondy_securitykey"><?php _e('Secret Key', 'pmp-fondy-payment'); ?>:</label>
             </th>
             <td>
                 <textarea id="fondy_securitykey" name="fondy_securitykey" rows="3"
@@ -365,10 +406,10 @@ class PMProGateway_fondy extends PMProGateway
 
         if (is_wp_error($request)) {
 
-            $error = '<p>' . __('An unidentified error occurred.', 'fondy') . '</p>';
+            $error = '<p>' . __('An unidentified error occurred.', 'pmp-fondy-payment') . '</p>';
             $error .= '<p>' . $request->get_error_message() . '</p>';
 
-            wp_die($error, __('Error', 'fondy'), array('response' => '401'));
+            wp_die($error, __('Error', 'pmp-fondy-payment'), array('response' => '401'));
 
         } elseif (200 == $code && 'OK' == $message) {
 
@@ -377,10 +418,10 @@ class PMProGateway_fondy extends PMProGateway
             }
             if (isset($out['response']['error_message'])) {
 
-                $error = '<p>' . __('Error message: ', 'fondy') . ' ' . $out['response']['error_message'] . '</p>';
-                $error .= '<p>' . __('Error code: ', 'fondy') . ' ' . $out['response']['error_message'] . '</p>';
+                $error = '<p>' . __('Error message: ', 'pmp-fondy-payment') . ' ' . $out['response']['error_message'] . '</p>';
+                $error .= '<p>' . __('Error code: ', 'pmp-fondy-payment') . ' ' . $out['response']['error_message'] . '</p>';
 
-                wp_die($error, __('Error', 'rcp'), array('response' => '401'));
+                wp_die($error, __('Error', 'pmp-fondy-payment'), array('response' => '401'));
 
             } else {
                 $url = json_decode(base64_decode($out['response']['data']), true)['order']['checkout_url'];

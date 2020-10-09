@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('FONDY_WOOCOMMERCE_VERSION')) {
-    define('FONDY_WOOCOMMERCE_VERSION', '2.6.7');
+    define('FONDY_WOOCOMMERCE_VERSION', '2.6.8');
 }
 
 /**
@@ -450,6 +450,15 @@ class WC_fondy extends WC_Payment_Gateway
     }
 
     /**
+     * @param int $order_id
+     * @return string
+     */
+    protected function getUniqueId($order_id)
+    {
+        return $order_id . self::ORDER_SEPARATOR . $this->fondy_unique;
+    }
+
+    /**
      * @param $order_id
      * @return string
      */
@@ -468,7 +477,7 @@ class WC_fondy extends WC_Payment_Gateway
         $order = new WC_Order($order_id);
         $amount = round( $order->get_total() * 100 );
         $fondy_args = array(
-            'order_id' => $order_id . self::ORDER_SEPARATOR . $this->fondy_unique,
+            'order_id' => $this->getUniqueId($order_id),
             'merchant_id' => $this->merchant_id,
             'order_desc' => $this->getProductInfo($order_id),
             'amount' => $amount,
@@ -641,7 +650,7 @@ class WC_fondy extends WC_Payment_Gateway
         if ($this->on_checkout_page == 'yes') {
             $amount = round($order->get_total() * 100);
             $fondy_args = array(
-                'order_id' => $order_id . self::ORDER_SEPARATOR . $this->fondy_unique,
+                'order_id' => $this->getUniqueId($order_id),
                 'merchant_id' => esc_attr($this->merchant_id),
                 'amount' => $amount,
                 'order_desc' => $this->getProductInfo($order_id),
@@ -694,16 +703,14 @@ class WC_fondy extends WC_Payment_Gateway
      */
     public function process_refund($order_id, $amount = null, $reason = '')
     {
-        $order = new WC_Order($order_id);
-
-        if (!$order or !$order->get_transaction_id()) {
-            return new WP_Error('error', __('Refund failed: No transaction ID', 'fondy-woocommerce-payment-gateway'));
+        if (!$order = new WC_Order($order_id)) {
+            return new WP_Error('fallen', 'Order not found');
         }
-        $payment_id = $order->get_transaction_id();
+
         $data = array(
             'request' => array(
                 'amount' => round($amount * 100),
-                'order_id' => $payment_id,
+                'order_id' => $this->getUniqueId($order->get_id()),
                 'currency' => $order->get_currency(),
                 'merchant_id' => esc_sql($this->merchant_id),
                 'comment' => esc_attr($reason)
@@ -1084,7 +1091,7 @@ class WC_fondy extends WC_Payment_Gateway
             return new WP_Error('fallen', 'Order not found');
         }
         $fondy_args = array(
-            'order_id' => $order->get_id() . self::ORDER_SEPARATOR . $this->fondy_unique,
+            'order_id' => $this->getUniqueId($order->get_id()),
             'currency' => esc_attr(get_woocommerce_currency()),
             'amount' => round($order->get_total() * 100),
             'merchant_id' => esc_attr($this->merchant_id),
