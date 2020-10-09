@@ -66,10 +66,10 @@ if ($order_status == FondyForm::ORDER_APPROVED) {
 
     pmpro_fondy_fnlog("ORDER_CREATED: ORDER: " . var_export($morder, true) . "\n---\n");
 
-    if (!empty ($morder) && !empty ($morder->status) && $morder->status == 'success') {
+    if (!empty($morder) && !empty($morder->status) && $morder->status == 'success') {
         $last_subscr_order = new MemberOrder();
         $last_subscr_order->getLastMemberOrderBySubscriptionTransactionID($system_payment_id);
-        if (isset($response['parent_order_id'])) {
+        if (!empty($response['parent_order_id'])) {
             $order_old_id = esc_sql((string)$response['parent_order_id']);
         } else {
             $order_old_id = $order_id;
@@ -84,11 +84,14 @@ if ($order_status == FondyForm::ORDER_APPROVED) {
         pmpro_fondy_fnlog("Checkout was already processed (" . $morder->code . "). Reccuring this request.");
 
     } elseif (pmpro_fondy_insChangeMembershipLevel($order_id, $morder, $system_payment_id, $rectoken)) {
-
         pmpro_fondy_fnlog("Checkout processed (" . $morder->code . ") success!");
     } else {
         pmpro_fondy_fnlog("ERROR: Couldn't change level for order (" . $morder->code . ").");
     }
+
+    if (isset($callback)) // return 200 to callback
+        wp_die();
+
     pmpro_fondy_exit(pmpro_url("confirmation", "?level=" . $morder->membership_level->id));
 } else {
     pmpro_fondy_fnlog("ERROR: (" . $order_status . ").");
