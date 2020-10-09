@@ -3,9 +3,11 @@
 Plugin Name: PmP Fondy Payment
 Plugin URI: https://fondy.eu
 Description: Fondy Gateway for Paid Memberships Pro
-Version: 1.0.3
-Domain Path: /
-Text Domain: fondy
+Version: 1.0.4
+Domain Path: /languages
+Text Domain: pmp-fondy-payment
+Requires at least: 2.5
+Requires PHP: 5.4
 Author: FONDY - Unified Payment Platform
 Author URI: https://fondy.eu/
 License: GPLv2 or later
