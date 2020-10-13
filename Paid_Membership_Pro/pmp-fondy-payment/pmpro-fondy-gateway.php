@@ -25,6 +25,8 @@ if (!class_exists('PMProGateway')) {
     return;
 } else {
     define("PMPRO_FONDY_DIR", dirname(__FILE__));
+    define("PMPRO_FONDY_BASE_FILE", __FILE__);
+    define("PMPRO_FONDY_VERSION", '1.0.5');
 
     register_activation_hook(__FILE__, 'PMProGateway_fondy::install');
     register_uninstall_hook(__FILE__, 'PMProGateway_fondy::uninstall');

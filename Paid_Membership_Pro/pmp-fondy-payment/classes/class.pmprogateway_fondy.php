@@ -41,7 +41,7 @@ class PMProGateway_fondy extends PMProGateway
         load_plugin_textdomain( 'pmp-fondy-payment', false, basename(PMPRO_FONDY_DIR).'/languages/' );
 
         //add plugin setting button
-        add_filter( 'plugin_action_links_' . plugin_basename(PMPRO_FONDY_DIR . '/pmpro-fondy-gateway.php'),
+        add_filter('plugin_action_links_' . plugin_basename(PMPRO_FONDY_BASE_FILE),
             array('PMProGateway_fondy', 'plugin_action_links')
         );
 
@@ -202,9 +202,13 @@ class PMProGateway_fondy extends PMProGateway
      */
     public function reinitCurrencyAndTaxSettings()
     {
-        add_action('admin_footer', function () {
-            echo "<script> if (document.getElementById('gateway').value === 'fondy'){ pmpro_changeGateway('fondy') } </script>";
-        });
+        wp_enqueue_script(
+                'fondy-pmp',
+                plugins_url('assets/js/fondy.js', plugin_basename(PMPRO_FONDY_BASE_FILE)),
+                array(),
+                PMPRO_FONDY_VERSION,
+                true
+        );
     }
 
     static function pmpro_required_billing_fields($fields)
