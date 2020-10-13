@@ -42,10 +42,10 @@ Some answers you can find here [FAQ](https://fondy.eu/faq/?utm_source=wordpress.
 2. Checkout page
 
 == Changelog ==
-= 1.0.0 = 
-* First release
-= 1.0.4 =
-fix duplicate orders
 = 1.0.5 =
 add localization
 fix displaying currency and tax setting
+= 1.0.4 =
+fix duplicate orders
+= 1.0.0 = 
+* First release
