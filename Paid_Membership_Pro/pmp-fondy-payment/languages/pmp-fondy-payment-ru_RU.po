@@ -14,59 +14,59 @@ msgstr ""
 
 #: classes/class.pmprogateway_fondy.php:84
 msgid "Fondy"
-msgstr ""
+msgstr "Fondy"
 
 #: classes/class.pmprogateway_fondy.php:137
 msgid "Settings"
-msgstr ""
+msgstr "Настройки"
 
 #: classes/class.pmprogateway_fondy.php:154
 msgid "View Documentation"
-msgstr ""
+msgstr "Просмотр документации"
 
 #: classes/class.pmprogateway_fondy.php:154
 msgid "Docs"
-msgstr ""
+msgstr "Документация"
 
 #: classes/class.pmprogateway_fondy.php:173
 msgid "Fondy Settings"
-msgstr ""
+msgstr "Настройки Fondy"
 
 #: classes/class.pmprogateway_fondy.php:178
 msgid "Merchant ID"
-msgstr ""
+msgstr "ID мерчанта"
 
 #: classes/class.pmprogateway_fondy.php:187
 msgid "Payment key"
-msgstr ""
+msgstr "Ключ платежа"
 
 #: classes/class.pmprogateway_fondy.php:422
 msgid "An unidentified error occurred."
-msgstr ""
+msgstr "Произошла неопознанная ошибка."
 
 #: classes/class.pmprogateway_fondy.php:434
 msgid "Error message: "
-msgstr ""
+msgstr "Сообщение об ошибке: "
 
 #: classes/class.pmprogateway_fondy.php:435
 msgid "Error code: "
-msgstr ""
+msgstr "Код ошибки: "
 #. Plugin Name of the plugin/theme
 msgid "PmP Fondy Payment"
-msgstr ""
+msgstr "PmP Fondy Payment"
 
 #. Plugin URI of the plugin/theme
 msgid "https://fondy.eu"
-msgstr ""
+msgstr "https://fondy.ru"
 
 #. Description of the plugin/theme
 msgid "Fondy Gateway for Paid Memberships Pro"
-msgstr ""
+msgstr "Fondy Gateway для Paid Memberships Pro"
 
 #. Author of the plugin/theme
 msgid "FONDY - Unified Payment Platform"
-msgstr ""
+msgstr "FONDY - Unified Payment Platform"
 
 #. Author URI of the plugin/theme
 msgid "https://fondy.eu/"
-msgstr ""
+msgstr "https://fondy.ru/"

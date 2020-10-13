@@ -7,7 +7,6 @@ class PMProGateway_fondy extends PMProGateway
 {
     static function install()
     {
-        file_put_contents(__DIR__ . '/success.txt', 'installed');
         global $wpdb;
 
         $wpdb->query('ALTER TABLE $wpdb->pmpro_membership_orders ADD fondy_token TEXT');
@@ -27,6 +26,7 @@ class PMProGateway_fondy extends PMProGateway
         return $this->gateway;
     }
 
+
     /**
      * Run on WP init
      *
@@ -37,8 +37,11 @@ class PMProGateway_fondy extends PMProGateway
         //make sure fondy is a gateway option
         add_filter('pmpro_gateways', array('PMProGateway_fondy', 'pmpro_gateways'));
 
+        //localization
+        load_plugin_textdomain( 'pmp-fondy-payment', false, basename(PMPRO_FONDY_DIR).'/languages/' );
+
         //add plugin setting button
-        add_filter( 'plugin_action_links_' . plugin_basename(PMPRO_FONDY_DIR . '/pmpro-fondy-gateway.php'),
+        add_filter('plugin_action_links_' . plugin_basename(PMPRO_FONDY_BASE_FILE),
             array('PMProGateway_fondy', 'plugin_action_links')
         );
 
@@ -47,10 +50,10 @@ class PMProGateway_fondy extends PMProGateway
 
         //add fields to payment settings
         add_filter('pmpro_payment_options', array('PMProGateway_fondy', 'pmpro_payment_options'));
-        add_filter('pmpro_payment_option_fields', array(
-            'PMProGateway_fondy',
-            'pmpro_payment_option_fields'
-        ), 10, 2);
+        add_filter('pmpro_payment_option_fields', array('PMProGateway_fondy', 'pmpro_payment_option_fields'), 10, 2);
+
+        // add currency and tax settings
+        add_filter('pmpro_payment_option_fields', array('PMProGateway_fondy', 'reinitCurrencyAndTaxSettings'), 11, 2);
 
         //code to add at checkout if fondy is the current gateway
         $gateway = pmpro_getOption("gateway");
@@ -58,10 +61,7 @@ class PMProGateway_fondy extends PMProGateway
         if ($gateway == "fondy") {
             //add_filter('pmpro_include_billing_address_fields', '__return_false');
             add_filter('pmpro_include_payment_information_fields', '__return_false');
-            add_filter('pmpro_required_billing_fields', array(
-                'PMProGateway_fondy',
-                'pmpro_required_billing_fields'
-            ));
+            add_filter('pmpro_required_billing_fields', array('PMProGateway_fondy', 'pmpro_required_billing_fields'));
             add_filter('pmpro_checkout_default_submit_button', array(
                 'PMProGateway_fondy',
                 'pmpro_checkout_default_submit_button'
@@ -81,7 +81,7 @@ class PMProGateway_fondy extends PMProGateway
     static function pmpro_gateways($gateways)
     {
         if (empty($gateways['fondy'])) {
-            $gateways['fondy'] = __('fondy', 'pmpro');
+            $gateways['fondy'] = __('Fondy', 'pmp-fondy-payment');
         }
 
         return $gateways;
@@ -184,7 +184,7 @@ class PMProGateway_fondy extends PMProGateway
         </tr>
         <tr class="gateway gateway_fondy" <?php if ($gateway != "fondy") { ?>style="display: none;"<?php } ?>>
             <th scope="row" valign="top">
-                <label for="fondy_securitykey"><?php _e('Secret Key', 'pmp-fondy-payment'); ?>:</label>
+                <label for="fondy_securitykey"><?php _e('Payment key', 'pmp-fondy-payment'); ?>:</label>
             </th>
             <td>
                 <textarea id="fondy_securitykey" name="fondy_securitykey" rows="3"
@@ -192,6 +192,23 @@ class PMProGateway_fondy extends PMProGateway
             </td>
         </tr>
         <?php
+    }
+
+    /**
+     * fix pmp hardcode
+     *
+     * @see paid-memberships-pro/paymentsettings.php:190
+     * @since 1.0.5
+     */
+    public function reinitCurrencyAndTaxSettings()
+    {
+        wp_enqueue_script(
+                'fondy-pmp',
+                plugins_url('assets/js/fondy.js', plugin_basename(PMPRO_FONDY_BASE_FILE)),
+                array(),
+                PMPRO_FONDY_VERSION,
+                true
+        );
     }
 
     static function pmpro_required_billing_fields($fields)
@@ -409,7 +426,7 @@ class PMProGateway_fondy extends PMProGateway
             $error = '<p>' . __('An unidentified error occurred.', 'pmp-fondy-payment') . '</p>';
             $error .= '<p>' . $request->get_error_message() . '</p>';
 
-            wp_die($error, __('Error', 'pmp-fondy-payment'), array('response' => '401'));
+            wp_die($error, __('Error'), array('response' => '401'));
 
         } elseif (200 == $code && 'OK' == $message) {
 
@@ -421,7 +438,7 @@ class PMProGateway_fondy extends PMProGateway
                 $error = '<p>' . __('Error message: ', 'pmp-fondy-payment') . ' ' . $out['response']['error_message'] . '</p>';
                 $error .= '<p>' . __('Error code: ', 'pmp-fondy-payment') . ' ' . $out['response']['error_message'] . '</p>';
 
-                wp_die($error, __('Error', 'pmp-fondy-payment'), array('response' => '401'));
+                wp_die($error, __('Error'), array('response' => '401'));
 
             } else {
                 $url = json_decode(base64_decode($out['response']['data']), true)['order']['checkout_url'];
