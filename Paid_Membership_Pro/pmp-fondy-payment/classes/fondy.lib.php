@@ -1,28 +1,21 @@
 <?php
 class FondyForm
 {
+    const API_CHECKOUT_URL = 'https://api.fondy.eu/api/checkout/url/';
+    const TEST_MERCHANT_ID = 1396424;
+    const TEST_MERCHANT_KEY = 'test';
     const RESPONCE_SUCCESS = 'success';
     const RESPONCE_FAIL = 'failure';
     const ORDER_SEPARATOR = '#';
     const SIGNATURE_SEPARATOR = '|';
     const ORDER_APPROVED = 'approved';
     const ORDER_DECLINED = 'declined';
-    public static function getSignature($data, $password, $encoded = true)
+
+    public static function getSignature($data, $secretKey)
     {
-        $data = array_filter($data, function($var) {
-            return $var !== '' && $var !== null;
-        });
-        ksort($data);
-        $str = $password;
-        foreach ($data as $k => $v) {
-            $str .= FondyForm::SIGNATURE_SEPARATOR . $v;
-        }
-        if ($encoded) {
-            return sha1($str);
-        } else {
-            return $str;
-        }
+        return sha1($secretKey . FondyForm::SIGNATURE_SEPARATOR . base64_encode(json_encode(array('order' => $data))));
     }
+
     public static function isPaymentValid($fondySettings, $response , $base64_data, $sign)
     {
         if ($fondySettings['merchant_id'] != $response['merchant_id']) {
@@ -35,7 +28,7 @@ class FondyForm
 		if (isset($response['signature'])){
 			unset($response['signature']);
 		}
-	    if ($sign != sha1($fondySettings['secret_key'] . '|' . $base64_data)) {
+	    if ($sign != sha1($fondySettings['secret_key'] . FondyForm::SIGNATURE_SEPARATOR . $base64_data)) {
 		    return 'An error has occurred during payment. Signature is not valid.';
 	    }
         return true;

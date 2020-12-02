@@ -1,4 +1,5 @@
 <?php
+// TODO refactor
 //in case the file is loaded directly
 require_once(dirname(__FILE__) . '/../classes/fondy.lib.php');
 
@@ -6,6 +7,11 @@ require_once(dirname(__FILE__) . '/../classes/fondy.lib.php');
  * DEBUG mode
  */
 define('FONDY_PMPRO_DEBUG', "log");
+
+//some globals
+global $wpdb, $gateway_environment, $fondy_logstr;
+$fondy_logstr = "";    //will put debug info here and write to pmpro_fondy_fnlog.txt
+$response = '';
 
 if (empty($_POST)) {
     $callback = json_decode(file_get_contents("php://input"));
@@ -17,27 +23,30 @@ if (empty($_POST)) {
     foreach ($callback as $key => $val) {
         $_POST[esc_sql($key)] = esc_sql($val);
     }
+
+    $base64_data = esc_sql($_POST['data']);
+    $signature = esc_sql((string)$_POST['signature']);
+    $response = json_decode(base64_decode(esc_sql($_POST['data'])), true)['order'];
+
+    /**
+     * Validate Fondy answer
+     */
+    if (pmpro_fondy_validate_sign($base64_data, $signature, $response, $gateway_environment === 'sandbox') !== true) {
+        pmpro_fondy_fnlog("Signature Invalid.");
+        pmpro_fondy_exit();
+    }
+} elseif (!empty($_POST['order_id']) && !empty($_POST['merchant_id'])) { // todo remove this elseif after checkout2 response_url fix
+    $merchantID = $gateway_environment === 'sandbox' ?  FondyForm::TEST_MERCHANT_ID : pmpro_getOption("fondy_merchantid");
+    if ($merchantID === $_POST['merchant_id']){
+        $response = esc_sql($_POST);
+    }
 }
 
-$base64_data = esc_sql($_POST['data']);
-$signature = esc_sql((string)$_POST['signature']);
-$response = json_decode(base64_decode(esc_sql($_POST['data'])), true)['order'];
 if (empty($response)) {
     pmpro_fondy_fnlog("Empty response.");
     pmpro_fondy_exit();
 }
 
-//some globals
-global $wpdb, $gateway_environment, $fondy_logstr;
-$fondy_logstr = "";    //will put debug info here and write to pmpro_fondy_fnlog.txt
-
-/**
- * Validate Fondy answer
- */
-if (pmpro_fondy_validate_sign($base64_data, $signature, $response) !== true) {
-    pmpro_fondy_fnlog("Signature Invalid.");
-    pmpro_fondy_exit();
-}
 //assign posted variables to local variables
 $amount = (int)$response['amount'];
 $actual_amount = (int)$response['actual_amount'];
@@ -54,6 +63,7 @@ if ($order_status == FondyForm::ORDER_APPROVED) {
     $morder->getMembershipLevel();
 
     $morder->getUser();
+
     if (isset($rectoken) and !empty($rectoken)) {
         $id = $morder->id;
         $rec = $wpdb->query($wpdb->prepare("
@@ -135,22 +145,14 @@ function pmpro_fondy_exit($redirect = false)
     exit;
 }
 
-function pmpro_fondy_validate_sign($base64_data, $sign, $response = array())
+function pmpro_fondy_validate_sign($base64_data, $sign, $response = array(), $isTestEnv = false)
 {
-
     $settings = array(
-        'merchant_id' => pmpro_getOption("fondy_merchantid"),
-        'secret_key' => pmpro_getOption("fondy_securitykey"),
+        'merchant_id' => $isTestEnv ? FondyForm::TEST_MERCHANT_ID : pmpro_getOption("fondy_merchantid"),
+        'secret_key' => $isTestEnv ? FondyForm::TEST_MERCHANT_KEY : pmpro_getOption("fondy_securitykey"),
     );
-    $validated = FondyForm::isPaymentValid($settings, $response, $base64_data, $sign);
 
-
-    if ($validated !== true) {
-        return $validated;
-    } else {
-        return true;
-    }
-
+    return FondyForm::isPaymentValid($settings, $response, $base64_data, $sign);
 }
 
 function pmpro_fondy_insChangeMembershipLevel($txn_id, &$morder, $payment_id, $rectoken)
