@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('FONDY_WOOCOMMERCE_VERSION')) {
-    define('FONDY_WOOCOMMERCE_VERSION', '2.6.8');
+    define('FONDY_WOOCOMMERCE_VERSION', '2.6.9');
 }
 
 /**
@@ -564,13 +564,24 @@ class WC_fondy extends WC_Payment_Gateway
             'headers' => array("Content-type" => "application/json;charset=UTF-8"),
             'body' => json_encode(array('request' => $args))
         );
-        $response = wp_remote_post('https://api.fondy.eu/api/checkout/url/', $conf);
 
-        $result = json_decode($response['body']);
-        $response_code = wp_remote_retrieve_response_code($response);
-        if ($response_code != 200) {
-            $error = "Return code is {$response_code}";
-            wp_die($error);
+        try {
+            $response = wp_remote_post('https://api.fondy.eu/api/checkout/url/', $conf);
+
+            if (is_wp_error($response))
+                throw new Exception($response->get_error_message());
+
+            $response_code = wp_remote_retrieve_response_code($response);
+
+            if ($response_code != 200)
+                throw new Exception("Fondy API return code is $response_code");
+
+            $result = json_decode($response['body']);
+        } catch (Exception $e) {
+            $error = '<p>' . __("There has been a critical error on your website.") . '</p>';
+            $error .= '<p>' . $e->getMessage() . '</p>';
+
+            wp_die($error, __('Error'), array('response' => '500'));
         }
 
         if ($result->response->response_status == 'failure') {
@@ -600,13 +611,22 @@ class WC_fondy extends WC_Payment_Gateway
             'headers' => array("Content-type" => "application/json;charset=UTF-8"),
             'body' => json_encode(array('request' => $args))
         );
-        $response = wp_remote_post('https://api.fondy.eu/api/checkout/token/', $conf);
-        $response_code = wp_remote_retrieve_response_code($response);
-        if ($response_code != 200) {
-            $error = "Return code is {$response_code}";
-            return array('result' => 'failture', 'messages' => $error);
+
+        try {
+            $response = wp_remote_post('https://api.fondy.eu/api/checkout/token/', $conf);
+
+            if (is_wp_error($response))
+                throw new Exception($response->get_error_message());
+
+            $response_code = wp_remote_retrieve_response_code($response);
+            if ($response_code != 200)
+                throw new Exception("Fondy API return code is $response_code");
+
+            $result = json_decode($response['body']);
+        } catch (Exception $e) {
+            return array('result' => 'failture', 'messages' => $e->getMessage());
         }
-        $result = json_decode($response['body']);
+
         if ($result->response->response_status == 'failure') {
             return array('result' => 'failture', 'messages' => $result->response->error_message);
         }
