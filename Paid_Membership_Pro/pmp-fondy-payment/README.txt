@@ -1,10 +1,10 @@
 === FONDY — Paid memberships Pro Payment Gateway ===
 Contributors: fondyeu
-Tags: payments, payment gateway, woocommerce, online payment, merchant
+Tags: payments, payment gateway, paid memberships pro, online payment, merchant
 Requires at least: 3.5
 Tested up to: 5.5
-Requires PHP: 5.4
-Stable tag: 1.0.4
+Requires PHP: 5.6
+Stable tag: 1.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,7 +42,13 @@ Some answers you can find here [FAQ](https://fondy.eu/faq/?utm_source=wordpress.
 2. Checkout page
 
 == Changelog ==
-= 1.0.0 = 
-* First release
+= 1.0.6 =
+add trial period support
+sandbox mode fix
+= 1.0.5 =
+add localization
+fix displaying currency and tax setting
 = 1.0.4 =
 fix duplicate orders
+= 1.0.0 = 
+* First release

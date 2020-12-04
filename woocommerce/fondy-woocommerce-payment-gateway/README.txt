@@ -2,9 +2,9 @@
 Contributors: fondyeu
 Tags: payments, payment gateway, woocommerce, online payment, merchant
 Requires at least: 3.5
-Tested up to: 5.5
+Tested up to: 5.3
 Requires PHP: 5.4
-Stable tag: 2.6.8
+Stable tag: 2.6.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -164,6 +164,14 @@ Added order statuses to settings page
 New logo and testing mode
 = 2.6.3 =
 Fixed default options
+= 2.6.5 =
+Added pre-orders
+= 2.6.7 =
+Added subscription
+= 2.6.8 =
+Refund fix
+= 2.6.9 =
+Added some API request error handler
 
 == Upgrade Notice ==
 
@@ -205,9 +213,3 @@ Added token caching
 Added instant redirect
 = 2.5.3 =
 Styles moved to merchant portal
-= 2.6.5 =
-Added pre-orders
-= 2.6.7 =
-Added subscription
-= 2.6.8 =
-Refund fix
