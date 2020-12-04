@@ -23,7 +23,9 @@ if (empty($_POST)) {
     foreach ($callback as $key => $val) {
         $_POST[esc_sql($key)] = esc_sql($val);
     }
+}
 
+if (isset($_POST['version'])){
     $base64_data = esc_sql($_POST['data']);
     $signature = esc_sql((string)$_POST['signature']);
     $response = json_decode(base64_decode(esc_sql($_POST['data'])), true)['order'];
