@@ -2,7 +2,7 @@
 Contributors: fondyeu
 Tags: payments, payment gateway, woocommerce, online payment, merchant
 Requires at least: 3.5
-Tested up to: 5.7
+Tested up to: 5.3
 Requires PHP: 5.4
 Stable tag: 2.6.9
 License: GPLv2 or later
