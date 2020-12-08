@@ -42,6 +42,8 @@ Some answers you can find here [FAQ](https://fondy.eu/faq/?utm_source=wordpress.
 2. Checkout page
 
 == Changelog ==
+= 1.0.7 =
+fix response_url redirect
 = 1.0.6 =
 add trial period support
 sandbox mode fix

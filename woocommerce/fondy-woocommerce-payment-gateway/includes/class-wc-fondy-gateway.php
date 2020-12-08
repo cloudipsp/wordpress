@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('FONDY_WOOCOMMERCE_VERSION')) {
-    define('FONDY_WOOCOMMERCE_VERSION', '2.6.9');
+    define('FONDY_WOOCOMMERCE_VERSION', '2.6.10');
 }
 
 /**
@@ -960,16 +960,6 @@ class WC_fondy extends WC_Payment_Gateway
             $this->msg['message'] = $paymentInfo;
             $order->add_order_note("ERROR: " . $paymentInfo);
         }
-        if ($this->redirect_page_id == "" || $this->redirect_page_id == 0) {
-            $redirect_url = $order->get_checkout_order_received_url();
-        } else {
-            $redirect_url = get_permalink($this->redirect_page_id);
-            if ($this->msg['class'] == 'woocommerce-error' or $this->msg['class'] == 'error') {
-                wc_add_notice($this->msg['message'], 'error');
-            } else {
-                wc_add_notice($this->msg['message']);
-            }
-        }
         if ($this->is_subscription($orderId)) {
             if (!empty($_POST['rectoken'])) {
                 $this->save_card($_POST, $order);
@@ -977,8 +967,23 @@ class WC_fondy extends WC_Payment_Gateway
                 $order->add_order_note('Transaction Subscription ERROR: no card token');
             }
         }
-        wp_redirect($redirect_url);
-        exit;
+
+        if (isset($callback)) { // return 200 to callback
+            die();
+        } else { // redirect
+            if ($this->redirect_page_id == "" || $this->redirect_page_id == 0) {
+                $redirect_url = $order->get_checkout_order_received_url();
+            } else {
+                $redirect_url = get_permalink($this->redirect_page_id);
+                if ($this->msg['class'] == 'woocommerce-error' or $this->msg['class'] == 'error') {
+                    wc_add_notice($this->msg['message'], 'error');
+                } else {
+                    wc_add_notice($this->msg['message']);
+                }
+            }
+            wp_redirect($redirect_url);
+            exit;
+        }
     }
 
     /**
