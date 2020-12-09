@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Fondy payment gateway
 Plugin URI: https://fondy.eu
 Description: Fondy Payment Gateway for WooCommerce.
-Version: 2.6.9
+Version: 2.6.10
 Author: FONDY - Unified Payment Platform
 Author URI: https://fondy.eu/
 Domain Path: /languages
@@ -11,7 +11,7 @@ Text Domain: fondy-woocommerce-payment-gateway
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 2.5.0
-WC tested up to: 4.4.1
+WC tested up to: 4.7.1
 */
 
 defined( 'ABSPATH' ) or exit;
@@ -55,7 +55,7 @@ if ( ! class_exists( 'WC_PaymentFondy' ) ) :
          */
         public function init_fondy() {
             require_once( dirname( __FILE__ ) . '/includes/class-wc-fondy-gateway.php' );
-            load_plugin_textdomain( "fondy-woocommerce-payment-gateway", false, basename( dirname( __FILE__ ) ) );
+            load_plugin_textdomain( "fondy-woocommerce-payment-gateway", false, basename( dirname( __FILE__ )) . '/languages' );
             add_filter( 'woocommerce_payment_gateways', array( $this, 'woocommerce_add_fondy_gateway' ) );
             add_action('wp_ajax_nopriv_generate_ajax_order_fondy_info', array('WC_fondy', 'generate_ajax_order_fondy_info' ), 99);
             add_action('wp_ajax_generate_ajax_order_fondy_info', array('WC_fondy', 'generate_ajax_order_fondy_info'), 99);

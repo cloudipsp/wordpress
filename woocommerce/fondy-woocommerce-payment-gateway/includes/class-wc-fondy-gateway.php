@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('FONDY_WOOCOMMERCE_VERSION')) {
-    define('FONDY_WOOCOMMERCE_VERSION', '2.6.9');
+    define('FONDY_WOOCOMMERCE_VERSION', '2.6.10');
 }
 
 /**
@@ -482,7 +482,7 @@ class WC_fondy extends WC_Payment_Gateway
             'order_desc' => $this->getProductInfo($order_id),
             'amount' => $amount,
             'currency' => get_woocommerce_currency(),
-            'server_callback_url' => $this->getCallbackUrl(),
+            'server_callback_url' => $this->getCallbackUrl() . '&is_callback=true',
             'response_url' => $this->getCallbackUrl(),
             'lang' => $this->getLanguage(),
             'sender_email' => $this->getEmail($order)
@@ -490,7 +490,7 @@ class WC_fondy extends WC_Payment_Gateway
         if ($this->calendar == 'yes') {
             $fondy_args['required_rectoken'] = 'Y';
             $fondy_args['subscription'] = 'Y';
-            $fondy_args['subscription_callback_url'] = $this->getCallbackUrl();
+            $fondy_args['subscription_callback_url'] = $this->getCallbackUrl() . '&is_callback=true';
         }
 
         if ($this->checkPreOrders($order_id)) {
@@ -675,7 +675,7 @@ class WC_fondy extends WC_Payment_Gateway
                 'amount' => $amount,
                 'order_desc' => $this->getProductInfo($order_id),
                 'currency' => esc_attr(get_woocommerce_currency()),
-                'server_callback_url' => $this->getCallbackUrl(),
+                'server_callback_url' => $this->getCallbackUrl() . '&is_callback=true',
                 'response_url' => $this->getCallbackUrl(),
                 'lang' => esc_attr($this->getLanguage()),
                 'sender_email' => esc_attr($this->getEmail($order))
@@ -960,16 +960,6 @@ class WC_fondy extends WC_Payment_Gateway
             $this->msg['message'] = $paymentInfo;
             $order->add_order_note("ERROR: " . $paymentInfo);
         }
-        if ($this->redirect_page_id == "" || $this->redirect_page_id == 0) {
-            $redirect_url = $order->get_checkout_order_received_url();
-        } else {
-            $redirect_url = get_permalink($this->redirect_page_id);
-            if ($this->msg['class'] == 'woocommerce-error' or $this->msg['class'] == 'error') {
-                wc_add_notice($this->msg['message'], 'error');
-            } else {
-                wc_add_notice($this->msg['message']);
-            }
-        }
         if ($this->is_subscription($orderId)) {
             if (!empty($_POST['rectoken'])) {
                 $this->save_card($_POST, $order);
@@ -977,8 +967,23 @@ class WC_fondy extends WC_Payment_Gateway
                 $order->add_order_note('Transaction Subscription ERROR: no card token');
             }
         }
-        wp_redirect($redirect_url);
-        exit;
+
+        if (isset($callback) && isset($_REQUEST['is_callback'])) { // return 200 to callback
+            die();
+        } else { // redirect
+            if ($this->redirect_page_id == "" || $this->redirect_page_id == 0) {
+                $redirect_url = $order->get_checkout_order_received_url();
+            } else {
+                $redirect_url = get_permalink($this->redirect_page_id);
+                if ($this->msg['class'] == 'woocommerce-error' or $this->msg['class'] == 'error') {
+                    wc_add_notice($this->msg['message'], 'error');
+                } else {
+                    wc_add_notice($this->msg['message']);
+                }
+            }
+            wp_redirect($redirect_url);
+            exit;
+        }
     }
 
     /**

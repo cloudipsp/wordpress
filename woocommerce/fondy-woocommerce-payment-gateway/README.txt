@@ -2,9 +2,9 @@
 Contributors: fondyeu
 Tags: payments, payment gateway, woocommerce, online payment, merchant
 Requires at least: 3.5
-Tested up to: 5.3
+Tested up to: 5.5
 Requires PHP: 5.4
-Stable tag: 2.6.9
+Stable tag: 2.6.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -130,86 +130,90 @@ Done, now you can accept payments from the customers!
 
 
 == Changelog ==
-= 1.0.0 = 
-* First release
-= 1.0.1 =
-add default success page
-= 2.0 =
-change to host-to-host
-= 2.2 =
-stability update
-= 2.2.3 =
-change payment complete status
-= 2.3.0 =
-some fix, duplicate update
-= 2.4.0 =
-Added v2 js Api
-= 2.4.1 =
-Added js Mask CCard
-= 2.4.2 =
-some fix php tags
-= 2.4.3 =
-Added Refund function
-= 2.4.4 =
-Fixed checkout card
-= 2.4.5 =
-Fix for php 5.3 <
-= 2.5.2 =
-Added instant redirect
-= 2.5.3 =
-Styles moved to merchant portal
-= 2.5.6 =
-Added order statuses to settings page
-= 2.5.8 =
-New logo and testing mode
-= 2.6.3 =
-Fixed default options
-= 2.6.5 =
-Added pre-orders
-= 2.6.7 =
-Added subscription
-= 2.6.8 =
-Refund fix
+
+= 2.6.10 =
+Fix answer to callback
+Fix connecting translation files
 = 2.6.9 =
 Added some API request error handler
+= 2.6.8 =
+Refund fix
+= 2.6.7 =
+Added subscription
+= 2.6.5 =
+Added pre-orders
+= 2.6.3 =
+Fixed default options
+= 2.5.8 =
+New logo and testing mode
+= 2.5.6 =
+Added order statuses to settings page
+= 2.5.3 =
+Styles moved to merchant portal
+= 2.5.2 =
+Added instant redirect
+= 2.4.5 =
+Fix for php 5.3 <
+= 2.4.4 =
+Fixed checkout card
+= 2.4.3 =
+Added Refund function
+= 2.4.2 =
+some fix php tags
+= 2.4.1 =
+Added js Mask CCard
+= 2.4.0 =
+Added v2 js Api
+= 2.3.0 =
+some fix, duplicate update
+= 2.2.3 =
+change payment complete status
+= 2.2 =
+stability update
+= 2.0 =
+change to host-to-host
+= 1.0.1 =
+add default success page
+= 1.0.0 = 
+* First release
 
 == Upgrade Notice ==
 
-= 1.0.0 =
-Add pop-up mode
-= 1.0.1 =
-add default success page
-= 2.0 =
-change to host-to-host
-= 2.2 =
-stability update
-= 2.2.2 =
-add expired callback
-= 2.2.3 =
-change payment complete status
-= 2.3.0 =
-some fix, duplicate update
-= 2.4.0 =
-Added v2 js Api
-= 2.4.1 =
-Added js Mask CCard
-= 2.4.2 =	
-some fix php tags	
-= 2.4.3 =	
-Added Refund function
-= 2.4.4 =
-Fixed checkout card
-= 2.4.6 =
-Order notify update
-= 2.4.7 =
-Unification css containers
-= 2.4.8 =
-Stability update
-= 2.4.9 =
-Added multi currencies support(WMPL)
-= 2.5.0 =
-Added token caching
-= 2.5.2 =
-Added instant redirect
 = 2.5.3 =
 Styles moved to merchant portal
+= 2.5.2 =
+Added instant redirect
+= 2.5.0 =
+Added token caching
+= 2.4.9 =
+Added multi currencies support(WMPL)
+= 2.4.8 =
+Stability update
+= 2.4.7 =
+Unification css containers
+= 2.4.6 =
+Order notify update
+= 2.4.4 =
+Fixed checkout card
+= 2.4.3 =
+Added Refund function
+= 2.4.2 =
+some fix php tags
+= 2.4.1 =
+Added js Mask CCard
+= 2.4.0 =
+Added v2 js Api
+= 2.3.0 =
+some fix, duplicate update
+= 2.2.3 =
+change payment complete status
+= 2.2.2 =
+add expired callback
+= 2.2 =
+stability update
+= 2.0 =
+change to host-to-host
+= 1.0.1 =
+add default success page
+= 1.0.0 =
+Add pop-up mode
