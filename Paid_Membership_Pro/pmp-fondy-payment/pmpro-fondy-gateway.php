@@ -3,7 +3,7 @@
 Plugin Name: PmP Fondy Payment
 Plugin URI: https://fondy.eu
 Description: Fondy Gateway for Paid Memberships Pro
-Version: 1.0.7
+Version: 1.0.8
 Domain Path: /languages
 Text Domain: pmp-fondy-payment
 Requires at least: 2.5
@@ -21,7 +21,7 @@ if (!class_exists('PMProGateway')) {
 
 define("PMPRO_FONDY_DIR", dirname(__FILE__));
 define("PMPRO_FONDY_BASE_FILE", __FILE__);
-define("PMPRO_FONDY_VERSION", '1.0.7');
+define("PMPRO_FONDY_VERSION", '1.0.8');
 
 register_activation_hook(__FILE__, 'PMProGateway_fondy::install');
 register_uninstall_hook(__FILE__, 'PMProGateway_fondy::uninstall');

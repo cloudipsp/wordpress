@@ -4,7 +4,7 @@ Tags: payments, payment gateway, paid memberships pro, online payment, merchant
 Requires at least: 3.5
 Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 1.0.7
+Stable tag: 1.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,6 +42,8 @@ Some answers you can find here [FAQ](https://fondy.eu/faq/?utm_source=wordpress.
 2. Checkout page
 
 == Changelog ==
+= 1.0.8 =
+changed order_id generation logic
 = 1.0.7 =
 fix response_url redirect
 = 1.0.6 =

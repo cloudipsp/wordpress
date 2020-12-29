@@ -311,7 +311,7 @@ class PMProGateway_fondy extends PMProGateway
                 'phone' => $order->billing->phone
             )),
             'product_id' => $order->membership_id,
-            'order_id' => $order->code . FondyForm::ORDER_SEPARATOR . time(),
+            'order_id' => $order->code,
             'merchant_id' => $this->isTestEnv ? FondyForm::TEST_MERCHANT_ID : pmpro_getOption("fondy_merchantid"),
             'order_desc' => substr($order->membership_level->name . " at " . get_bloginfo("name"), 0, 127),
             'amount' => round($initial_payment * 100),
