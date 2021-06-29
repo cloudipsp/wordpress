@@ -17,14 +17,21 @@ class PMProGateway_fondy extends PMProGateway
      */
     private $isTestEnv;
 
-    static function install()
+    public function __construct($gateway = NULL)
+    {
+        $this->isTestEnv = pmpro_getOption( "gateway_environment" ) === 'sandbox';
+
+        parent::__construct($gateway);
+    }
+
+    public static function install()
     {
         global $wpdb;
 
         $wpdb->query("ALTER TABLE $wpdb->pmpro_membership_orders ADD fondy_token TEXT");
     }
 
-    static function uninstall()
+    public static function uninstall()
     {
         global $wpdb;
 
@@ -36,7 +43,7 @@ class PMProGateway_fondy extends PMProGateway
      *
      * @since 1.8
      */
-    static function init()
+    public static function init()
     {
         //make sure fondy is a gateway option
         add_filter('pmpro_gateways', array('PMProGateway_fondy', 'pmpro_gateways'));
@@ -81,7 +88,7 @@ class PMProGateway_fondy extends PMProGateway
      *
      * @since 1.8
      */
-    static function pmpro_gateways($gateways)
+    public static function pmpro_gateways($gateways)
     {
         if (empty($gateways['fondy'])) {
             $gateways['fondy'] = __('Fondy', 'pmp-fondy-payment');
@@ -90,7 +97,7 @@ class PMProGateway_fondy extends PMProGateway
         return $gateways;
     }
 
-    static function pmpro_required_billing_fields($fields)
+    public static function pmpro_required_billing_fields($fields)
     {
         //unset($fields['bfirstname']);
         //unset($fields['blastname']);
@@ -115,7 +122,7 @@ class PMProGateway_fondy extends PMProGateway
      *
      * @since 1.8
      */
-    static function getGatewayOptions()
+    public static function getGatewayOptions()
     {
         $options = array(
             'sslseal',
@@ -138,7 +145,7 @@ class PMProGateway_fondy extends PMProGateway
      *
      * @since 1.8
      */
-    static function pmpro_payment_options($options)
+    public static function pmpro_payment_options($options)
     {
         //get fondy options
         $fondy_options = PMProGateway_fondy::getGatewayOptions();
@@ -155,7 +162,7 @@ class PMProGateway_fondy extends PMProGateway
      * @param $values
      * @param $gateway
      */
-    static function pmpro_payment_option_fields($values, $gateway)
+    public static function pmpro_payment_option_fields($values, $gateway)
     {
         include( PMPRO_FONDY_DIR .'/views/payment-option-fields.php' );
     }
@@ -165,7 +172,7 @@ class PMProGateway_fondy extends PMProGateway
      *
      * @since 1.8
      */
-    static function pmpro_checkout_default_submit_button($show)
+    public static function pmpro_checkout_default_submit_button($show)
     {
         $text_domain = 'pmpro';
 
@@ -183,7 +190,7 @@ class PMProGateway_fondy extends PMProGateway
      * @param $user_id
      * @param $morder
      */
-    static function pmpro_checkout_before_change_membership_level($user_id, $morder)
+    public static function pmpro_checkout_before_change_membership_level($user_id, $morder)
     {
         global $discount_code_id, $wpdb;
 
@@ -206,20 +213,13 @@ class PMProGateway_fondy extends PMProGateway
     }
 
 
-    public function __construct($gateway = NULL)
-    {
-        $this->isTestEnv = pmpro_getOption( "gateway_environment" ) === 'sandbox';
-
-        parent::__construct($gateway);
-    }
-
     /**
      * add plugin setting button
      *
      * @param $links
      * @return mixed
      */
-    public function plugin_action_links($links)
+    public static function plugin_action_links($links)
     {
         $settings_link = '<a href="'. admin_url('admin.php?page=pmpro-paymentsettings') .'">'. __("Settings") .'</a>';
         array_unshift( $links, $settings_link );
@@ -234,7 +234,7 @@ class PMProGateway_fondy extends PMProGateway
      * @param $file
      * @return array
      */
-    public function plugin_row_meta($links, $file)
+    public static function plugin_row_meta($links, $file)
     {
         if(strpos($file, basename(PMPRO_FONDY_BASE_FILE)) !== false) {
             $row_links = array(
@@ -251,7 +251,7 @@ class PMProGateway_fondy extends PMProGateway
      *
      * @since 1.0.6
      */
-    public function addFondyAdminPageJS()
+    public static function addFondyAdminPageJS()
     {
         wp_enqueue_script(
             'fondy-pmp',
