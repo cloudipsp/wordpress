@@ -1,0 +1,7 @@
+#fondy-checkout-container button::after{
+    display: block !important;
+}
+/*todo forget for what this part*/
+#payment .payment_methods li .payment_box.payment_method_fondy_card{
+    padding: 1.41575em !important;
+}

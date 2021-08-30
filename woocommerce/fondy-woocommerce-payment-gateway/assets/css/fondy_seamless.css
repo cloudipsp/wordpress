@@ -1,0 +1,19 @@
+#payment .payment_methods li .payment_box.payment_method_fondy_card{
+    padding: 0;
+}
+
+#payment .payment_methods li .payment_box.payment_method_fondy_wallet{
+    padding: 1rem 0;
+}
+
+html #f.f-embed .f-wrapper{
+    min-height: 0;
+}
+
+#checkout-card-container .f-payment-method-card-inner .f-info {
+    display: none;
+}
+
+#checkout-card-container .f-payment-method-card-inner .f-icons{
+    margin-top: 1rem;
+}
