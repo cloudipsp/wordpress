@@ -182,6 +182,8 @@ Add better order status matching
 Remove old unused settings
 Fix callback url
 Fix PHP 8 compatibility
+= 3.0.1 =
+Fix relative server_callback_url
 
 
 == Upgrade Notice ==

@@ -5,7 +5,7 @@
  * Description: Fondy Payment Gateway for WooCommerce.
  * Author: Fondy - Unified Payment Platform
  * Author URI: https://fondy.io
- * Version: 3.0.0
+ * Version: 3.0.1
  * Text Domain: fondy-woocommerce-payment-gateway
  * Domain Path: /languages
  * Tested up to: 5.8

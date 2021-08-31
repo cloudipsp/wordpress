@@ -245,7 +245,7 @@ abstract class WC_Fondy_Payment_Gateway extends WC_Payment_Gateway
 
     public function getCallbackUrl()
     {
-        return wc_get_endpoint_url('wc-api', strtolower(get_class($this)));
+        return wc_get_endpoint_url('wc-api', strtolower(get_class($this)), get_site_url());
     }
 
     /**
