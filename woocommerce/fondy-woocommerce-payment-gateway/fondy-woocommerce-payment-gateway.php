@@ -25,7 +25,7 @@ if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get
 
 define("WC_FONDY_DIR", dirname(__FILE__));
 define("WC_FONDY_BASE_FILE", __FILE__);
-define('WC_FONDY_VERSION', '3.0.0');
+define('WC_FONDY_VERSION', '3.0.1');
 define('WC_FONDY_MIN_PHP_VER', '5.6.0');
 define('WC_FONDY_MIN_WC_VER', '3.0');
 
