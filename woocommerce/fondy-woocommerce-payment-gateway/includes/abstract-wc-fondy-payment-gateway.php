@@ -71,7 +71,7 @@ abstract class WC_Fondy_Payment_Gateway extends WC_Payment_Gateway
             if ($this->integration_type === 'embedded') {
                 $processResult['redirect'] = $order->get_checkout_payment_url(true);
             } elseif ($this->integration_type === 'seamless') {
-                $processResult['token'] = $this->getCheckoutToken($order);;
+                $processResult['token'] = $this->getCheckoutToken($order);
             } else {
                 $paymentParams = $this->getPaymentParams($order);
                 $processResult['redirect'] = WC_Fondy_API::getCheckoutUrl($paymentParams);
@@ -169,6 +169,7 @@ abstract class WC_Fondy_Payment_Gateway extends WC_Payment_Gateway
      *
      * @param $order
      * @return array|string
+     * @throws Exception
      */
     public function getCheckoutToken($order)
     {

@@ -61,6 +61,9 @@ class WC_Fondy_API
         return self::$secretKey;
     }
 
+    /**
+     * @throws Exception
+     */
     public static function getCheckoutUrl($requestData)
     {
         $response = self::sendToAPI('checkout/url', $requestData);
@@ -68,6 +71,9 @@ class WC_Fondy_API
         return $response->checkout_url;
     }
 
+    /**
+     * @throws Exception
+     */
     public static function getCheckoutToken($requestData)
     {
         $response = self::sendToAPI('checkout/token', $requestData);
@@ -75,21 +81,36 @@ class WC_Fondy_API
         return $response->token;
     }
 
+    /**
+     * @throws Exception
+     */
     public static function reverse($requestData)
     {
         return self::sendToAPI('reverse/order_id', $requestData);
     }
 
+    /**
+     * @throws Exception
+     */
     public static function capture($requestData)
     {
         return self::sendToAPI('capture/order_id', $requestData);
     }
 
+    /**
+     * @throws Exception
+     */
     public static function recurring($requestData)
     {
         return self::sendToAPI('recurring', $requestData);
     }
 
+    /**
+     * @param $endpoint
+     * @param $requestData
+     * @return mixed
+     * @throws Exception
+     */
     public static function sendToAPI($endpoint, $requestData)
     {
         $requestData['merchant_id'] = self::getMerchantID();
@@ -105,11 +126,11 @@ class WC_Fondy_API
         );
 
         if (is_wp_error($response))
-            throw new Exception('Connection error.');
+            throw new Exception($response->get_error_message());
 
         $response_code = wp_remote_retrieve_response_code($response);
         if ($response_code != 200)
-            throw new Exception("Fondy API Return code is {$response_code}. Please try again later.");
+            throw new Exception("Fondy API Return code is $response_code. Please try again later.");
 
         $result = json_decode($response['body']);
 
@@ -122,6 +143,12 @@ class WC_Fondy_API
         return $result->response;
     }
 
+    /**
+     * @param $data
+     * @param $password
+     * @param bool $encoded
+     * @return mixed|string
+     */
     public static function getSignature($data, $password, $encoded = true)
     {
         if (isset($data['additional_info'])) {

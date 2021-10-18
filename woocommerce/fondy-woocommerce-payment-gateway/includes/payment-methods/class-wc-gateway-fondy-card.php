@@ -18,7 +18,7 @@ class WC_Gateway_Fondy_Card extends WC_Fondy_Payment_Gateway
     public function __construct()
     {
         $this->id = 'fondy'; // payment gateway plugin ID
-        $this->icon = plugins_url('assets/img/fondy_logo_cards.svg', WC_FONDY_BASE_FILE);; // URL of the icon that will be displayed on checkout page near your gateway name
+        $this->icon = plugins_url('assets/img/fondy_logo_cards.svg', WC_FONDY_BASE_FILE); // URL of the icon that will be displayed on checkout page near your gateway name
         $this->has_fields = false; // in case you need a custom credit card form
         $this->method_title = 'Fondy';
         $this->method_description = __('Card payments, Apple/Google Pay', 'fondy-woocommerce-payment-gateway');

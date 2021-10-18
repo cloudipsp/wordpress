@@ -130,20 +130,27 @@ class WC_Fondy_Subscriptions_Compat
                 'order_id' => $this->paymentGateway->createFondyOrderID($renewal_order),
                 'amount' => $amount,
                 'rectoken' => $token[0]['token'],
+                'sender_email' => $renewal_order->get_billing_email(),
                 'currency' => get_woocommerce_currency(),
-                'order_desc' => 'recurring payment for: ' . $renewal_order->get_order_number()
+                'order_desc' => sprintf(
+                    __('Recurring payment for: %s', 'fondy-woocommerce-payment-gateway'),
+                    $renewal_order->get_order_number()
+                ),
             ]);
 
             if ($subscriptionPayment->order_status === 'approved') {
                 $renewal_order->update_status('completed');
                 $renewal_order->payment_complete($subscriptionPayment->payment_id);
-                $renewal_order->add_order_note('Fondy subscription payment successful.<br/>Fondy ID: ' . ' (' . $subscriptionPayment->payment_id . ')');
+                $renewal_order->add_order_note("Fondy subscription payment successful.<br/>Fondy ID: $subscriptionPayment->payment_id");
             } else {
-                throw new Exception("Transaction ERROR: order {$subscriptionPayment->order_status}<br/>Fondy ID: {$subscriptionPayment->payment_id}");
+                throw new Exception("Transaction ERROR: order $subscriptionPayment->order_status<br/>Fondy ID: $subscriptionPayment->payment_id");
             }
         } catch (Exception $e) {
             /* translators: error message */
-            $renewal_order->update_status('failed', sprintf(__('Subscription payment failed. Reason: %s', 'fondy-woocommerce-payment-gateway'), $e->getMessage()));
+            $renewal_order->update_status('failed', sprintf(
+                __('Subscription payment failed. Reason: %s', 'fondy-woocommerce-payment-gateway'),
+                $e->getMessage()
+            ));
         }
     }
 }

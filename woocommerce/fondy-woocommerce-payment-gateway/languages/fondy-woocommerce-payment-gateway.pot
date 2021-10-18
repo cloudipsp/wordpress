@@ -290,3 +290,8 @@ msgstr ""
 #: includes/payment-methods/class-wc-gateway-fondy-localmethods.php:61
 msgid "Pay with your local bank with Fondy online payments."
 msgstr ""
+
+#. translators: order id
+#: includes/compat/class-wc-fondy-subscriptions-compat.php:136
+msgid "Recurring payment for: %s"
+msgstr ""
