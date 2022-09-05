@@ -4,7 +4,7 @@ Tags: payments, payment gateway, woocommerce, online payment, merchant, credit c
 Requires at least: 3.5
 Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 3.0.2
+Stable tag: 3.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -187,6 +187,8 @@ Fix relative server_callback_url
 = 3.0.2 =
 Add send email renewal order payment info
 Add more informative WP remote_post errors
+= 3.0.3 =
+Fixed handle POST form callback
 
 == Upgrade Notice ==
 
