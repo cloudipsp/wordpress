@@ -1,8 +1,8 @@
-=== FONDY — WooCommerce Payment Gateway ===
+=== Fondy — WooCommerce Payment Gateway ===
 Contributors: fondyeu
 Tags: payments, payment gateway, woocommerce, online payment, merchant, credit card, fondy, apple pay, payment request, google pay
 Requires at least: 3.5
-Tested up to: 5.8
+Tested up to: 6.0.1
 Requires PHP: 5.6
 Stable tag: 3.0.3
 License: GPLv2 or later
@@ -11,11 +11,11 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 == Description ==
 The plugin for WooCommerce allows you to integrate the online payment form on the Checkout page of your online store.
 
-The [Fondy](https://fondy.io/) ecommerce plugin for online stores, based on the WooCommerce addon for CMS Wordpress provides businesses with a single platform for quick and secure accepting payments on the site, and its customers with convenient ways to pay for goods and services of their interest. After connecting the system, your customers will be able to pay for purchases using bank cards, online banking, mobile payments.
+Fondy’s [WooCommerce Payment Gateway plugin](https://fondy.io/gb/plugins/woocommerce/) for online stores, based on CMS Wordpress provides businesses with a single platform for quick and secure accepting payments on the site, and its customers with convenient ways to pay for goods and services of their interest. After connecting the system, your customers will be able to pay for purchases using bank cards, online banking, mobile payments.
 
 The ability to pay in a convenient way increases customer loyalty, increases the frequency of purchases and helps entrepreneurs earn more. The Fondy platform has already been connected to more than 8000 entrepreneurs around the world — from small start-ups and niche stores to international companies with millions of turnover.
 
-We already work in [33 countries](https://docs.fondy.eu/docs/page/supported-countries/), accept payments from any country, and support more than [100 currencies](https://docs.fondy.eu/docs/page/27/), cooperate with banks of the European Union, Eastern Europe, Ukraine and Russia, and constantly expand our presence around the world.
+We already work in [33 countries](https://docs.fondy.eu/docs/page/supported-countries/), accept payments from any country, and support more than [100 currencies](https://docs.fondy.eu/docs/page/27/), cooperate with banks of the European Union, UK, Eastern Europe, Ukraine and constantly expand our presence around the world.
 
 
 == Reasons to choose Fondy ==
@@ -27,7 +27,6 @@ We already work in [33 countries](https://docs.fondy.eu/docs/page/supported-coun
 * Roles system — the ability to create users with different access rights to the personal account
 * Maximum security level: three levels of anti-fraud protection, SSL/TLS encryption, 3D Secure technology
 * [Detailed analytics](https://fondy.io/en/products/personal-cabinet/) on payments and invoices, the formation of customized reports in the user's personal account
-* Support for integration with online cash registers (for the region of Russia)
 
 
 == Supported payment methods ==
@@ -90,7 +89,7 @@ The system also provides analytics on customers, showing in which ways payment i
 == Tariffs ==
 Only commission with payment. It is possible to adjust payment of the commission on itself, or to impose on the client.
 
-[See current tariffs on the Fondy website](https://fondy.io/en/price-of-payment-gateway/)
+[See current tariffs on the Fondy website](https://fondy.io/gb/pricing/)
 
 
 == FAQ ==

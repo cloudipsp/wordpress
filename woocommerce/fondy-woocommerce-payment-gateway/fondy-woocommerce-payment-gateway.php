@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name: WooCommerce - Fondy payment gateway
- * Plugin URI: https://fondy.io/en/cms/wordpress/woocommerce/
+ * Plugin URI: https://fondy.io/gb/plugins/woocommerce/
  * Description: Fondy Payment Gateway for WooCommerce.
- * Author: Fondy - Unified Payment Platform
+ * Author: Fondy
  * Author URI: https://fondy.io
  * Version: 3.0.3
  * Text Domain: fondy-woocommerce-payment-gateway
