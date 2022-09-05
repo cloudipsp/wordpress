@@ -151,10 +151,6 @@ class WC_Fondy_API
      */
     public static function getSignature($data, $password, $encoded = true)
     {
-        if (isset($data['additional_info'])) {
-            $data['additional_info'] = str_replace("\\", "", $data['additional_info']);
-        }
-
         $data = array_filter($data, function ($var) {
             return $var !== '' && $var !== null;
         });
